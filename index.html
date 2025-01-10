@@ -31,11 +31,11 @@
     <div id="video-container"></div>
 
     <script>
-        // Array of video URLs
+        // Array of video URLs (make sure these are valid and accessible)
         const videoUrls = [
-            "https://d.rapidcdn.app/snapinsta?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWZyYTUtMS5jZG5pbnN0YWdyYW0uY29tL28xL3YvdDE2L2YyL204Ni9BUU5jUm81cXVCbmN4Qm1CRnBMNHlMLVJTUmVBVFVPU2pTUUk1YWZjRG9ab0ltY2hacEhNdmZwYWgzYVlrUnF3ZTlRODZPMG5WQ2h0NnROT0dIVHp4b3NPMVhmUzNjR2NZMTJ4UWFBLm1wND9lZmc9ZXlKNGNIWmZZWE56WlhSZmFXUWlPakUzTmpNMU5qVTVOamMzT1RjME9UVXNJblpsYm1OdlpHVmZkR0ZuSWpvaWVIQjJYM0J5YjJkeVpYTnphWFpsTGtsT1UxUkJSMUpCVFM1RFRFbFFVeTVETXk0M01qQXVaR0Z6YUY5aVlYTmxiR2x1WlY4eFgzWXhJbjAmX25jX2h0PXNjb250ZW50LWZyYTUtMS5jZG5pbnN0YWdyYW0uY29tJl9uY19jYXQ9MTAzJnZzPTQ1NTYxMDMyNDkwMGZhZjUmX25jX3ZzPUhCa3NGUUlZVW1sblgzaHdkbDl5WldWc2MxOXdaWEp0WVc1bGJuUmZjM0pmY0hKdlpDOUVSVFE0TkVVeFFUUTBORVZETTBJMU56VTFOak16TkRZM1FrRkNNa0U0Tmw5MmFXUmxiMTlrWVhOb2FXNXBkQzV0Y0RRVkFBTElBUUFWQWhnNmNHRnpjM1JvY205MVoyaGZaWFpsY25OMGIzSmxMMGRPTmxSTGFIbFVURjlFWkcxMk9FUkJTRkpWWDA5YWFIazVPV1JpY1Y5RlFVRkJSaFVDQXNnQkFDZ0FHQUFiQW9nSGRYTmxYMjlwYkFFeEVuQnliMmR5WlhOemFYWmxYM0psWTJsd1pRRXhGUUFBSnU2ejQ3Q0dfYUVHRlFJb0FrTXpMQmRBSUNIS3dJTVNieGdTWkdGemFGOWlZWE5sYkdsdVpWOHhYM1l4RVFCMV9nY0EmY2NiPTktNCZvaD0wMF9BWUE5WjdjWldsVkVHSVJ3RHlTTzFBeUoyMEdOOFlBQ2ZSUlJ1aVJ2NTlJRTR3Jm9lPTY3ODFGMjY4Jl9uY19zaWQ9MWQ1NzZkJmRsPTEiLCJmaWxlbmFtZSI6IlNuYXBpbnN0YS5hcHBfdmlkZW9fQVFOY1JvNXF1Qm5jeEJtQkZwTDR5TC1SU1JlQVRVT1NqU1FJNWFmY0RvWm9JbWNoWnBITXZmcGFoM2FZa1Jxd2U5UTg2TzBuVkNodDZ0Tk9HSFR6eG9zTzFYZlMzY0djWTEyeFFhQS5tcDQifQ.amJM2kBWIqzB3H5Gn4WyVvuZJbiwouM55snluYO5HzU&dl=1&dl=1",
-            "https://www.example.com/video2.mp4",
-            "https://www.example.com/video3.mp4"
+            "https://www.w3schools.com/html/mov_bbb.mp4", // Example working video
+            "https://archive.org/download/ElephantsDream/ed_hd.mp4", // Example working video
+            "https://media.w3.org/2010/05/sintel/trailer_hd.mp4" // Example working video
         ];
 
         // Get the container element
@@ -47,6 +47,7 @@
             video.setAttribute("autoplay", true);
             video.setAttribute("muted", true);
             video.setAttribute("loop", true);
+            video.setAttribute("playsinline", true); // For iOS compatibility
             video.innerHTML = `<source src="${url}" type="video/mp4">Your browser does not support the video tag.`;
             container.appendChild(video);
         });
