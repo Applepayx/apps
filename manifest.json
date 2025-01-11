@@ -1,6 +1,6 @@
 {
   "name": "Secure Instagram PWA",
-  "short_name": "InstagramPWA",
+  "short_name": "Instagram",
   "start_url": "index.html?standalone=true",
   "display": "standalone",
   "background_color": "#ffffff",
