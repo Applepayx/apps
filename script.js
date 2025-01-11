@@ -32,7 +32,9 @@ function verifyPassword() {
 
 function loadApp() {
   document.getElementById("login-screen").style.display = "none";
-  document.getElementById("app").style.display = "block";
+
+  // Redirect to Instagram
+  window.location.href = "https://www.instagram.com";
 }
 
 // Load CryptoJS library dynamically
