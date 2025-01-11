@@ -26,16 +26,15 @@ function verifyPassword() {
     const encryptedPassword = encrypt(inputPassword, encryptionKey);
     localStorage.setItem("appPassword", encryptedPassword);
     alert("Password set successfully.");
-    loadApp();
+    redirectToInstagram(); // Call the new function here
   }
 }
 
-function loadApp() {
-  document.getElementById("login-screen").style.display = "none";
-
-  // Redirect to Instagram
-  window.location.href = "https://www.instagram.com";
+function redirectToInstagram() {
+  // Redirecting directly to Instagram
+  window.location.replace("https://www.instagram.com");
 }
+
 
 // Load CryptoJS library dynamically
 const script = document.createElement("script");
