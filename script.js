@@ -10,7 +10,7 @@ function decrypt(data, key) {
 
 // Password management
 const storedPassword = localStorage.getItem("appPassword");
-const encryptionKey = "secure_encryption_key"; // Replace with a strong key
+const encryptionKey = "123"; // Replace with a strong key
 
 function verifyPassword() {
   const inputPassword = document.getElementById("app-password").value;
