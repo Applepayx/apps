@@ -38,8 +38,8 @@
 
         input {
             flex: 1;
-            padding: 5px;
-            font-size: 14px;
+            padding: 4px;
+            font-size: 12px;
             border-radius: 5px;
             border: 1px solid #444;
             background-color: #222;
@@ -48,8 +48,8 @@
         }
 
         button.icon {
-            padding: 5px;
-            font-size: 14px;
+            padding: 4px;
+            font-size: 12px;
             border: none;
             border-radius: 5px;
             background-color: #444;
@@ -126,11 +126,7 @@
         <option value="">-- Select a Saved Location --</option>
     </select>
     <button class="action" onclick="saveLocation()">💾 Save Location</button>
-
-    <!-- Other Actions -->
-    <h3>⚙️ Other Actions</h3>
-    <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
-    <button class="action" onclick="triggerAction('stop')">Stop</button>
+    <button class="action" onclick="exportLocations()">📤 Export Locations</button>
 
     <script>
         let focusedInput = null;
@@ -177,6 +173,15 @@
             alert(`Location "${label}" saved.`);
         }
 
+        function exportLocations() {
+            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
+            const blob = new Blob([JSON.stringify(savedLocations, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'savedLocations.json';
+            link.click();
+        }
+
         function updateSavedLocationsDropdown() {
             const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
             const dropdown = document.getElementById('savedLocations');
@@ -205,49 +210,6 @@
             }
 
             dropdown.value = '';
-        }
-
-        function triggerWalk() {
-            const start = document.getElementById('walkStart').value.trim();
-            const end = document.getElementById('walkEnd').value.trim();
-
-            if (!start || !end) {
-                alert('Please enter both start and end locations.');
-                return;
-            }
-
-            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
-            fetch(url)
-                .then(response => response.text())
-                .then(data => alert('Walk triggered successfully!'))
-                .catch(error => alert('Failed to trigger Walk: ' + error));
-        }
-
-        function triggerJump() {
-            const location = document.getElementById('jumpLocation').value.trim();
-
-            if (!location) {
-                alert('Please enter a location for Jump.');
-                return;
-            }
-
-            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
-            fetch(url)
-                .then(response => response.text())
-                .then(data => alert('Jump triggered successfully!'))
-                .catch(error => alert('Failed to trigger Jump: ' + error));
-        }
-
-        function triggerAction(action) {
-            const url =
-                action === 'check'
-                    ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
-                    : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
-
-            fetch(url)
-                .then(response => response.text())
-                .then(data => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
-                .catch(error => alert('Failed to trigger action: ' + error));
         }
 
         updateSavedLocationsDropdown();
