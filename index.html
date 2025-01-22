@@ -99,7 +99,7 @@
     <h1>MacroDroid Trigger</h1>
 
     <!-- Walk Action -->
-    <h3>🚶 Walk</h3>
+    <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
     <div class="input-group">
         <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
         <button class="icon" onclick="pasteInput('walkStart')">📋</button>
@@ -113,7 +113,7 @@
     <button class="action" onclick="triggerWalk()">Send Walk</button>
 
     <!-- Jump Action -->
-    <h3>🦘 Jump</h3>
+    <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
     <div class="input-group">
         <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
         <button class="icon" onclick="pasteInput('jumpLocation')">📋</button>
@@ -126,7 +126,6 @@
         <option value="">-- Select a Saved Location --</option>
     </select>
     <button class="action" onclick="saveLocation()">💾 Save Location</button>
-    <button class="action" onclick="deleteLocation()">🗑️ Delete Location</button>
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
@@ -197,25 +196,6 @@
                 document.getElementById('savedLocations').value = '';
                 return;
             }
-        function deleteLocation() {
-            const dropdown = document.getElementById('savedLocations');
-            const selectedLabel = dropdown.options[dropdown.selectedIndex].text;
-        
-            if (!selectedLabel || selectedLabel === '-- Select a Saved Location --') {
-                alert('Please select a saved location to delete.');
-                return;
-            }
-        
-            const confirmDelete = confirm(`Are you sure you want to delete the location "${selectedLabel}"?`);
-            if (!confirmDelete) return;
-        
-            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
-            delete savedLocations[selectedLabel];
-            localStorage.setItem('savedLocations', JSON.stringify(savedLocations));
-            updateSavedLocationsDropdown();
-            alert(`Location "${selectedLabel}" deleted.`);
-        }
-
 
             const dropdown = document.getElementById('savedLocations');
             const selectedLocation = dropdown.value;
