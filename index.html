@@ -43,7 +43,7 @@
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             flex: 1;
             padding: 5px;
-            font-size: 14px;
+            font-size: 15px;
             border-radius: 5px;
             border: 1px solid #444;
             background-color: #222;
@@ -55,7 +55,7 @@
         button.icon {
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             padding: 5px;
-            font-size: 14px;
+            font-size: 15px;
             border: none;
             border-radius: 5px;
             background-color: #444;
@@ -73,7 +73,7 @@
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             width: 100%;
             padding: 5px;
-            font-size: 14px;
+            font-size: 15px;
             border-radius: 5px;
             border: 1px solid #444;
             background-color: #222;
@@ -89,7 +89,7 @@
             border: none;
             border-radius: 5px;
             padding: 10px;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
             transition: background-color 0.3s;
             margin: 10px 0;
@@ -161,14 +161,14 @@
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
-    <button class="action" onclick="openGoogleMaps()">Open Google Maps 🗺️</button>
+    <button class="action" onclick="openGoogleMaps()">Google Maps 🗺️</button>
     <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
     <button class="action" onclick="triggerAction('stop')">Stop</button>
 
     <script>
         let focusedInput = null;
         let unlockCount = 0;
-        const unlockThreshold = 3;
+        const unlockThreshold = 2;
        
         function closeScreenLock() {
             const screenLock = document.getElementById('screenLock');
@@ -191,14 +191,18 @@
             document.getElementById(id).value = '';
         }
 
+
         async function pasteInput(id) {
             try {
                 const text = await navigator.clipboard.readText();
-                document.getElementById(id).value = text;
+                // Remove parentheses from the pasted text
+                const cleanedText = text.replace(/[()]/g, '');
+                document.getElementById(id).value = cleanedText;
             } catch (err) {
                 alert('Failed to paste from clipboard: ' + err);
             }
         }
+
 
         function saveLocation() {
             if (!focusedInput) {
