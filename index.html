@@ -139,6 +139,7 @@
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
+    <button class="action" onclick="openGoogleMaps()">🌍 Open Google Maps</button>
     <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
     <button class="action" onclick="triggerAction('stop')">Stop</button>
 
@@ -155,7 +156,9 @@
 
         async function pasteInput(id) {
             try {
-                const text = await navigator.clipboard.readText();
+                let text = await navigator.clipboard.readText();
+                // Remove parentheses from the clipboard text
+                text = text.replace(/[()]/g, '');
                 document.getElementById(id).value = text;
             } catch (err) {
                 alert('Failed to paste from clipboard: ' + err);
@@ -253,7 +256,11 @@
                 action === 'check'
                     ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
                     : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
-
+            
+        function openGoogleMaps() {
+            const url = "comgooglemaps://"; // Google Maps URL scheme
+            window.location.href = url;
+        }
             fetch(url)
                 .then(response => response.text())
                 .then(data => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
