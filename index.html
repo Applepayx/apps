@@ -131,7 +131,8 @@
     </div>
     <button class="action" onclick="triggerJump()">Send Jump</button>
 
-    <!-- Fetch and Manage Locations -->
+    <!-- Saved Locations -->
+    <h3>📍 Saved Locations</h3>
     <select id="savedLocations" onchange="applySavedLocation()">
         <option value="">-- Select a Saved Location --</option>
     </select>
@@ -140,7 +141,7 @@
     <h3>⚙️ Other Actions</h3>
     <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
     <button class="action" onclick="triggerAction('stop')">Stop</button>
-    <button class="action" onclick="openGoogleMaps()">Open Google Maps</button>
+    <button class="action" onclick="openGoogleMaps()">🗺️ Open Google Maps</button>
 
     <script>
         let focusedInput = null;
@@ -162,13 +163,33 @@
             }
         }
 
+        async function fetchSavedLocations() {
+            try {
+                const response = await fetch('locations.json');
+                const locations = await response.json();
+                populateSavedLocationsDropdown(locations);
+            } catch (error) {
+                console.error('Failed to fetch saved locations:', error);
+            }
+        }
+
+        function populateSavedLocationsDropdown(locations) {
+            const dropdown = document.getElementById('savedLocations');
+            dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
+            for (const [label, location] of Object.entries(locations)) {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = label;
+                dropdown.appendChild(option);
+            }
+        }
+
         function applySavedLocation() {
             if (!focusedInput) {
                 alert('Click on an input field first to select a saved location.');
                 document.getElementById('savedLocations').value = '';
                 return;
             }
-
             const dropdown = document.getElementById('savedLocations');
             const selectedLocation = dropdown.value;
 
@@ -191,7 +212,7 @@
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(data => alert('Walk triggered successfully!'))
+                .then(() => alert('Walk triggered successfully!'))
                 .catch(error => alert('Failed to trigger Walk: ' + error));
         }
 
@@ -206,7 +227,7 @@
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(data => alert('Jump triggered successfully!'))
+                .then(() => alert('Jump triggered successfully!'))
                 .catch(error => alert('Failed to trigger Jump: ' + error));
         }
 
@@ -218,35 +239,18 @@
 
             fetch(url)
                 .then(response => response.text())
-                .then(data => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .then(() => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
                 .catch(error => alert('Failed to trigger action: ' + error));
         }
 
         function openGoogleMaps() {
-            const location = prompt('Enter the location you want to open in Google Maps:');
-            if (!location) {
-                alert('No location entered.');
-                return;
+            const urlScheme = 'comgooglemaps://';
+            if (focusedInput && document.getElementById(focusedInput).value.trim()) {
+                const location = encodeURIComponent(document.getElementById(focusedInput).value.trim());
+                window.location.href = `${urlScheme}?q=${location}`;
+            } else {
+                alert('Please enter or select a location first.');
             }
-            const url = `https://maps.google.com/?q=${encodeURIComponent(location)}`;
-            window.location.href = url;
-        }
-
-        function fetchSavedLocations() {
-            fetch('locations.json')
-                .then(response => response.json())
-                .then(data => {
-                    const dropdown = document.getElementById('savedLocations');
-                    dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
-
-                    data.locations.forEach(loc => {
-                        const option = document.createElement('option');
-                        option.value = loc.coordinates;
-                        option.textContent = loc.label;
-                        dropdown.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Failed to fetch locations:', error));
         }
 
         fetchSavedLocations();
