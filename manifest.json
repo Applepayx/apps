@@ -1,6 +1,6 @@
 {
-  "name": "Secure Instagram PWA",
-  "short_name": "Instagram",
+  "name": "Apple Pay PWA",
+  "short_name": "Apple Pay",
   "start_url": "index.html?standalone=true",
   "display": "standalone",
   "background_color": "#ffffff",
