@@ -20,27 +20,19 @@
             margin: 0;
             text-align: center;
             padding: 10px;
-            overflow: hidden; /* Disable scrolling */
-            touch-action: none; /* Disable gestures like pinch-to-zoom */
+            overflow: hidden;
+            touch-action: none;
         }
-
         h1, h3 {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             font-size: 20px;
             margin: 10px 0;
         }
-
         .input-group {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             display: flex;
-            align-items: center;
             justify-content: space-between;
             margin: 10px 0;
-            max-width: 100%;
         }
-
         input {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             flex: 1;
             padding: 5px;
             font-size: 15px;
@@ -49,11 +41,8 @@
             background-color: #222;
             color: #fff;
             margin-right: 5px;
-            width: 70%; /* Adjust this percentage to make inputs smaller */
         }
-
         button.icon {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             padding: 5px;
             font-size: 15px;
             border: none;
@@ -62,27 +51,11 @@
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-left: 5px; /* Add space between buttons */
         }
-
         button.icon:hover {
             background-color: #666;
         }
-
-        select {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
-            width: 100%;
-            padding: 5px;
-            font-size: 15px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #222;
-            color: #fff;
-            margin: 10px 0;
-        }
-
         button.action {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             width: 100%;
             background-color: #444;
             color: #fff;
@@ -91,19 +64,12 @@
             padding: 10px;
             font-size: 15px;
             cursor: pointer;
-            transition: background-color 0.3s;
             margin: 10px 0;
+            transition: background-color 0.3s;
         }
-
         button.action:hover {
             background-color: #666;
         }
-
-        button.action:active {
-            background-color: #888;
-        }
-
-        /* Screen Lock Style */
         #screenLock {
             position: fixed;
             top: 0;
@@ -116,7 +82,6 @@
             justify-content: center;
             align-items: center;
             color: #fff;
-            font-family: 'Poppins', Arial, sans-serif;
             font-size: 18px;
             text-align: center;
         }
@@ -124,36 +89,37 @@
 </head>
 <body>
     <!-- Black Screen Lock -->
-   <div id="screenLock">
+    <div id="screenLock">
         <p>Error: Please try again later</p>
     </div>
     
     <h1>MacroDroid Trigger</h1>
 
     <!-- Walk Action -->
-    <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
+    <h3>🚶 Walk</h3>
     <div class="input-group">
-        <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
+        <input type="text" id="walkStart" placeholder="Start Location">
         <button class="icon" onclick="pasteInput('walkStart')">📋</button>
         <button class="icon" onclick="clearInput('walkStart')">❌</button>
     </div>
     <div class="input-group">
-        <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
+        <input type="text" id="walkEnd" placeholder="End Location">
         <button class="icon" onclick="pasteInput('walkEnd')">📋</button>
         <button class="icon" onclick="clearInput('walkEnd')">❌</button>
     </div>
     <button class="action" onclick="triggerWalk()">Send Walk</button>
 
     <!-- Jump Action -->
-    <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
+    <h3>🏃 Jump</h3>
     <div class="input-group">
-        <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
+        <input type="text" id="jumpLocation" placeholder="Jump Location">
         <button class="icon" onclick="pasteInput('jumpLocation')">📋</button>
         <button class="icon" onclick="clearInput('jumpLocation')">❌</button>
     </div>
     <button class="action" onclick="triggerJump()">Send Jump</button>
 
-    <!-- Save and Manage Locations -->
+    <!-- Saved Locations -->
+    <h3>📍 Saved Locations</h3>
     <select id="savedLocations" onchange="applySavedLocation()">
         <option value="">-- Select a Saved Location --</option>
     </select>
@@ -165,100 +131,41 @@
     <button class="action" onclick="triggerAction('stop')">Stop</button>
 
     <script>
-        let focusedInput = null;
         let unlockCount = 0;
         const unlockThreshold = 2;
-       
-        function closeScreenLock() {
-            const screenLock = document.getElementById('screenLock');
-            screenLock.style.display = 'none';
-            screenLock.style.pointerEvents = 'none'; // Disable interaction
-            screenLock.style.display = 'none';
-        }
 
+        // Close Screen Lock
+        document.getElementById('screenLock').addEventListener('click', () => {
+            unlockCount++;
+            if (unlockCount >= unlockThreshold) {
+                document.getElementById('screenLock').style.display = 'none';
+            }
+        });
 
-        function setFocusedInput(inputId) {
-            focusedInput = inputId;
-        }
-        function openGoogleMaps() {
-            const googleMapsURL = "comgooglemaps://";
-            const fallbackURL = "https://maps.google.com";
-    
-            // Attempt to open Google Maps app
-            window.location.href = googleMapsURL;       
-        }
-        
+        // Clear Input
         function clearInput(id) {
             document.getElementById(id).value = '';
         }
 
-
+        // Paste Input
         async function pasteInput(id) {
             try {
                 const text = await navigator.clipboard.readText();
-                // Remove parentheses from the pasted text
-                const cleanedText = text.replace(/[()]/g, '');
-                document.getElementById(id).value = cleanedText;
+                document.getElementById(id).value = text.trim();
             } catch (err) {
                 alert('Failed to paste from clipboard: ' + err);
             }
         }
 
-
-        async function fetchLocations() {
-            try {
-                const response = await fetch('locations.json');
-                if (!response.ok) throw new Error('Failed to fetch locations file.');
-                const locations = await response.json();
-                return locations;
-            } catch (error) {
-                console.error('Error fetching locations:', error);
-                return {};
-            }
-        }
-        
-
-
-
-        
-            const locations = await fetchLocations();
-            locations[label] = location;
-        
-
-        
-        async function updateSavedLocationsDropdown() {
-            const locations = await fetchLocations();
-            const dropdown = document.getElementById('savedLocations');
-            dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
-        
-            for (const [label, location] of Object.entries(locations)) {
-                const option = document.createElement('option');
-                option.value = location;
-                option.textContent = label;
-                dropdown.appendChild(option);
-            }
-        }
-        
+        // Apply Saved Location
         function applySavedLocation() {
-            if (!focusedInput) {
-                alert('Click on an input field first to select a saved location.');
-                document.getElementById('savedLocations').value = '';
-                return;
-            }
-        
-            const dropdown = document.getElementById('savedLocations');
-            const selectedLocation = dropdown.value;
-        
+            const selectedLocation = document.getElementById('savedLocations').value;
             if (selectedLocation) {
-                document.getElementById(focusedInput).value = selectedLocation;
+                document.getElementById('jumpLocation').value = selectedLocation;
             }
-        
-            dropdown.value = '';
         }
-        
 
-
-
+        // Trigger Walk
         function triggerWalk() {
             const start = document.getElementById('walkStart').value.trim();
             const end = document.getElementById('walkEnd').value.trim();
@@ -268,13 +175,10 @@
                 return;
             }
 
-            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
-            fetch(url)
-                .then(response => response.text())
-                .then(data => alert('Walk triggered successfully!'))
-                .catch(error => alert('Failed to trigger Walk: ' + error));
+            alert(`Walk triggered: Start = ${start}, End = ${end}`);
         }
 
+        // Trigger Jump
         function triggerJump() {
             const location = document.getElementById('jumpLocation').value.trim();
 
@@ -283,35 +187,36 @@
                 return;
             }
 
-            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
-            fetch(url)
-                .then(response => response.text())
-                .then(data => alert('Jump triggered successfully!'))
-                .catch(error => alert('Failed to trigger Jump: ' + error));
+            alert(`Jump triggered at: ${location}`);
         }
 
+        // Open Google Maps
+        function openGoogleMaps() {
+            const googleMapsURL = "comgooglemaps://";
+            const fallbackURL = "https://maps.google.com";
+
+            // Attempt to open Google Maps app or fallback to the website
+            window.location.href = googleMapsURL || fallbackURL;
+        }
+
+        // Trigger Other Actions
         function triggerAction(action) {
-            const url =
-                action === 'check'
-                    ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
-                    : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
+            const actionURLs = {
+                check: 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check',
+                stop: 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset',
+            };
+
+            const url = actionURLs[action];
+            if (!url) {
+                alert('Invalid action.');
+                return;
+            }
 
             fetch(url)
                 .then(response => response.text())
-                .then(data => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
-                .catch(error => alert('Failed to trigger action: ' + error));
+                .then(() => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .catch(error => alert(`Failed to trigger ${action}: ${error}`));
         }
-
-        // Black Screen Lock Logic
-        document.getElementById('screenLock').addEventListener('click', () => {
-            unlockCount++;
-            if (unlockCount === unlockThreshold) {
-                document.getElementById('screenLock').style.display = 'none';
-                unlockCount = 0; // Reset for the next lock
-            }
-        });
-
-        updateSavedLocationsDropdown();
     </script>
 </body>
 </html>
