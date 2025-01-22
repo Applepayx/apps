@@ -161,6 +161,7 @@
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
+    <button class="action" onclick="openGoogleMaps()">Open Google Maps 🗺️</button>
     <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
     <button class="action" onclick="triggerAction('stop')">Stop</button>
 
@@ -172,7 +173,14 @@
         function setFocusedInput(inputId) {
             focusedInput = inputId;
         }
-
+        function openGoogleMaps() {
+            const googleMapsURL = "comgooglemaps://";
+            const fallbackURL = "https://maps.google.com";
+    
+            // Attempt to open Google Maps app
+            window.location.href = googleMapsURL;       
+        }
+        
         function clearInput(id) {
             document.getElementById(id).value = '';
         }
