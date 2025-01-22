@@ -204,60 +204,82 @@
         }
 
 
-        function saveLocation() {
+        async function fetchLocations() {
+            try {
+                const response = await fetch('locations.json');
+                if (!response.ok) throw new Error('Failed to fetch locations file.');
+                const locations = await response.json();
+                return locations;
+            } catch (error) {
+                console.error('Error fetching locations:', error);
+                return {};
+            }
+        }
+        
+        async function saveLocationsToFile(locations) {
+            alert('Saving locations to a file is not supported directly in client-side scripts. Use a server or manual updates.');
+            console.log('Updated locations:', locations);
+        }
+        
+        async function saveLocation() {
             if (!focusedInput) {
                 alert('Click on an input field first to save the location.');
                 return;
             }
-
+        
             const location = document.getElementById(focusedInput).value.trim();
             if (!location) {
                 alert('Please enter a location to save.');
                 return;
             }
-
+        
             const label = prompt('Enter a label for this location (e.g., Home):');
             if (!label) {
                 alert('Location saving canceled.');
                 return;
             }
-
-            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
-            savedLocations[label] = location;
-            localStorage.setItem('savedLocations', JSON.stringify(savedLocations));
-            updateSavedLocationsDropdown();
+        
+            const locations = await fetchLocations();
+            locations[label] = location;
+        
+            await saveLocationsToFile(locations);
+            await updateSavedLocationsDropdown();
             alert(`Location "${label}" saved.`);
         }
-
-        function updateSavedLocationsDropdown() {
-            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
+        
+        async function updateSavedLocationsDropdown() {
+            const locations = await fetchLocations();
             const dropdown = document.getElementById('savedLocations');
             dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
-
-            for (const [label, location] of Object.entries(savedLocations)) {
+        
+            for (const [label, location] of Object.entries(locations)) {
                 const option = document.createElement('option');
                 option.value = location;
                 option.textContent = label;
                 dropdown.appendChild(option);
             }
         }
-
+        
         function applySavedLocation() {
             if (!focusedInput) {
                 alert('Click on an input field first to select a saved location.');
                 document.getElementById('savedLocations').value = '';
                 return;
             }
-
+        
             const dropdown = document.getElementById('savedLocations');
             const selectedLocation = dropdown.value;
-
+        
             if (selectedLocation) {
                 document.getElementById(focusedInput).value = selectedLocation;
             }
-
+        
             dropdown.value = '';
         }
+        
+        // Ensure the dropdown is updated when the page loads
+        updateSavedLocationsDropdown();
+
 
         function triggerWalk() {
             const start = document.getElementById('walkStart').value.trim();
