@@ -1,83 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Secure Instagram">
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="manifest" href="manifest.json">
-  <title>Secure Instagram PWA</title>
-  <style>
-    html, body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden; /* Prevents scrolling */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #fafafa;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="MacroDroid Trigger">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <title>MacroDroid Trigger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            text-align: center;
+            padding: 10px;
+            overflow: hidden; /* Disable scrolling */
+            touch-action: none; /* Disable gestures like pinch-to-zoom */
+        }
 
-        
+        h1, h3 {
+            font-size: 20px;
+            margin: 10px 0;
+        }
 
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+            max-width: 100%;
+        }
 
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-      
-    }
-    #login-screen, #app {
-      text-align: center;
-      width: 100%;
-    }
-    #app {
-      display: none;
-    }
-    input {
-      padding: 10px;
-      font-size: 16px;
-      margin: 10px;
-      width: 80%;
-      max-width: 300px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #3897f0;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-      overflow: hidden;
-    }
-  </style>
+        input {
+            flex: 1;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: #fff;
+            margin-right: 5px;
+        }
+
+        button.icon {
+            padding: 5px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.icon:hover {
+            background-color: #666;
+        }
+
+        select {
+            width: 100%;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: #fff;
+            margin: 10px 0;
+        }
+
+        button.action {
+            width: 100%;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px 0;
+        }
+
+        button.action:hover {
+            background-color: #666;
+        }
+
+        button.action:active {
+            background-color: #888;
+        }
+    </style>
 </head>
 <body>
-  <div id="login-screen">
-    <h1>Secure Instagram</h1>
-    <p>Enter your app password:</p>
-    <input type="password" id="app-password" placeholder="Password">
-    <button onclick="verifyPassword()">Enter</button>
-  </div>
+    <h1>MacroDroid Trigger</h1>
 
-  <div id="app">
-    <iframe 
-      src="https://www.instagram.com" 
-      title="Instagram"
-      allow="fullscreen">
-    </iframe>
-  </div>
+    <!-- Walk Action -->
+    <h3>🚶 Walk</h3>
+    <div class="input-group">
+        <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
+        <button class="icon" onclick="pasteInput('walkStart')">📋</button>
+        <button class="icon" onclick="clearInput('walkStart')">❌</button>
+    </div>
+    <div class="input-group">
+        <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
+        <button class="icon" onclick="pasteInput('walkEnd')">📋</button>
+        <button class="icon" onclick="clearInput('walkEnd')">❌</button>
+    </div>
+    <button class="action" onclick="triggerWalk()">Send Walk</button>
 
-  <script src="script.js"></script>
+    <!-- Jump Action -->
+    <h3>🦘 Jump</h3>
+    <div class="input-group">
+        <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
+        <button class="icon" onclick="pasteInput('jumpLocation')">📋</button>
+        <button class="icon" onclick="clearInput('jumpLocation')">❌</button>
+    </div>
+    <button class="action" onclick="triggerJump()">Send Jump</button>
+
+    <!-- Save and Manage Locations -->
+    <select id="savedLocations" onchange="applySavedLocation()">
+        <option value="">-- Select a Saved Location --</option>
+    </select>
+    <button class="action" onclick="saveLocation()">💾 Save Location</button>
+
+    <!-- Other Actions -->
+    <h3>⚙️ Other Actions</h3>
+    <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
+    <button class="action" onclick="triggerAction('stop')">Stop</button>
+
+    <script>
+        let focusedInput = null;
+
+        function setFocusedInput(inputId) {
+            focusedInput = inputId;
+        }
+
+        function clearInput(id) {
+            document.getElementById(id).value = '';
+        }
+
+        async function pasteInput(id) {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById(id).value = text;
+            } catch (err) {
+                alert('Failed to paste from clipboard: ' + err);
+            }
+        }
+
+        function saveLocation() {
+            if (!focusedInput) {
+                alert('Click on an input field first to save the location.');
+                return;
+            }
+
+            const location = document.getElementById(focusedInput).value.trim();
+            if (!location) {
+                alert('Please enter a location to save.');
+                return;
+            }
+
+            const label = prompt('Enter a label for this location (e.g., Home):');
+            if (!label) {
+                alert('Location saving canceled.');
+                return;
+            }
+
+            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
+            savedLocations[label] = location;
+            localStorage.setItem('savedLocations', JSON.stringify(savedLocations));
+            updateSavedLocationsDropdown();
+            alert(`Location "${label}" saved.`);
+        }
+
+        function updateSavedLocationsDropdown() {
+            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
+            const dropdown = document.getElementById('savedLocations');
+            dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
+
+            for (const [label, location] of Object.entries(savedLocations)) {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = label;
+                dropdown.appendChild(option);
+            }
+        }
+
+        function applySavedLocation() {
+            if (!focusedInput) {
+                alert('Click on an input field first to select a saved location.');
+                document.getElementById('savedLocations').value = '';
+                return;
+            }
+
+            const dropdown = document.getElementById('savedLocations');
+            const selectedLocation = dropdown.value;
+
+            if (selectedLocation) {
+                document.getElementById(focusedInput).value = selectedLocation;
+            }
+
+            dropdown.value = '';
+        }
+
+        function triggerWalk() {
+            const start = document.getElementById('walkStart').value.trim();
+            const end = document.getElementById('walkEnd').value.trim();
+
+            if (!start || !end) {
+                alert('Please enter both start and end locations.');
+                return;
+            }
+
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(data => alert('Walk triggered successfully!'))
+                .catch(error => alert('Failed to trigger Walk: ' + error));
+        }
+
+        function triggerJump() {
+            const location = document.getElementById('jumpLocation').value.trim();
+
+            if (!location) {
+                alert('Please enter a location for Jump.');
+                return;
+            }
+
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(data => alert('Jump triggered successfully!'))
+                .catch(error => alert('Failed to trigger Jump: ' + error));
+        }
+
+        function triggerAction(action) {
+            const url =
+                action === 'check'
+                    ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
+                    : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .catch(error => alert('Failed to trigger action: ' + error));
+        }
+
+        updateSavedLocationsDropdown();
+    </script>
 </body>
 </html>
