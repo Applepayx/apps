@@ -131,16 +131,16 @@
     </div>
     <button class="action" onclick="triggerJump()">Send Jump</button>
 
-    <!-- Save and Manage Locations -->
+    <!-- Fetch and Manage Locations -->
     <select id="savedLocations" onchange="applySavedLocation()">
         <option value="">-- Select a Saved Location --</option>
     </select>
-    <button class="action" onclick="saveLocation()">💾 Save Location</button>
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
     <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
     <button class="action" onclick="triggerAction('stop')">Stop</button>
+    <button class="action" onclick="openGoogleMaps()">Open Google Maps</button>
 
     <script>
         let focusedInput = null;
@@ -159,44 +159,6 @@
                 document.getElementById(id).value = text;
             } catch (err) {
                 alert('Failed to paste from clipboard: ' + err);
-            }
-        }
-
-        function saveLocation() {
-            if (!focusedInput) {
-                alert('Click on an input field first to save the location.');
-                return;
-            }
-
-            const location = document.getElementById(focusedInput).value.trim();
-            if (!location) {
-                alert('Please enter a location to save.');
-                return;
-            }
-
-            const label = prompt('Enter a label for this location (e.g., Home):');
-            if (!label) {
-                alert('Location saving canceled.');
-                return;
-            }
-
-            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
-            savedLocations[label] = location;
-            localStorage.setItem('savedLocations', JSON.stringify(savedLocations));
-            updateSavedLocationsDropdown();
-            alert(`Location "${label}" saved.`);
-        }
-
-        function updateSavedLocationsDropdown() {
-            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
-            const dropdown = document.getElementById('savedLocations');
-            dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
-
-            for (const [label, location] of Object.entries(savedLocations)) {
-                const option = document.createElement('option');
-                option.value = location;
-                option.textContent = label;
-                dropdown.appendChild(option);
             }
         }
 
@@ -260,7 +222,34 @@
                 .catch(error => alert('Failed to trigger action: ' + error));
         }
 
-        updateSavedLocationsDropdown();
+        function openGoogleMaps() {
+            const location = prompt('Enter the location you want to open in Google Maps:');
+            if (!location) {
+                alert('No location entered.');
+                return;
+            }
+            const url = `https://maps.google.com/?q=${encodeURIComponent(location)}`;
+            window.location.href = url;
+        }
+
+        function fetchSavedLocations() {
+            fetch('locations.json')
+                .then(response => response.json())
+                .then(data => {
+                    const dropdown = document.getElementById('savedLocations');
+                    dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
+
+                    data.locations.forEach(loc => {
+                        const option = document.createElement('option');
+                        option.value = loc.coordinates;
+                        option.textContent = loc.label;
+                        dropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Failed to fetch locations:', error));
+        }
+
+        fetchSavedLocations();
     </script>
 </body>
 </html>
