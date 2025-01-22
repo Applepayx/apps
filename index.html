@@ -169,7 +169,13 @@
         let focusedInput = null;
         let unlockCount = 0;
         const unlockThreshold = 3;
-        
+       
+        function closeScreenLock() {
+            const screenLock = document.getElementById('screenLock');
+            screenLock.style.display = 'none';
+            screenLock.style.pointerEvents = 'none'; // Disable interaction
+        }
+
         function setFocusedInput(inputId) {
             focusedInput = inputId;
         }
