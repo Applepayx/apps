@@ -25,13 +25,11 @@
         }
 
         h1, h3 {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             font-size: 20px;
             margin: 10px 0;
         }
 
         .input-group {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -40,7 +38,6 @@
         }
 
         input {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             flex: 1;
             padding: 5px;
             font-size: 14px;
@@ -49,12 +46,9 @@
             background-color: #222;
             color: #fff;
             margin-right: 5px;
-            width: 70%; /* Adjust this percentage to make inputs smaller */
-
         }
 
         button.icon {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             padding: 5px;
             font-size: 14px;
             border: none;
@@ -63,7 +57,7 @@
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-left: 5px; /* Add space between buttons */
+            margin-left: 5px;
         }
 
         button.icon:hover {
@@ -71,7 +65,6 @@
         }
 
         select {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             width: 100%;
             padding: 5px;
             font-size: 14px;
@@ -83,7 +76,6 @@
         }
 
         button.action {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             width: 100%;
             background-color: #444;
             color: #fff;
@@ -98,10 +90,6 @@
 
         button.action:hover {
             background-color: #666;
-        }
-
-        button.action:active {
-            background-color: #888;
         }
     </style>
 </head>
@@ -131,11 +119,11 @@
     </div>
     <button class="action" onclick="triggerJump()">Send Jump</button>
 
-    <!-- Save and Manage Locations -->
+    <!-- Saved Locations -->
+    <h3>📍 Saved Locations</h3>
     <select id="savedLocations" onchange="applySavedLocation()">
         <option value="">-- Select a Saved Location --</option>
     </select>
-    <button class="action" onclick="saveLocation()">💾 Save Location</button>
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
@@ -157,56 +145,16 @@
         async function pasteInput(id) {
             try {
                 let text = await navigator.clipboard.readText();
-                // Remove parentheses from the clipboard text
-                text = text.replace(/[()]/g, '');
+                text = text.replace(/[()]/g, ''); // Remove parentheses
                 document.getElementById(id).value = text;
             } catch (err) {
                 alert('Failed to paste from clipboard: ' + err);
             }
         }
 
-        function saveLocation() {
-            if (!focusedInput) {
-                alert('Click on an input field first to save the location.');
-                return;
-            }
-
-            const location = document.getElementById(focusedInput).value.trim();
-            if (!location) {
-                alert('Please enter a location to save.');
-                return;
-            }
-
-            const label = prompt('Enter a label for this location (e.g., Home):');
-            if (!label) {
-                alert('Location saving canceled.');
-                return;
-            }
-
-            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
-            savedLocations[label] = location;
-            localStorage.setItem('savedLocations', JSON.stringify(savedLocations));
-            updateSavedLocationsDropdown();
-            alert(`Location "${label}" saved.`);
-        }
-
-        function updateSavedLocationsDropdown() {
-            const savedLocations = JSON.parse(localStorage.getItem('savedLocations')) || {};
-            const dropdown = document.getElementById('savedLocations');
-            dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
-
-            for (const [label, location] of Object.entries(savedLocations)) {
-                const option = document.createElement('option');
-                option.value = location;
-                option.textContent = label;
-                dropdown.appendChild(option);
-            }
-        }
-
         function applySavedLocation() {
             if (!focusedInput) {
                 alert('Click on an input field first to select a saved location.');
-                document.getElementById('savedLocations').value = '';
                 return;
             }
 
@@ -218,6 +166,24 @@
             }
 
             dropdown.value = '';
+        }
+
+        function updateSavedLocationsDropdown() {
+            fetch('locations.json')
+                .then(response => response.json())
+                .then(data => {
+                    const dropdown = document.getElementById('savedLocations');
+                    dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
+                    data.forEach(location => {
+                        const option = document.createElement('option');
+                        option.value = location.value;
+                        option.textContent = location.label;
+                        dropdown.appendChild(option);
+                    });
+                })
+                .catch(err => {
+                    console.error('Failed to load saved locations:', err);
+                });
         }
 
         function triggerWalk() {
@@ -232,8 +198,8 @@
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(data => alert('Walk triggered successfully!'))
-                .catch(error => alert('Failed to trigger Walk: ' + error));
+                .then(() => alert('Walk triggered successfully!'))
+                .catch(err => alert('Failed to trigger Walk: ' + err));
         }
 
         function triggerJump() {
@@ -247,8 +213,8 @@
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(data => alert('Jump triggered successfully!'))
-                .catch(error => alert('Failed to trigger Jump: ' + error));
+                .then(() => alert('Jump triggered successfully!'))
+                .catch(err => alert('Failed to trigger Jump: ' + err));
         }
 
         function triggerAction(action) {
@@ -256,15 +222,11 @@
                 action === 'check'
                     ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
                     : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
-            
-        function openGoogleMaps() {
-            const url = "comgooglemaps://"; // Google Maps URL scheme
-            window.location.href = url;
-        }
+
             fetch(url)
                 .then(response => response.text())
-                .then(data => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
-                .catch(error => alert('Failed to trigger action: ' + error));
+                .then(() => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .catch(err => alert('Failed to trigger action: ' + err));
         }
 
         updateSavedLocationsDropdown();
