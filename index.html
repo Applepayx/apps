@@ -157,7 +157,6 @@
     <select id="savedLocations" onchange="applySavedLocation()">
         <option value="">-- Select a Saved Location --</option>
     </select>
-    <button class="action" onclick="saveLocation()">💾 Save Location</button>
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
@@ -216,36 +215,14 @@
             }
         }
         
-        async function saveLocationsToFile(locations) {
-            alert('Saving locations to a file is not supported directly in client-side scripts. Use a server or manual updates.');
-            console.log('Updated locations:', locations);
-        }
-        
-        async function saveLocation() {
-            if (!focusedInput) {
-                alert('Click on an input field first to save the location.');
-                return;
-            }
-        
-            const location = document.getElementById(focusedInput).value.trim();
-            if (!location) {
-                alert('Please enter a location to save.');
-                return;
-            }
-        
-            const label = prompt('Enter a label for this location (e.g., Home):');
-            if (!label) {
-                alert('Location saving canceled.');
-                return;
-            }
+
+
+
         
             const locations = await fetchLocations();
             locations[label] = location;
         
-            await saveLocationsToFile(locations);
-            await updateSavedLocationsDropdown();
-            alert(`Location "${label}" saved.`);
-        }
+
         
         async function updateSavedLocationsDropdown() {
             const locations = await fetchLocations();
