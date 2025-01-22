@@ -50,7 +50,6 @@
             color: #fff;
             margin-right: 5px;
             width: 70%; /* Adjust this percentage to make inputs smaller */
-
         }
 
         button.icon {
@@ -103,9 +102,32 @@
         button.action:active {
             background-color: #888;
         }
+
+        /* Screen Lock Style */
+        #screenLock {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 18px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+    <!-- Black Screen Lock -->
+    <div id="screenLock">
+        <p>Tap three times to unlock</p>
+    </div>
+
     <h1>MacroDroid Trigger</h1>
 
     <!-- Walk Action -->
@@ -144,6 +166,8 @@
 
     <script>
         let focusedInput = null;
+        let unlockCount = 0;
+        const unlockThreshold = 3;
 
         function setFocusedInput(inputId) {
             focusedInput = inputId;
@@ -259,6 +283,15 @@
                 .then(data => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
                 .catch(error => alert('Failed to trigger action: ' + error));
         }
+
+        // Black Screen Lock Logic
+        document.getElementById('screenLock').addEventListener('click', () => {
+            unlockCount++;
+            if (unlockCount === unlockThreshold) {
+                document.getElementById('screenLock').style.display = 'none';
+                unlockCount = 0; // Reset for the next lock
+            }
+        });
 
         updateSavedLocationsDropdown();
     </script>
