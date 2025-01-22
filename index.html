@@ -125,9 +125,7 @@
 <body>
     <!-- Black Screen Lock -->
    <div id="screenLock">
-        <p>Error: Unable to complete this action.</p>
-        <p>Please try again later.</p>
-        <button onclick="closeScreenLock()">Dismiss</button>
+        <p>Error: Please try again later</p>
     </div>
     
     <h1>MacroDroid Trigger</h1>
@@ -170,9 +168,7 @@
         let focusedInput = null;
         let unlockCount = 0;
         const unlockThreshold = 3;
-        function closeScreenLock() {
-            document.getElementById('screenLock').style.display = 'none';
-        }
+        
         function setFocusedInput(inputId) {
             focusedInput = inputId;
         }
