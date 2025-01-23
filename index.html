@@ -153,10 +153,12 @@
             document.getElementById(id).value = '';
         }
 
+
         async function pasteInput(id) {
             try {
                 const text = await navigator.clipboard.readText();
-                document.getElementById(id).value = text;
+                const cleanedText = text.replace(/[()]/g, ''); // Remove parentheses
+                document.getElementById(id).value = cleanedText;
             } catch (err) {
                 alert('Failed to paste from clipboard: ' + err);
             }
