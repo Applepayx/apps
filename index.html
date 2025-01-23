@@ -246,13 +246,9 @@
 
         function openGoogleMaps() {
             const urlScheme = 'comgooglemaps://';
-            if (focusedInput && document.getElementById(focusedInput).value.trim()) {
-                const location = encodeURIComponent(document.getElementById(focusedInput).value.trim());
-                window.location.href = `${urlScheme}?q=${location}`;
-            } else {
-                alert('Please enter or select a location first.');
-            }
+            window.location.href = urlScheme;
         }
+
 
         fetchSavedLocations();
     </script>
