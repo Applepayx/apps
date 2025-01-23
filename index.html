@@ -132,6 +132,7 @@
         <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
         <button class="icon" onclick="pasteInput('walkStart')">📋</button>
         <button class="icon" onclick="clearInput('walkStart')">❌</button>
+        <button class="icon" onclick="switchInputs()">🔄</button>
     </div>
     <div class="input-group">
         <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
@@ -195,6 +196,16 @@
             }
         }
 
+        function switchInputs() {
+            const startInput = document.getElementById('walkStart');
+            const endInput = document.getElementById('walkEnd');
+
+           // Swap the values of the two inputs
+            const temp = startInput.value;
+            startInput.value = endInput.value;
+            endInput.value = temp;
+        }
+        
         async function fetchSavedLocations() {
             try {
                 const response = await fetch('locations.json');
