@@ -119,8 +119,8 @@
         <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
         <button class="icon" onclick="pasteInput('walkEnd')">📋</button>
         <button class="icon" onclick="clearInput('walkEnd')">❌</button>
+        <button class="icon" onclick="triggerWalk()">▶️</button>
     </div>
-    <button class="action" onclick="triggerWalk()">Send Walk</button>
 
     <!-- Jump Action -->
     <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
@@ -128,9 +128,8 @@
         <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
         <button class="icon" onclick="pasteInput('jumpLocation')">📋</button>
         <button class="icon" onclick="clearInput('jumpLocation')">❌</button>
+        <button class="icon" onclick="triggerJump()">▶️</button>
     </div>
-    <button class="action" onclick="triggerJump()">Send Jump</button>
-
     <!-- Saved Locations -->
     <h3>📍 Saved Locations</h3>
     <select id="savedLocations" onchange="applySavedLocation()">
