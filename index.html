@@ -43,7 +43,7 @@
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             flex: 1;
             padding: 5px;
-            font-size: 14px;
+            font-size: 17px;
             border-radius: 5px;
             border: 1px solid #444;
             background-color: #222;
@@ -56,7 +56,7 @@
         button.icon {
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             padding: 5px;
-            font-size: 14px;
+            font-size: 17px;
             border: none;
             border-radius: 5px;
             background-color: #444;
@@ -74,7 +74,7 @@
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             width: 100%;
             padding: 5px;
-            font-size: 14px;
+            font-size: 17px;
             border-radius: 5px;
             border: 1px solid #444;
             background-color: #222;
@@ -90,7 +90,7 @@
             border: none;
             border-radius: 5px;
             padding: 10px;
-            font-size: 14px;
+            font-size: 17px;
             cursor: pointer;
             transition: background-color 0.3s;
             margin: 10px 0;
@@ -108,7 +108,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            font-size: 24px;
+            font-size: 17px;
         }
 
         button.action:hover {
@@ -122,7 +122,7 @@
 </head>
 <body>
     <div id="lockScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; z-index: 9999; display: flex; align-items: center; justify-content: center;">
-         <p style="color: white; font-size: 24px;">Tap 3 times to unlock</p>
+         <p style="color: black; font-size: 24px;">..</p>
     </div>
     <h1>MacroDroid Trigger</h1>
 
@@ -156,9 +156,11 @@
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
-    <button class="action" onclick="triggerAction('check')">Check Phone Battery</button>
-    <button class="action" onclick="triggerAction('stop')">Stop</button>
-    <button class="action" onclick="openGoogleMaps()">🗺️ Open Google Maps</button>
+    <button class="action" onclick="openGoogleMaps()">🗺️ Google Maps 🗺️</button>
+    <button class="action" onclick="triggerAction('stop')">⚠️ Stop ⚠️</button>
+    <button class="action" onclick="triggerAction('check')">🪫 Battery 🔋</button>
+
+
 
     <script>
         let focusedInput = null;
