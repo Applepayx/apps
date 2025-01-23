@@ -28,6 +28,7 @@
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             font-size: 20px;
             margin: 10px 0;
+            animation: fadeIn 1s ease-in-out;
         }
 
         .input-group {
@@ -50,8 +51,14 @@
             color: #fff;
             margin-right: 5px;
             width: 70%; /* Adjust this percentage to make inputs smaller */
+            transition: transform 0.2s ease-in-out;
 
         }
+        input:focus {
+            transform: scale(1.05);
+            border-color: #666;
+        }
+
 
         button.icon {
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
@@ -64,11 +71,15 @@
             cursor: pointer;
             transition: background-color 0.3s;
             margin-left: 5px; /* Add space between buttons */
+            transition: background-color 0.3s, transform 0.2s ease-in-out;
         }
 
-        button.icon:hover {
+        button.icon:hover, button.action:hover {
             background-color: #666;
+            transform: scale(1.1);
         }
+
+    
 
         select {
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
@@ -94,6 +105,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             margin: 10px 0;
+            transition: background-color 0.3s, transform 0.2s ease-in-out;
         }
 
         #lockScreen {
@@ -110,7 +122,28 @@
             z-index: 1000;
             font-size: 17px;
         }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .action:hover {
+            animation: pulse 0.6s infinite;
+        }
+    
         button.action:hover {
             background-color: #666;
         }
