@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="MacroDroid Trigger">
     <meta name="theme-color" content="#000000">
@@ -26,11 +26,6 @@
             padding: 10px;
             overflow: hidden; /* Disable scrolling */
             touch-action: none; /* Disable gestures like pinch-to-zoom */
-            height: 100%;
-            overflow: hidden;
-            padding-bottom: 150px; /* Adjust based on the keyboard height */
-            position: relative;
-            overflow-y: auto;
         }
 
         h1, h3 {
@@ -40,46 +35,27 @@
         }
 
         .input-group {
-            font-family: 'Poppins', Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin: 10px 0;
             max-width: 100%;
-            background: rgba(255, 255, 255, 0.05); /* Slight transparent background for the group */
-            padding: 10px; /* Adds spacing inside the group for a cleaner look */
-            border-radius: 10px; /* Rounded corners for the group */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Slight shadow for a floating effect */
-            transition: all 0.3s ease; /* Smooth animations */
         }
 
         input {
-            font-family: 'Poppins', Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             flex: 1;
             padding: 5px;
             font-size: 17px;
             border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.3); /* Transparent border */
-            background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
+            border: 1px solid #444;
+            background-color: #222;
             color: #fff;
             margin-right: 5px;
             width: 70%; /* Adjust this percentage to make inputs smaller */
-            transition: all 0.3s ease; /* Smooth transition for hover and focus */
-            outline: none; /* Remove default outline */
-        }
-        
-        input:hover {
-            background-color: rgba(255, 255, 255, 0.2); /* Slightly brighter on hover */
-            border-color: rgba(255, 255, 255, 0.5); /* Brighter border on hover */
-        }
-        
-        input:focus {
-            background-color: rgba(255, 255, 255, 0.2); /* Slightly brighter on focus */
-            border-color: rgba(255, 0, 0, 0.8); /* Red border when focused */
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Red glow effect */
-        }
 
+        }
 
          button.icon, button.action {
             font-family: 'Poppins', Arial, sans-serif;
@@ -87,7 +63,7 @@
             font-size: 16px;
             border: none;
             border-radius: 50px; /* Fully rounded buttons */
-            background: rgba(50, 50, 50, 0.6); /* Increased transparency */
+            background: rgba(50, 50, 50, 0.7); /* Increased transparency */
             color: #fff;
             cursor: pointer;
             transition: all 0.3s ease; /* Smooth transitions for hover and active effects */
@@ -98,24 +74,16 @@
 
 
         select {
-            font-family: 'Poppins', Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             width: 100%;
-            padding: 10px;
+            padding: 5px;
             font-size: 18px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
-            background: rgba(255, 255, 255, 0.05); /* Transparent background */
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #222;
             color: #fff;
             margin: 10px 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Slight shadow */
         }
-        
-        select:focus {
-            outline: none;
-            border-color: red; /* Red glow on focus */
-            box-shadow:
-
 
 
 
@@ -135,29 +103,15 @@
         }
        
         button.icon:hover, button.action:hover {
-            background: rgba(70, 70, 70, 0.7); /* Increased transparency */
+            background: rgba(70, 70, 70, 0.8); /* Increased transparency */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Intensify shadow on hover */
             transform: translateY(-2px); /* Slight lift on hover */
         }
     
         button.icon:active, button.action:active {
-            background: rgba(40, 40, 40, 0.7); /* Increased transparency */
+            background: rgba(40, 40, 40, 0.8); /* Increased transparency */
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow reduction */
             transform: translateY(1px); /* Button presses down slightly */
-        }
-            #notification {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(50, 50, 50, 0.9);
-            color: #fff;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            font-family: 'Poppins', Arial, sans-serif;
-            z-index: 9999;
-            transition: opacity 0.5s ease, top 0.5s ease;
         }
     </style>
 </head>
@@ -189,6 +143,7 @@
         <button class="icon" onclick="pasteInput('jumpLocation')">📋</button>
         <button class="icon" onclick="clearInput('jumpLocation')">❌</button>
         <button class="icon" onclick="triggerJump()">▶️</button>
+    <div id="notification" style="display: none; position: fixed; top: 20px; right: 20px; background-color: rgba(50, 50, 50, 0.9); color: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); font-family: 'Poppins', Arial, sans-serif; z-index: 9999; transition: opacity 0.5s ease, top 0.5s ease;"></div>
     </div>
     <!-- Saved Locations -->
     <h3>📍 Saved Locations</h3>
@@ -202,7 +157,7 @@
     <button class="action" onclick="triggerAction('stop')">⚠️ Stop ⚠️</button>
     <button class="action" onclick="triggerAction('check')">🪫 Battery 🔋</button>
 
-    <div id="notification"></div>
+
 
     <script>
         let focusedInput = null;
@@ -216,14 +171,23 @@
                 lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks
             }
         });
-
-        document.querySelectorAll('input, select').forEach(input => {
-            input.addEventListener('focus', () => {
+        
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            notification.style.opacity = '1';
+            notification.style.top = '20px';
+    
+            // Fade out after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.top = '10px';
                 setTimeout(() => {
-                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300); // Add a delay to account for keyboard animation
-            });
-        });
+                    notification.style.display = 'none';
+                }, 500); // Wait for the fade-out transition to complete
+            }, 3000); // Notification stays visible for 3 seconds
+        }
         
         function setFocusedInput(inputId) {
             focusedInput = inputId;
@@ -290,72 +254,50 @@
 
             dropdown.value = '';
         }
-        
-        // Notification logic
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.style.display = 'block';
-            notification.style.opacity = '1';
-            notification.style.top = '20px';
 
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.top = '10px';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 500); // Wait for fade-out
-            }, 3000); // Show for 3 seconds
-        }
-
-          // Update the triggerWalk function
         function triggerWalk() {
             const start = document.getElementById('walkStart').value.trim();
             const end = document.getElementById('walkEnd').value.trim();
-
+    
             if (!start || !end) {
                 showNotification('⚠️ Please enter both start and end locations.');
                 return;
             }
-
+    
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
             fetch(url)
                 .then(response => response.text())
                 .then(() => showNotification('✅ Walk triggered successfully!'))
                 .catch(error => showNotification('❌ Failed to trigger Walk: ' + error));
         }
-
+    
+        // Update the triggerJump function
         function triggerJump() {
             const location = document.getElementById('jumpLocation').value.trim();
-
+    
             if (!location) {
                 showNotification('⚠️ Please enter a location for Jump.');
                 return;
             }
-
+    
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
             fetch(url)
                 .then(response => response.text())
                 .then(() => showNotification('✅ Jump triggered successfully!'))
                 .catch(error => showNotification('❌ Failed to trigger Jump: ' + error));
         }
-
+    
+        // Update the triggerAction function
         function triggerAction(action) {
             const url =
                 action === 'check'
                     ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
                     : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
-        
+    
             fetch(url)
                 .then(response => response.text())
-                .then(() => {
-                    const message = `${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`;
-                    showNotification(message, 'success'); // Display success notification
-                })
-                .catch(error => {
-                    const message = `Failed to trigger action: ${error}`;
-                    showNotification(message, 'error'); // Display error notification
-                });
+                .then(() => showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .catch(error => showNotification('❌ Failed to trigger action: ' + error));
         }
 
         function openGoogleMaps() {
