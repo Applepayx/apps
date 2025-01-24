@@ -42,6 +42,22 @@
             margin: 10px 0;
             max-width: 100%;
         }
+        
+        input[type="text"] {
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            outline: none;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        }
 
 
 
@@ -89,7 +105,21 @@
             z-index: 1000;
             font-size: 18px;
         }
-       
+
+        #notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-family: 'Poppins', Arial, sans-serif;
+            z-index: 9999;
+            transition: opacity 0.5s ease, top 0.5s ease;
+        }        
         button.icon:hover, button.action:hover {
             background: rgba(70, 70, 70, 0.8); /* Increased transparency */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Intensify shadow on hover */
