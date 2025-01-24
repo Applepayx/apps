@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="MacroDroid Trigger">
     <meta name="theme-color" content="#000000">
@@ -26,6 +26,11 @@
             padding: 10px;
             overflow: hidden; /* Disable scrolling */
             touch-action: none; /* Disable gestures like pinch-to-zoom */
+            height: 100%;
+            overflow: hidden;
+            padding-bottom: 150px; /* Adjust based on the keyboard height */
+            position: relative;
+            overflow-y: auto;
         }
 
         h1, h3 {
@@ -212,6 +217,13 @@
             }
         });
 
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', () => {
+                setTimeout(() => {
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300); // Add a delay to account for keyboard animation
+            });
+        });
         
         function setFocusedInput(inputId) {
             focusedInput = inputId;
