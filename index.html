@@ -33,15 +33,24 @@
             font-size: 20px;
             margin: 10px 0;
         }
-
         .input-group {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin: 10px 0;
-            max-width: 100%;
+            background-color: rgba(0, 0, 0, 0.3); /* Transparent group background */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Soft glow for the group */
+            padding: 10px; /* Padding around the group */
+            transition: all 0.3s ease; /* Smooth transition for hover/focus effects */
         }
+        
+        .input-group:hover {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* Intensify glow on hover */
+            border-color: rgba(255, 255, 255, 0.5); /* Highlight border on hover */
+        }
+
         
 
         input, button.icon, button.action {
