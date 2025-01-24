@@ -60,29 +60,65 @@
 
         button.icon, button.action {
             font-family: 'Poppins', Arial, sans-serif; /* Apply to buttons */
-            padding: 10px;
+            padding: 12px 20px; /* Increase padding for a more comfortable size */
             font-size: 16px;
             border: none;
-            border-radius: 25px; /* Make the buttons rounded */
-            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Add a gradient */
+            border-radius: 30px; /* Smoothly rounded buttons */
+            background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Warm gradient colors */
             color: #fff;
             cursor: pointer;
-            transition: all 0.3s ease; /* Smooth transitions for hover effects */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add a shadow */
-            margin: 5px; /* Add space between buttons */
+            transition: all 0.4s ease; /* Smoother transition */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 5px rgba(255, 126, 95, 0.5); /* Dual shadow effect */
+            margin: 8px; /* Add spacing between buttons */
+            position: relative;
+            overflow: hidden; /* Prevent hover effects from spilling out */
         }
         
         button.icon:hover, button.action:hover {
-            background: linear-gradient(135deg, #2575fc, #6a11cb); /* Invert the gradient on hover */
-            transform: translateY(-3px); /* Lift the button slightly */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4); /* Intensify the shadow */
+            background: linear-gradient(135deg, #feb47b, #ff7e5f); /* Reverse the gradient */
+            transform: translateY(-5px) scale(1.05); /* Lift and slightly enlarge */
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 126, 95, 0.7); /* Enhance shadows */
         }
         
         button.icon:active, button.action:active {
-            background: linear-gradient(135deg, #1b4fd6, #4e00c2); /* Darken the gradient on click */
-            transform: translateY(1px); /* Slightly depress the button */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce the shadow */
+            background: linear-gradient(135deg, #d65d4e, #e87e65); /* Slightly darker on press */
+            transform: translateY(2px); /* Slight depression effect */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Reduce shadow */
         }
+        
+        button.icon::before, button.action::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 10%, transparent 50%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        button.icon:hover::before, button.action:hover::before {
+            transform: translate(-50%, -50%) scale(1); /* Glow expands outward */
+            opacity: 0;
+        }
+        
+        button.icon, button.action {
+            z-index: 2; /* Keep text and icons above effects */
+        }
+        
+        button.icon span, button.action span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        button.icon:hover span, button.action:hover span {
+            transform: scale(1.1); /* Slight zoom effect on text/icon */
+        }
+
 
 
 
