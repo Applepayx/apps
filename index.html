@@ -35,58 +35,61 @@
         }
 
         .input-group {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            font-family: 'Poppins', Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin: 10px 0;
             max-width: 100%;
         }
-
-        input {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
-            flex: 1;
-            padding: 5px;
-            font-size: 17px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #222;
-            color: #fff;
-            margin-right: 5px;
-            width: 70%; /* Adjust this percentage to make inputs smaller */
-
-        }
-
-         button.icon, button.action {
+        
+        button.icon, button.action {
             font-family: 'Poppins', Arial, sans-serif;
-            padding: 10px 15px; /* Adjust padding for better sizing */
+            padding: 10px 15px;
             font-size: 16px;
             border: none;
-            border-radius: 50px; /* Fully rounded buttons */
-            background: rgba(50, 50, 50, 0.7); /* Increased transparency */
+            border-radius: 50px;
+            background: rgba(50, 50, 50, 0.7); /* Background remains */
             color: #fff;
             cursor: pointer;
-            transition: all 0.3s ease; /* Smooth transitions for hover and active effects */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-            margin: 5px; /* Space between buttons */
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 5px;
+            background-color: transparent; /* Transparent background */
+            border: 1px solid transparent; /* Border becomes transparent */
+            color: #fff;
+            box-shadow: 0 0 0 2px rgba(50, 50, 50, 0.7); /* Transparent glowing border */
         }
-
-
-
+        
+        button.icon:hover, button.action:hover {
+            background-color: transparent; /* Keep transparent background */
+            box-shadow: 0 0 10px rgba(50, 50, 50, 0.7); /* Glowing effect on hover */
+            transform: translateY(-2px);
+        }
+        
+        button.icon:active, button.action:active {
+            background: rgba(40, 40, 40, 0.8);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transform: translateY(1px);
+        }
+        
         select {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            font-family: 'Poppins', Arial, sans-serif;
             width: 100%;
             padding: 5px;
             font-size: 18px;
             border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #222;
+            border: 1px solid transparent; /* Transparent border */
+            background-color: transparent; /* Transparent background */
             color: #fff;
             margin: 10px 0;
+            box-shadow: 0 0 0 2px rgba(50, 50, 50, 0.7); /* Transparent glowing border */
         }
-
-
-
+        
+        select:hover {
+            box-shadow: 0 0 10px rgba(50, 50, 50, 0.7); /* Glowing effect on hover */
+        }
+        
         #lockScreen {
             position: fixed;
             top: 0;
@@ -101,18 +104,7 @@
             z-index: 1000;
             font-size: 18px;
         }
-       
-        button.icon:hover, button.action:hover {
-            background: rgba(70, 70, 70, 0.8); /* Increased transparency */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Intensify shadow on hover */
-            transform: translateY(-2px); /* Slight lift on hover */
-        }
-    
-        button.icon:active, button.action:active {
-            background: rgba(40, 40, 40, 0.8); /* Increased transparency */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow reduction */
-            transform: translateY(1px); /* Button presses down slightly */
-        }
+
     </style>
 </head>
 <body>
