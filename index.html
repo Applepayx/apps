@@ -33,8 +33,8 @@
         /* Apply the fade effect to the .trigger-screen container */
         .trigger-screen {
             font-family: 'Poppins', Arial, sans-serif;
-            background: url('peakpx.jpg') no-repeat center center fixed; /* Background image */
-            background-color: #000; /* Fallback color if the image doesn't load */
+            background: url('peakpx.jpg') no-repeat center center fixed;
+            background-color: #000;
             background-position: center;
             background-repeat: no-repeat;
             background-size: 100% 100%;
@@ -44,24 +44,22 @@
             padding: 10px;
             overflow: hidden;
             touch-action: none;
-        
-            /* Animation for fading effect */
-            animation: fadeInOut 10s ease-in-out infinite; /* Slow fade-in and fade-out cycle */
+            
+            /* Apply animation for fading effect */
+            animation: fadeInOut 10s ease-in-out infinite;
         }
         
-        /* Keyframes for the fade-in and fade-out effect */
         @keyframes fadeInOut {
-            80% {
-                opacity: 1; /* Fully visible */
+            0% {
+                opacity: 0;
             }
-            90% {
-                opacity: 0.8; /* Slightly faded */
+            50% {
+                opacity: 1;
             }
             100% {
-                opacity: 1; /* Fully visible again */
+                opacity: 0;
             }
         }
-
 
 
 
