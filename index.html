@@ -15,20 +15,76 @@
 
     <title>MacroDroid Trigger</title>
     <style>
-        body {
-            font-family: 'Poppins', Arial, sans-serif;
-            background: url('peakpx.jpg') no-repeat center center fixed; /* Add your image as background */
-            background-color: #000; /* Fallback color if the image doesn't load */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent tiling */
-            background-size: 100% 100%; /* Stretch the image to fit the screen */
-            color: #fff;
-            margin: 0;
-            text-align: center;
-            padding: 10px;
-            overflow: hidden; /* Disable scrolling */
-            touch-action: none; /* Disable gestures like pinch-to-zoom */
+    body {
+        font-family: 'Poppins', Arial, sans-serif;
+        background: url('peakpx.jpg') no-repeat center center fixed;
+        background-color: #000;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #fff;
+        margin: 0;
+        text-align: center;
+        padding: 10px;
+        overflow: hidden;
+        touch-action: none;
+        position: relative;
+    }
+    
+    /* Slow zooming effect */
+    @keyframes slowZoom {
+        0% {
+            transform: scale(1);
         }
+        100% {
+            transform: scale(1.05);
+        }
+    }
+    
+    /* Apply the zoom effect */
+    body {
+        animation: slowZoom 20s infinite alternate; /* Slow zoom in and out */
+    }
+    
+    /* Slowly moving background horizontally and vertically */
+    @keyframes moveBackground {
+        0% {
+            background-position: center center;
+        }
+        50% {
+            background-position: 30% 30%; /* Move to 30% of the screen */
+        }
+        100% {
+            background-position: center center; /* Return to center */
+        }
+    }
+    
+    /* Apply the moving background effect */
+    body {
+        animation: moveBackground 15s ease-in-out infinite; /* Slow movement */
+    }
+    
+    /* Adding glitchy distortion effect (static noise) */
+    @keyframes staticNoise {
+        0% {
+            background: url('peakpx.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        50% {
+            background: url('peakpx.jpg') no-repeat center center fixed;
+            background-size: 105%; /* Zoomed-in look */
+        }
+        100% {
+            background: url('peakpx.jpg') no-repeat center center fixed;
+            background-size: 100%;
+        }
+    }
+    
+    /* Apply the glitchy static effect */
+    body {
+        animation: staticNoise 5s steps(5, end) infinite; /* Glitchy static effect */
+    }
+
 
         h1, h3 {
             font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
