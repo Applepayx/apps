@@ -57,17 +57,17 @@
 
         }
 
-        button.icon, button.action {
+         button.icon, button.action {
             font-family: 'Poppins', Arial, sans-serif;
             padding: 10px 15px; /* Adjust padding for better sizing */
             font-size: 16px;
             border: none;
             border-radius: 50px; /* Fully rounded buttons */
-            background: linear-gradient(135deg, #6c63ff, #5a5df5); /* Gradient color */
+            background: rgba(50, 50, 50, 0.8); /* Darker and semi-transparent background */
             color: #fff;
             cursor: pointer;
             transition: all 0.3s ease; /* Smooth transitions for hover and active effects */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow */
             margin: 5px; /* Space between buttons */
         }
 
@@ -103,14 +103,14 @@
         }
        
         button.icon:hover, button.action:hover {
-            background: linear-gradient(135deg, #5a5df5, #6c63ff); /* Invert gradient on hover */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4); /* Intensify shadow on hover */
+            background: rgba(70, 70, 70, 0.9); /* Slightly lighter and less transparent on hover */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Intensify shadow on hover */
             transform: translateY(-2px); /* Slight lift on hover */
         }
-
+    
         button.icon:active, button.action:active {
-            background: linear-gradient(135deg, #4a4bcc, #5a5df5); /* Darker gradient on active */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow reduction */
+            background: rgba(40, 40, 40, 0.9); /* Darker background on active */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow reduction */
             transform: translateY(1px); /* Button presses down slightly */
         }
     </style>
