@@ -89,17 +89,24 @@
         /* Reverted Icon button styling */
         button.icon {
             font-family: 'Poppins', Arial, sans-serif;
-            padding: 8px 15px;
-            font-size: 18px;
+            padding: 8px;
+            font-size: 0; /* Hide button text if any */
             border: none;
             border-radius: 5px;
             background-color: rgba(255, 255, 255, 0.3); /* Transparent button */
-            color: #fff;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s ease;
             margin-left: 5px;
+            display: flex;
+            align-items: center; /* Center the image vertically */
+            justify-content: center; /* Center the image horizontally */
         }
         
+        button.icon img {
+            width: 20px; /* Icon size */
+            height: 20px; /* Icon size */
+            pointer-events: none; /* Prevent click events on the image */
+        }
         button.icon:hover {
             background-color: rgba(255, 255, 255, 1);
             transform: scale(1.1);
@@ -181,9 +188,19 @@
     </div>
     <div class="input-group">
         <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
-        <button class="icon" onclick="pasteInput('walkEnd')">📋</button>
-        <button class="icon" onclick="clearInput('walkEnd')">❌</button>
-        <button class="icon" onclick="triggerWalk()">▶️</button>
+        <button class="icon" onclick="pasteInput('walkStart')">
+            <img src="clipboard-icon.png" alt="Paste" style="width: 20px; height: 20px;">
+        </button>
+        <button class="icon" onclick="clearInput('walkStart')">
+            <img src="clear-icon.png" alt="Clear" style="width: 20px; height: 20px;">
+        </button>
+        <button class="icon" onclick="switchInputs()">
+            <img src="switch-icon.png" alt="Switch" style="width: 20px; height: 20px;">
+        </button>
+        <button class="icon" onclick="triggerWalk()">
+            <img src="play-icon.png" alt="Trigger Walk" style="width: 20px; height: 20px;">
+        </button>
+        
     </div>
 
     <!-- Jump Action -->
