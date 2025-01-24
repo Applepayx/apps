@@ -121,40 +121,31 @@
         
         /* Action button styling */
         button.action {
-            width: auto;
-            background-color: rgba(68, 68, 68, 0.3);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 16px;
+            width: 50px; /* Fixed width for the buttons */
+            height: 50px; /* Fixed height for the buttons */
+            background-color: transparent; /* Make background transparent */
+            background-size: cover; /* Make sure the image covers the button area */
+            background-position: center; /* Center the image inside the button */
+            background-repeat: no-repeat; /* Prevent image repeating */
+            border: none; /* Remove the border */
+            border-radius: 10px; /* Optional: Rounded corners for the button */
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; /* Smooth transition */
             margin: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        /* Ensuring images inside buttons are centered */
-        button.action img {
-            width: 30px; /* Adjust the size of the icon */
-            height: 30px; /* Ensure the icon maintains a square shape */
         }
         
         /* Hover effect for action buttons */
         button.action:hover {
-            background-color: rgba(68, 68, 68, 0.2);
-            transform: scale(1.05);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            transform: scale(1.1); /* Button grows on hover */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* Slight shadow on hover */
+            filter: brightness(1.1); /* Slight brightness increase */
         }
         
         /* Active effect for action buttons */
         button.action:active {
-            background-color: rgba(68, 68, 68, 0.4);
-            transform: scale(0.97);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: scale(0.95); /* Button shrinks when clicked */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow change */
+            filter: brightness(0.9); /* Slight brightness decrease */
         }
         
         /* Styling to make the action buttons inline */
@@ -243,17 +234,11 @@
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
-    <div class="action-container">
-        <button class="action" onclick="openGoogleMaps()">
-            <img src="google-maps-icon.png" alt="Google Maps" style="width: 30px; height: 30px;">
-        </button>
-        <button class="action" onclick="triggerAction('stop')">
-            <img src="stop-icon.png" alt="Stop" style="width: 30px; height: 30px;">
-        </button>
-        <button class="action" onclick="triggerAction('check')">
-            <img src="battery-icon.png" alt="Battery" style="width: 30px; height: 30px;">
-        </button>
-    </div>
+     <div class="action-container">
+        <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
+        <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
+        <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
+     </div>
 
 
     <script>
