@@ -67,29 +67,6 @@
             background-color: rgba(255, 255, 255, 0.3);
         }
         
-        /* Icon button with transparency and hover effect */
-        button.icon {
-            font-family: 'Poppins', Arial, sans-serif;
-            padding: 8px 15px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            background-color: rgba(68, 68, 68, 0.7); /* Transparent button */
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s ease;
-            margin-left: 5px;
-        }
-        
-        button.icon:hover {
-            background-color: rgba(68, 68, 68, 1);
-            transform: scale(1.1);
-        }
-        
-        button.icon:active {
-            background-color: rgba(68, 68, 68, 0.9);
-            transform: scale(1.05);
-        }
         
         /* Transparent select dropdown */
         select {
@@ -109,31 +86,58 @@
             border-color: #fff;
             background-color: rgba(255, 255, 255, 0.3);
         }
+        /* Icon button with updated styling */
+        button.icon {
+            font-family: 'Poppins', Arial, sans-serif;
+            padding: 6px 12px; /* Slightly smaller size */
+            font-size: 16px; /* Slightly smaller font size */
+            border: none;
+            border-radius: 25px; /* More rounded corners */
+            background-color: rgba(68, 68, 68, 0.7); /* Transparent button */
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
+            margin-left: 5px;
+        }
         
-        /* Action button with added effect */
+        button.icon:hover {
+            background-color: rgba(68, 68, 68, 1);
+            transform: scale(1.1);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Cool shadow effect */
+        }
+        
+        button.icon:active {
+            background-color: rgba(68, 68, 68, 0.9);
+            transform: scale(1.05);
+        }
+        
+        /* Action button with updated styling */
         button.action {
             font-family: 'Poppins', Arial, sans-serif;
             width: 100%;
             background-color: rgba(68, 68, 68, 0.7);
             color: #fff;
             border: none;
-            border-radius: 5px;
-            padding: 12px 20px;
-            font-size: 18px;
+            border-radius: 25px; /* More rounded corners */
+            padding: 10px 16px; /* Slightly smaller padding */
+            font-size: 16px; /* Slightly smaller font size */
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s ease;
+            transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
             margin: 10px 0;
         }
         
         button.action:hover {
             background-color: rgba(68, 68, 68, 1);
             transform: scale(1.05);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Cool shadow effect */
         }
         
         button.action:active {
             background-color: rgba(68, 68, 68, 0.9);
             transform: scale(0.98);
         }
+
+
 
         #lockScreen {
             position: fixed;
