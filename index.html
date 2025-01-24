@@ -221,22 +221,25 @@
             }
         });
         
-        function showNotification(message) {
+        function showNotification(message, duration = 3000) {
             const notification = document.getElementById('notification');
+            
+            // Set the message
             notification.textContent = message;
+            
+            // Show the notification
             notification.style.display = 'block';
             notification.style.opacity = '1';
-            notification.style.top = '20px';
-    
-            // Fade out after 3 seconds
+        
+            // Hide after the specified duration
             setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.top = '10px';
+                notification.style.opacity = '0'; // Fade out
                 setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 500); // Wait for the fade-out transition to complete
-            }, 3000); // Notification stays visible for 3 seconds
+                    notification.style.display = 'none'; // Remove from view
+                }, 500); // Match the transition duration
+            }, duration);
         }
+
         
         function setFocusedInput(inputId) {
             focusedInput = inputId;
@@ -253,7 +256,7 @@
                 const cleanedText = text.replace(/[()]/g, ''); // Remove parentheses
                 document.getElementById(id).value = cleanedText;
             } catch (err) {
-                alert('Failed to paste from clipboard: ' + err);
+                showNotification('❌ Failed to paste from clipboard: ' + err);
             }
         }
 
@@ -290,7 +293,7 @@
 
         function applySavedLocation() {
             if (!focusedInput) {
-                alert('Click on an input field first to select a saved location.');
+                showNotification('⚠️ Click on an input field first to select a saved location.');
                 document.getElementById('savedLocations').value = '';
                 return;
             }
