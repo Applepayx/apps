@@ -35,27 +35,46 @@
         }
 
         .input-group {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            font-family: 'Poppins', Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin: 10px 0;
             max-width: 100%;
+            background: rgba(255, 255, 255, 0.05); /* Slight transparent background for the group */
+            padding: 10px; /* Adds spacing inside the group for a cleaner look */
+            border-radius: 10px; /* Rounded corners for the group */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Slight shadow for a floating effect */
+            transition: all 0.3s ease; /* Smooth animations */
         }
 
         input {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            font-family: 'Poppins', Arial, sans-serif;
             flex: 1;
             padding: 5px;
             font-size: 17px;
             border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #222;
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Transparent border */
+            background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
             color: #fff;
             margin-right: 5px;
             width: 70%; /* Adjust this percentage to make inputs smaller */
-
+            transition: all 0.3s ease; /* Smooth transition for hover and focus */
+            outline: none; /* Remove default outline */
         }
+        
+        input:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Slightly brighter on hover */
+            border-color: rgba(255, 255, 255, 0.5); /* Brighter border on hover */
+        }
+        
+        input:focus {
+            background-color: rgba(255, 255, 255, 0.2); /* Slightly brighter on focus */
+            border-color: rgba(255, 0, 0, 0.8); /* Red border when focused */
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Red glow effect */
+        }
+
 
          button.icon, button.action {
             font-family: 'Poppins', Arial, sans-serif;
@@ -74,16 +93,24 @@
 
 
         select {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            font-family: 'Poppins', Arial, sans-serif;
             width: 100%;
-            padding: 5px;
+            padding: 10px;
             font-size: 18px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #222;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+            background: rgba(255, 255, 255, 0.05); /* Transparent background */
             color: #fff;
             margin: 10px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Slight shadow */
         }
+        
+        select:focus {
+            outline: none;
+            border-color: red; /* Red glow on focus */
+            box-shadow:
+
 
 
 
