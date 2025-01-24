@@ -150,18 +150,22 @@
         #notification {
             display: none;
             position: fixed;
-            top: 50%; /* Center vertically */
+            top: 0; /* Align to the top of the screen */
             left: 50%; /* Center horizontally */
-            transform: translate(-50%, -50%); /* Adjust for centering */
+            transform: translateX(-50%); /* Adjust for centering */
+            width: 100%; /* Make the notification take full width */
             background-color: rgba(0, 0, 0, 0.8);
             color: #fff;
             padding: 15px 20px;
-            border-radius: 8px;
+            border-radius: 0; /* No rounded corners */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             font-family: 'Poppins', Arial, sans-serif;
             z-index: 9999;
             transition: opacity 0.5s ease, transform 0.5s ease;
+            overflow-y: auto; /* Allow vertical scrolling if content exceeds screen height */
+            max-height: 100vh; /* Prevent going off-screen vertically */
         }
+
 
 
         #lockScreen {
