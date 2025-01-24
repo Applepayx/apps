@@ -43,37 +43,40 @@
             max-width: 100%;
         }
         
-        input[type="text"] {
-            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
-            border: 1px solid #fff;
-            color: #fff;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            outline: none;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-            transition: box-shadow 0.3s ease;
+
+        input, button.icon, button.action {
+            background-color: rgba(0, 0, 0, 0.4); /* Transparent background */
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Semi-transparent border */
+            color: #fff; /* Text color */
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Glow effect */
+            transition: all 0.3s ease; /* Smooth transition for hover and focus effects */
         }
         
-        input[type="text"]:focus {
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        input:focus, button.icon:hover, button.action:hover {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Intensify glow on focus/hover */
+            border-color: rgba(255, 255, 255, 0.8); /* Highlight border */
         }
-
-
-
-         button.icon, button.action {
-            font-family: 'Poppins', Arial, sans-serif;
-            padding: 10px 15px; /* Adjust padding for better sizing */
+        
+        input, select {
+            padding: 10px;
+            border-radius: 5px;
             font-size: 16px;
-            border: none;
-            border-radius: 50px; /* Fully rounded buttons */
-            background: rgba(50, 50, 50, 0.7); /* Increased transparency */
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease; /* Smooth transitions for hover and active effects */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-            margin: 5px; /* Space between buttons */
+            outline: none; /* Remove default focus outline */
         }
+        
+        button.icon, button.action {
+            padding: 10px 15px; /* Adjust button padding */
+            border-radius: 50px; /* Rounded buttons */
+            cursor: pointer;
+        }
+        
+        button.icon:active, button.action:active {
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Subtle glow on press */
+            transform: scale(0.98); /* Slight scale down effect on press */
+        }
+
+
+
 
 
 
@@ -120,17 +123,8 @@
             z-index: 9999;
             transition: opacity 0.5s ease, top 0.5s ease;
         }        
-        button.icon:hover, button.action:hover {
-            background: rgba(70, 70, 70, 0.8); /* Increased transparency */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Intensify shadow on hover */
-            transform: translateY(-2px); /* Slight lift on hover */
-        }
-    
-        button.icon:active, button.action:active {
-            background: rgba(40, 40, 40, 0.8); /* Increased transparency */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow reduction */
-            transform: translateY(1px); /* Button presses down slightly */
-        }
+
+
 
     </style>
 </head>
