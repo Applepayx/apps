@@ -17,6 +17,22 @@
     <style>
         body {
             font-family: 'Poppins', Arial, sans-serif;
+            background: url('peakpx.jpg') no-repeat center center fixed; /* Add your image as background */
+            background-color: #000; /* Fallback color if the image doesn't load */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent tiling */
+            background-size: 100% 100%; /* Stretch the image to fit the screen */
+            color: #fff;
+            margin: 0;
+            text-align: center;
+            padding: 10px;
+            overflow: hidden; /* Disable scrolling */
+            touch-action: none; /* Disable gestures like pinch-to-zoom */
+        }
+        
+        /* Apply the fade effect to the .trigger-screen container */
+        .trigger-screen {
+            font-family: 'Poppins', Arial, sans-serif;
             background: url('peakpx.jpg') no-repeat center center fixed; /* Background image */
             background-color: #000; /* Fallback color if the image doesn't load */
             background-position: center;
@@ -45,6 +61,7 @@
                 opacity: 1; /* Fully visible again */
             }
         }
+
 
 
 
@@ -208,43 +225,44 @@
     <div id="lockScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; z-index: 9999; display: flex; align-items: center; justify-content: center;">
          <p style="color: black; font-size: 24px;">..</p>
     </div>
-    <h1>MacroDroid Trigger</h1>
+    <div class="trigger-screen"> <!-- Added class here -->
+        <h1>MacroDroid Trigger</h1>
+        
+        <!-- Walk Action -->
+        <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
+        <div class="input-group">
+            <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
+            <button class="icon" onclick="pasteInput('walkStart')">📋</button>
+            <button class="icon" onclick="clearInput('walkStart')">❌</button>
+            <button class="icon" onclick="switchInputs()">🔄</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
+            <button class="icon" onclick="pasteInput('walkEnd')">📋</button>
+            <button class="icon" onclick="clearInput('walkEnd')">❌</button>
+            <button class="icon" onclick="triggerWalk()">▶️</button>
+        </div>
     
-    <!-- Walk Action -->
-    <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
-    <div class="input-group">
-        <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
-        <button class="icon" onclick="pasteInput('walkStart')">📋</button>
-        <button class="icon" onclick="clearInput('walkStart')">❌</button>
-        <button class="icon" onclick="switchInputs()">🔄</button>
-    </div>
-    <div class="input-group">
-        <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
-        <button class="icon" onclick="pasteInput('walkEnd')">📋</button>
-        <button class="icon" onclick="clearInput('walkEnd')">❌</button>
-        <button class="icon" onclick="triggerWalk()">▶️</button>
-    </div>
-
-    <!-- Jump Action -->
-    <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
-    <div class="input-group">
-        <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
-        <button class="icon" onclick="pasteInput('jumpLocation')">📋</button>
-        <button class="icon" onclick="clearInput('jumpLocation')">❌</button>
-        <button class="icon" onclick="triggerJump()">▶️</button>
-    <div id="notification"></div>
-    </div>
-    <!-- Saved Locations -->
-    <select id="savedLocations" onchange="applySavedLocation()">
-        <option value="">📍 Saved Locations</option>
-    </select>
-
-    <!-- Other Actions -->
-    <h3>⚙️ Other Actions</h3>
-    <button class="action" onclick="openGoogleMaps()">🗺️ Google Maps 🗺️</button>
-    <button class="action" onclick="triggerAction('stop')">⚠️ Stop ⚠️</button>
-    <button class="action" onclick="triggerAction('check')">🪫 Battery 🔋</button>
-
+        <!-- Jump Action -->
+        <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
+        <div class="input-group">
+            <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
+            <button class="icon" onclick="pasteInput('jumpLocation')">📋</button>
+            <button class="icon" onclick="clearInput('jumpLocation')">❌</button>
+            <button class="icon" onclick="triggerJump()">▶️</button>
+        <div id="notification"></div>
+        </div>
+        <!-- Saved Locations -->
+        <select id="savedLocations" onchange="applySavedLocation()">
+            <option value="">📍 Saved Locations</option>
+        </select>
+    
+        <!-- Other Actions -->
+        <h3>⚙️ Other Actions</h3>
+        <button class="action" onclick="openGoogleMaps()">🗺️ Google Maps 🗺️</button>
+        <button class="action" onclick="triggerAction('stop')">⚠️ Stop ⚠️</button>
+        <button class="action" onclick="triggerAction('check')">🪫 Battery 🔋</button>
+    </div> <!-- End of trigger-screen div -->
 
 
     <script>
