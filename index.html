@@ -119,32 +119,42 @@
         }
 
         
-        /* Action buttons styling (smaller, rounder, in one line) */
+        /* Action button styling */
         button.action {
-            font-family: 'Poppins', Arial, sans-serif;
-            width: auto; /* Remove full width */
+            width: auto;
             background-color: rgba(68, 68, 68, 0.3);
             color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3); /* Add a slight border for 3D look */
-            border-radius: 8px; /* Less rounded corners */
-            padding: 10px 16px; /* Adjust padding */
-            font-size: 16px; /* Slightly larger font size */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
             margin: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add 3D shadow */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
+        /* Ensuring images inside buttons are centered */
+        button.action img {
+            width: 30px; /* Adjust the size of the icon */
+            height: 30px; /* Ensure the icon maintains a square shape */
+        }
+        
+        /* Hover effect for action buttons */
         button.action:hover {
             background-color: rgba(68, 68, 68, 0.2);
             transform: scale(1.05);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4); /* Increase shadow for hover effect */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
         }
         
+        /* Active effect for action buttons */
         button.action:active {
             background-color: rgba(68, 68, 68, 0.4);
             transform: scale(0.97);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow for pressed effect */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         /* Styling to make the action buttons inline */
@@ -233,10 +243,17 @@
 
     <!-- Other Actions -->
     <h3>⚙️ Other Actions</h3>
-    <button class="action" onclick="openGoogleMaps()">🗺️ Google Maps 🗺️</button>
-    <button class="action" onclick="triggerAction('stop')">⚠️ Stop ⚠️</button>
-    <button class="action" onclick="triggerAction('check')">🪫 Battery 🔋</button>
-
+    <div class="action-container">
+        <button class="action" onclick="openGoogleMaps()">
+            <img src="google-maps-icon.png" alt="Google Maps" style="width: 30px; height: 30px;">
+        </button>
+        <button class="action" onclick="triggerAction('stop')">
+            <img src="stop-icon.png" alt="Stop" style="width: 30px; height: 30px;">
+        </button>
+        <button class="action" onclick="triggerAction('check')">
+            <img src="battery-icon.png" alt="Battery" style="width: 30px; height: 30px;">
+        </button>
+    </div>
 
 
     <script>
