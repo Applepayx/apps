@@ -275,9 +275,9 @@
             unlockClicks++;
             if (unlockClicks === 3) {
                 lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks
+                document.querySelector('.trigger-screen').style.display = 'block'; // Ensure the trigger screen is shown
             }
         });
-        
         function showNotification(message, duration = 3000) {
             const notification = document.getElementById('notification');
             
