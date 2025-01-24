@@ -113,12 +113,27 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow reduction */
             transform: translateY(1px); /* Button presses down slightly */
         }
+            #notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(50, 50, 50, 0.9);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-family: 'Poppins', Arial, sans-serif;
+            z-index: 9999;
+            transition: opacity 0.5s ease, top 0.5s ease;
+        }
     </style>
 </head>
 <body>
     <div id="lockScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; z-index: 9999; display: flex; align-items: center; justify-content: center;">
          <p style="color: black; font-size: 24px;">..</p>
     </div>
+    <div id="notification"></div>
     <h1>MacroDroid Trigger</h1>
 
     <!-- Walk Action -->
@@ -237,36 +252,54 @@
 
             dropdown.value = '';
         }
+        
+        // Notification logic
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            notification.style.opacity = '1';
+            notification.style.top = '20px';
 
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.top = '10px';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 500); // Wait for fade-out
+            }, 3000); // Show for 3 seconds
+        }
+
+          // Update the triggerWalk function
         function triggerWalk() {
             const start = document.getElementById('walkStart').value.trim();
             const end = document.getElementById('walkEnd').value.trim();
 
             if (!start || !end) {
-                alert('Please enter both start and end locations.');
+                showNotification('⚠️ Please enter both start and end locations.');
                 return;
             }
 
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(() => alert('Walk triggered successfully!'))
-                .catch(error => alert('Failed to trigger Walk: ' + error));
+                .then(() => showNotification('✅ Walk triggered successfully!'))
+                .catch(error => showNotification('❌ Failed to trigger Walk: ' + error));
         }
 
         function triggerJump() {
             const location = document.getElementById('jumpLocation').value.trim();
 
             if (!location) {
-                alert('Please enter a location for Jump.');
+                showNotification('⚠️ Please enter a location for Jump.');
                 return;
             }
 
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(() => alert('Jump triggered successfully!'))
-                .catch(error => alert('Failed to trigger Jump: ' + error));
+                .then(() => showNotification('✅ Jump triggered successfully!'))
+                .catch(error => showNotification('❌ Failed to trigger Jump: ' + error));
         }
 
         function triggerAction(action) {
@@ -274,11 +307,17 @@
                 action === 'check'
                     ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
                     : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
-
+        
             fetch(url)
                 .then(response => response.text())
-                .then(() => alert(`${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
-                .catch(error => alert('Failed to trigger action: ' + error));
+                .then(() => {
+                    const message = `${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`;
+                    showNotification(message, 'success'); // Display success notification
+                })
+                .catch(error => {
+                    const message = `Failed to trigger action: ${error}`;
+                    showNotification(message, 'error'); // Display error notification
+                });
         }
 
         function openGoogleMaps() {
