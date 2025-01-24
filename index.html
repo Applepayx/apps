@@ -229,7 +229,7 @@
 
         function populateSavedLocationsDropdown(locations) {
             const dropdown = document.getElementById('savedLocations');
-            dropdown.innerHTML = '<option value="">-- Select a Saved Location --</option>';
+            dropdown.innerHTML = '<option value=""> 📍 Saved Locations </option>';
             for (const [label, location] of Object.entries(locations)) {
                 const option = document.createElement('option');
                 option.value = location;
