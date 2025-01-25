@@ -245,11 +245,6 @@
         let focusedInput = null;
         let unlockClicks = 0;
        
-        window.addEventListener('load', () => {
-            const lockScreen = document.getElementById('lockScreen');
-            lockScreen.style.display = 'none'; // Hide the splash screen once content is loaded
-        });
-
    
         // Lock Screen Logic
         const lockScreen = document.getElementById('lockScreen');
@@ -414,6 +409,18 @@
 
 
         fetchSavedLocations();
+
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                  console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+        
     </script>
 </body>
 </html> 
