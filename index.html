@@ -386,9 +386,24 @@
         }
 
         function openGoogleMaps() {
-            const urlScheme = 'comgooglemaps://?q=Share+Location';
-            window.location.href = urlScheme;
-        }
+            const walkStart = document.getElementById('walkStart').value.trim();
+            const walkEnd = document.getElementById('walkEnd').value.trim();
+            const jumpLocation = document.getElementById('jumpLocation').value.trim();
+
+            if (walkStart && walkEnd) {
+               // Redirect to a walking route using the Google Maps app
+               const walkUrlScheme = `comgooglemaps://?saddr=${encodeURIComponent(walkStart)}&daddr=${encodeURIComponent(walkEnd)}&directionsmode=walking`;
+               window.location.href = walkUrlScheme;
+            } else if (jumpLocation) {
+            // Redirect to a specific location using the Google Maps app
+                const jumpUrlScheme = `comgooglemaps://?q=${encodeURIComponent(jumpLocation)}`;
+                window.location.href = jumpUrlScheme;
+            } else {
+            // Default to opening the Google Maps app
+                const defaultUrlScheme = 'comgooglemaps://';
+                window.location.href = defaultUrlScheme;
+            }
+          }
 
 
         fetchSavedLocations();
