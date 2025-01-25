@@ -254,14 +254,19 @@
         let unlockClicks = 0;
        
    
-        // Lock Screen Logic
-        const lockScreen = document.getElementById('lockScreen');
-        lockScreen.addEventListener('click', () => {
-            unlockClicks++;
-            if (unlockClicks === 3) {
-                lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks
-            }
-        });
+
+
+        window.onload = () => {
+                setTimeout(() => {
+                        const lockScreen = document.getElementById('lockScreen');
+                        lockScreen.style.opacity = '0'; // Fade out the entire lock screen
+                        setTimeout(() => {
+                                lockScreen.style.display = 'none'; // Hide it completely after fade-out
+                        }, 500); // Match the fade-out duration
+                }, 100); // Small delay to ensure everything loads
+        };
+
+
         
         function showNotification(message, duration = 4500) {
             const notification = document.getElementById('notification');
