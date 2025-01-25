@@ -265,6 +265,14 @@
                         }, 500); // Match the fade-out duration
                 }, 100); // Small delay to ensure everything loads
         };
+        // Lock Screen Logic
+        const lockScreen = document.getElementById('lockScreen');
+        lockScreen.addEventListener('click', () => {
+            unlockClicks++;
+            if (unlockClicks === 3) {
+                lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks
+            }
+        });
 
 
         
