@@ -180,6 +180,16 @@
 
        }
 
+         
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
         #lockScreen {
             position: fixed;
             top: 0;
@@ -189,6 +199,8 @@
             background: url('black.jpg') no-repeat center center fixed; /* Black background image */
             background-size: cover;
             z-index: 9999; /* Keep it on top of everything */
+            animation: fadeIn 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out;
         }
 
     </style>
