@@ -244,7 +244,13 @@
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
+       
+        window.addEventListener('load', () => {
+            const lockScreen = document.getElementById('lockScreen');
+            lockScreen.style.display = 'none'; // Hide the splash screen once content is loaded
+        });
 
+   
         // Lock Screen Logic
         const lockScreen = document.getElementById('lockScreen');
         lockScreen.addEventListener('click', () => {
@@ -403,6 +409,7 @@
                 const defaultUrlScheme = 'comgooglemaps://';
                 window.location.href = defaultUrlScheme;
             }
+
         }
 
 
