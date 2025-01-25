@@ -255,16 +255,6 @@
        
    
 
-
-        window.onload = () => {
-                setTimeout(() => {
-                        const lockScreen = document.getElementById('lockScreen');
-                        lockScreen.style.opacity = '0'; // Fade out the entire lock screen
-                        setTimeout(() => {
-                                lockScreen.style.display = 'none'; // Hide it completely after fade-out
-                        }, 500); // Match the fade-out duration
-                }, 100); // Small delay to ensure everything loads
-        };
         // Lock Screen Logic
         const lockScreen = document.getElementById('lockScreen');
         lockScreen.addEventListener('click', () => {
