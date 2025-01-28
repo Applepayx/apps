@@ -178,40 +178,40 @@
          
 
         
+         /* Lock screen styling */
         #lockScreen {
-            position: fixed;
+            position: fixed;       /* Position it fixed on the screen */
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: url('black.jpg') no-repeat center center fixed;
-            background-size: cover;
-            background-position: center center;
-            z-index: 9999;
-            opacity: 1; /* Ensure it starts visible */
-            visibility: visible; /* Make sure it's visible */
-            pointer-events: all; /* Allow interactions initially */
-            transition: opacity 0.5s ease, visibility 0s 0.5s; /* Smooth transition for opacity */
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+            display: block;        /* Initially visible */
+            opacity: 1;            /* Fully visible */
+            z-index: 9999;         /* Make sure it's on top of all other content */
+            transition: opacity 0.5s ease-in-out; /* Smooth opacity transition when hiding */
         }
         
-
-
-        
-        /* Optional: fade-in transition */
-        #lockScreen.fade-in {
-            opacity: 1;
-        }
-        
-        /* Optional: fade-out transition */
-        #lockScreen.fade-out {
-            opacity: 0;
-        }
-
+        /* This class hides the lock screen */
         #lockScreen.hidden {
-            opacity: 0;
-            visibility: hidden; /* Ensure it's not clickable or visible when hidden */
-            pointer-events: none; /* Disable interactions when hidden */
+            display: none;         /* Hide lock screen */
+            opacity: 0;            /* Optionally, add opacity fade out */
         }
+        
+        /* Optional: Unlock area styling */
+        .unlock-area {
+            position: absolute;
+            top: 50%; /* Center the unlock area */
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            margin-top: -50px; /* Adjust to center it */
+            margin-left: -50px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px; /* Rounded corners for the unlock area */
+            cursor: pointer;
+        }
+
 
     </style>
 </head>
