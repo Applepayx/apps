@@ -263,11 +263,8 @@
        
    
 
-        // Lock Screen Logic
         // Lock Screen Logic - Unlock on specific spot
-        const lockScreen = document.getElementById('lockScreen');
-        const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 }; // 200x200px area in the center
-        
+
         const lockScreen = document.getElementById('lockScreen');
         const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 };
         let unlockClicks = 0; // Track unlock attempts
