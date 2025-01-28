@@ -189,15 +189,18 @@
             background-position: center center;
             z-index: 9999;
             opacity: 1; /* Ensure it starts visible */
+            visibility: visible; /* Make sure it's visible */
             pointer-events: all; /* Allow interactions initially */
-            transition: opacity 0.5s ease; /* Smooth transition for opacity */
+            transition: opacity 0.5s ease, visibility 0s 0.5s; /* Smooth transition for opacity */
         }
         
         /* Hide lockScreen initially */
         #lockScreen.hidden {
             opacity: 0;
+            visibility: hidden; /* Ensure it's not clickable or visible when hidden */
             pointer-events: none; /* Disable interactions when hidden */
         }
+
         
         /* Optional: fade-in transition */
         #lockScreen.fade-in {
