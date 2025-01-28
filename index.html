@@ -175,11 +175,6 @@
             overflow-y: auto; /* Allow vertical scrolling if content exceeds screen height */
             max-height: 100vh; /* Prevent going off-screen vertically */
         }
-
-
-
-       }
-
          
 
         
@@ -189,12 +184,32 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: url('black.jpg') no-repeat center center fixed; /* Add your image as background */
-            background-size: contain;
+            background: url('black.jpg') no-repeat center center fixed;
+            background-size: cover;
             background-position: center center;
-            z-index: 9999; /* Keep it on top of everything */
-
+            z-index: 9999;
+            opacity: 1; /* Ensure it starts visible */
+            pointer-events: all; /* Allow interactions initially */
+            transition: opacity 0.5s ease; /* Smooth transition for opacity */
         }
+        
+        /* Hide lockScreen initially */
+        #lockScreen.hidden {
+            opacity: 0;
+            pointer-events: none; /* Disable interactions when hidden */
+        }
+        
+        /* Optional: fade-in transition */
+        #lockScreen.fade-in {
+            opacity: 1;
+        }
+        
+        /* Optional: fade-out transition */
+        #lockScreen.fade-out {
+            opacity: 0;
+        }
+
+
 
     </style>
 </head>
@@ -253,18 +268,35 @@
         const lockScreen = document.getElementById('lockScreen');
         const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 }; // 200x200px area in the center
         
+        const lockScreen = document.getElementById('lockScreen');
+        const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 };
+        let unlockClicks = 0; // Track unlock attempts
+        
+        // Add lock screen transition
+        lockScreen.classList.add('hidden'); // Hide the lock screen initially
+        
+        // Unlock logic: only show lockScreen after the content is loaded
+        window.addEventListener('load', () => {
+            lockScreen.style.display = 'block'; // Ensure it's shown only after content is loaded
+            lockScreen.classList.add('fade-in'); // Add fade-in class when content is loaded
+        });
+        
+        // Click to unlock (3 clicks on a specific area)
         lockScreen.addEventListener('click', (event) => {
-            // Check if the click is within the specific spot
             if (
                 event.clientX >= unlockArea.x && event.clientX <= unlockArea.x + unlockArea.width &&
                 event.clientY >= unlockArea.y && event.clientY <= unlockArea.y + unlockArea.height
             ) {
                 unlockClicks++;
                 if (unlockClicks === 3) {
-                    lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks within the area
+                    lockScreen.classList.add('fade-out'); // Add fade-out class to lock screen
+                    setTimeout(() => {
+                        lockScreen.classList.add('hidden'); // Hide the lock screen after fading out
+                    }, 500); // Match this timeout with the fade-out duration
                 }
             }
         });
+
 
 
 
