@@ -207,7 +207,11 @@
             opacity: 0;
         }
 
-
+        #lockScreen.hidden {
+            opacity: 0;
+            visibility: hidden; /* Ensure it's not clickable or visible when hidden */
+            pointer-events: none; /* Disable interactions when hidden */
+        }
 
     </style>
 </head>
