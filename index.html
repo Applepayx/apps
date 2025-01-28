@@ -267,14 +267,13 @@
         const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 };
         let unlockClicks = 0; // Counter for unlock clicks
         
-        // Add lock screen transition
-        lockScreen.classList.add('hidden'); // Hide the lock screen initially
+        // Initially show the lock screen, no flash or opacity transition
+        lockScreen.style.display = 'block'; // Show lock screen immediately
         
         // Unlock logic: only show lockScreen after the content is loaded
         window.addEventListener('load', () => {
-            lockScreen.style.visibility = 'visible'; // Make sure lock screen is visible
-            lockScreen.style.opacity = '1';  // Make sure it's fully visible right away
-            lockScreen.classList.remove('hidden');  // Fade it in using opacity
+            lockScreen.style.opacity = '1'; // Ensure it's fully visible after page load (if any animation is needed)
+            lockScreen.classList.remove('hidden'); // Fade it in smoothly (if necessary) after content load
         });
         
         // Click to unlock (3 clicks on a specific area)
