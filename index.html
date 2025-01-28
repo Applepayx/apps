@@ -201,45 +201,45 @@
     <div id="lockScreen">
     </div>
     <div id="macroDroidTrigger">
-        <h1>MacroDroid Trigger</h1>
+            <h1>MacroDroid Trigger</h1>
+            
+            <!-- Walk Action -->
+            <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
+            <div class="input-group">
+                <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
+                <button class="icon" onclick="pasteInput('walkStart')" style="background-image: url('paste-icon.png');"></button>
+                <button class="icon" onclick="clearInput('walkStart')" style="background-image: url('clear-icon.png');"></button>
+                <button class="icon" onclick="switchInputs()" style="background-image: url('switch-icon.png');"></button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
+                <button class="icon" onclick="pasteInput('walkEnd')" style="background-image: url('paste-icon.png');"></button>
+                <button class="icon" onclick="clearInput('walkEnd')" style="background-image: url('clear-icon.png');"></button>
+                <button class="icon" onclick="triggerWalk()" style="background-image: url('training.png');"></button>
+            </div>
+            
+            <!-- Jump Action -->
+            <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
+            <div class="input-group">
+                <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
+                <button class="icon" onclick="pasteInput('jumpLocation')" style="background-image: url('paste-icon.png');"></button>
+                <button class="icon" onclick="clearInput('jumpLocation')" style="background-image: url('clear-icon.png');"></button>
+                <button class="icon" onclick="triggerJump()" style="background-image: url('location.png');"></button>
+            </div>
+            <div id="notification"></div>
+            </div>
+            <!-- Saved Locations -->
+            <select id="savedLocations" onchange="applySavedLocation()">
+                <option value="">📍 Saved Locations</option>
+            </select>
         
-        <!-- Walk Action -->
-        <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
-        <div class="input-group">
-            <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
-            <button class="icon" onclick="pasteInput('walkStart')" style="background-image: url('paste-icon.png');"></button>
-            <button class="icon" onclick="clearInput('walkStart')" style="background-image: url('clear-icon.png');"></button>
-            <button class="icon" onclick="switchInputs()" style="background-image: url('switch-icon.png');"></button>
-        </div>
-        <div class="input-group">
-            <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
-            <button class="icon" onclick="pasteInput('walkEnd')" style="background-image: url('paste-icon.png');"></button>
-            <button class="icon" onclick="clearInput('walkEnd')" style="background-image: url('clear-icon.png');"></button>
-            <button class="icon" onclick="triggerWalk()" style="background-image: url('training.png');"></button>
-        </div>
-        
-        <!-- Jump Action -->
-        <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
-        <div class="input-group">
-            <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
-            <button class="icon" onclick="pasteInput('jumpLocation')" style="background-image: url('paste-icon.png');"></button>
-            <button class="icon" onclick="clearInput('jumpLocation')" style="background-image: url('clear-icon.png');"></button>
-            <button class="icon" onclick="triggerJump()" style="background-image: url('location.png');"></button>
-        </div>
-        <div id="notification"></div>
-        </div>
-        <!-- Saved Locations -->
-        <select id="savedLocations" onchange="applySavedLocation()">
-            <option value="">📍 Saved Locations</option>
-        </select>
-    
-        <!-- Other Actions -->
-        <h3>⚙️ Other Actions</h3>
-         <div class="action-container">
-            <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
-            <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
-            <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
-         </div>
+            <!-- Other Actions -->
+            <h3>⚙️ Other Actions</h3>
+             <div class="action-container">
+                <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
+                <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
+                <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
+             </div>
 
     </div>
     
