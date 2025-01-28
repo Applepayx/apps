@@ -177,9 +177,11 @@
         }
 
 
-        #macroDroidTrigger {
-            display: none;
-        }
+
+       }
+
+         
+
         
         #lockScreen {
             position: fixed;
@@ -189,68 +191,66 @@
             height: 100vh;
             background: url('black.jpg') no-repeat center center fixed;
             background-size: contain;
-            z-index: 9999;
-            opacity: 1; /* Initially visible */
-            transition: opacity 0.3s ease-in-out;
-        }
+            background-position: center center;
+            z-index: 9999; /* Keep it on top of everything */
 
+        }
 
     </style>
 </head>
 <body>
     <div id="lockScreen">
     </div>
-    <div id="macroDroidTrigger">
-            <h1>MacroDroid Trigger</h1>
-            
-            <!-- Walk Action -->
-            <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
-            <div class="input-group">
-                <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
-                <button class="icon" onclick="pasteInput('walkStart')" style="background-image: url('paste-icon.png');"></button>
-                <button class="icon" onclick="clearInput('walkStart')" style="background-image: url('clear-icon.png');"></button>
-                <button class="icon" onclick="switchInputs()" style="background-image: url('switch-icon.png');"></button>
-            </div>
-            <div class="input-group">
-                <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
-                <button class="icon" onclick="pasteInput('walkEnd')" style="background-image: url('paste-icon.png');"></button>
-                <button class="icon" onclick="clearInput('walkEnd')" style="background-image: url('clear-icon.png');"></button>
-                <button class="icon" onclick="triggerWalk()" style="background-image: url('training.png');"></button>
-            </div>
-            
-            <!-- Jump Action -->
-            <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
-            <div class="input-group">
-                <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
-                <button class="icon" onclick="pasteInput('jumpLocation')" style="background-image: url('paste-icon.png');"></button>
-                <button class="icon" onclick="clearInput('jumpLocation')" style="background-image: url('clear-icon.png');"></button>
-                <button class="icon" onclick="triggerJump()" style="background-image: url('location.png');"></button>
-            </div>
-            <div id="notification"></div>
-            </div>
-            <!-- Saved Locations -->
-            <select id="savedLocations" onchange="applySavedLocation()">
-                <option value="">📍 Saved Locations</option>
-            </select>
-        
-            <!-- Other Actions -->
-            <h3>⚙️ Other Actions</h3>
-             <div class="action-container">
-                <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
-                <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
-                <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
-             </div>
-
+    <h1>MacroDroid Trigger</h1>
+    
+    <!-- Walk Action -->
+    <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
+    <div class="input-group">
+        <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
+        <button class="icon" onclick="pasteInput('walkStart')" style="background-image: url('paste-icon.png');"></button>
+        <button class="icon" onclick="clearInput('walkStart')" style="background-image: url('clear-icon.png');"></button>
+        <button class="icon" onclick="switchInputs()" style="background-image: url('switch-icon.png');"></button>
+    </div>
+    <div class="input-group">
+        <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
+        <button class="icon" onclick="pasteInput('walkEnd')" style="background-image: url('paste-icon.png');"></button>
+        <button class="icon" onclick="clearInput('walkEnd')" style="background-image: url('clear-icon.png');"></button>
+        <button class="icon" onclick="triggerWalk()" style="background-image: url('training.png');"></button>
     </div>
     
+    <!-- Jump Action -->
+    <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
+    <div class="input-group">
+        <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
+        <button class="icon" onclick="pasteInput('jumpLocation')" style="background-image: url('paste-icon.png');"></button>
+        <button class="icon" onclick="clearInput('jumpLocation')" style="background-image: url('clear-icon.png');"></button>
+        <button class="icon" onclick="triggerJump()" style="background-image: url('location.png');"></button>
+    </div>
+    <div id="notification"></div>
+    </div>
+    <!-- Saved Locations -->
+    <select id="savedLocations" onchange="applySavedLocation()">
+        <option value="">📍 Saved Locations</option>
+    </select>
+
+    <!-- Other Actions -->
+    <h3>⚙️ Other Actions</h3>
+     <div class="action-container">
+        <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
+        <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
+        <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
+     </div>
+
+
     <script>
         let focusedInput = null;
-       
         let unlockClicks = 0;
-        const lockScreen = document.getElementById('lockScreen');
-        const macroDroidTrigger = document.getElementById('macroDroidTrigger');
-        
+       
+   
+
+        // Lock Screen Logic
         // Lock Screen Logic - Unlock on specific spot
+        const lockScreen = document.getElementById('lockScreen');
         const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 }; // 200x200px area in the center
         
         lockScreen.addEventListener('click', (event) => {
@@ -261,22 +261,10 @@
             ) {
                 unlockClicks++;
                 if (unlockClicks === 3) {
-                    // Hide the lock screen and show MacroDroid Trigger
-                    lockScreen.style.opacity = '0'; // Fade out
-                    setTimeout(() => {
-                        lockScreen.style.display = 'none'; // Hide the lock screen entirely
-                        macroDroidTrigger.style.display = 'block'; // Show the MacroDroid trigger
-                    }, 300); // Match the transition time
+                    lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks within the area
                 }
             }
         });
-        
-        // Ensure lock screen is shown only after the page is fully loaded
-        window.addEventListener('load', () => {
-            // You can also preload anything else here if needed.
-            lockScreen.style.display = 'block';
-        });
-
 
 
 
