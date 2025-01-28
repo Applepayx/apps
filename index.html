@@ -259,23 +259,19 @@
 
     <script>
         let focusedInput = null;
-        let unlockClicks = 0;
-       
-   
-
-        // Lock Screen Logic - Unlock on specific spot
-
+        
+        
         const lockScreen = document.getElementById('lockScreen');
         const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 };
-        let unlockClicks = 0; // Track unlock attempts
+        let unlockClicks = 0; // Counter for unlock clicks
         
         // Add lock screen transition
         lockScreen.classList.add('hidden'); // Hide the lock screen initially
         
         // Unlock logic: only show lockScreen after the content is loaded
         window.addEventListener('load', () => {
-            lockScreen.style.display = 'block'; // Ensure it's shown only after content is loaded
-            lockScreen.classList.add('fade-in'); // Add fade-in class when content is loaded
+            lockScreen.style.visibility = 'visible'; // Make sure the lock screen is visible after content load
+            lockScreen.classList.remove('hidden');  // Fade it in using opacity
         });
         
         // Click to unlock (3 clicks on a specific area)
@@ -286,13 +282,11 @@
             ) {
                 unlockClicks++;
                 if (unlockClicks === 3) {
-                    lockScreen.classList.add('fade-out'); // Add fade-out class to lock screen
-                    setTimeout(() => {
-                        lockScreen.classList.add('hidden'); // Hide the lock screen after fading out
-                    }, 500); // Match this timeout with the fade-out duration
+                    lockScreen.classList.add('hidden'); // Smoothly hide lock screen
                 }
             }
         });
+
 
 
 
