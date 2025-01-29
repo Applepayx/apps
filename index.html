@@ -305,7 +305,6 @@
                 const data = await response.json();
                 triggerSequentialJumps(data.locations);
             } catch (error) {
-                console.error('Failed to fetch jump locations:', error);
                 showNotification('❌ Failed to fetch jump locations.');
             }
         }
@@ -340,10 +339,7 @@
                 .catch(error => console.error('Error:', error));
         }
         
-        // Show notification (replace with your notification logic if needed)
-        function showNotification(message, duration = 4500) {
-            console.log(message);  // Replace with your actual notification code
-        }
+
         
         // Call the function to start the process
         fetchJumpLocations();
