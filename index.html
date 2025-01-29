@@ -11,40 +11,49 @@
     <link rel="icon" href="icon.png" type="image/png">
     <link rel="apple-touch-icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
     <link rel="stylesheet" href="styles.css">
     <link rel="preload" href="black.jpg" as="image">
     <link rel="preload" href="peakpx.jpg" as="image">
     <title>Apple Pay</title>
     <style>
+        
+        /* Full-screen map background styling */
+        #map {
+            height: 100vh; /* Set to full viewport height */
+            width: 100%; /* Full width */
+        }
+
+        
         body, html {
             font-family: 'Poppins', Arial, sans-serif;
-            background: url('peakpx.jpg') no-repeat center center fixed; /* Add your image as background */
-            background-color: black; /* Fallback color if the image doesn't load */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent tiling */
-            background-size: auto 100%; /* Stretch the image to fit the screen */
-            color: #fff;
             margin: 0;
             text-align: center;
             padding: 10px;
-            overflow: hidden; /* Disable scrolling */
+            overflow: hidden;
             touch-action: none; /* Disable gestures like pinch-to-zoom */
         }
 
         h1, h3 {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            font-family: 'Poppins', Arial, sans-serif;
             font-size: 20px;
             margin: 10px 0;
+            color: #fff;
+            position: absolute;
+            top: 10px;
+            z-index: 100; /* Ensure it's above the map */
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         /* Base styling */
-        .input-group {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px 0;
-            max-width: 100%;
+        .input-group, .action-container {
+            z-index: 100; /* Ensure buttons are above the map */
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
         /* Transparent input fields */
@@ -149,12 +158,7 @@
         }
         
         /* Styling to make the action buttons inline */
-        .action-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px; /* Space between buttons */
-            margin-top: 20px;
-        }
+
 
 
         #notification {
@@ -209,6 +213,7 @@
 <body>
     <div id="lockScreen">
     </div>
+    <div id="map"></div>
     <h1>MacroDroid Trigger</h1>
     
     <!-- Walk Action -->
@@ -249,6 +254,7 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button onclick="triggerJumpSequence()">Trigger Jump Sequence</button>
      </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 
     <script>
@@ -488,6 +494,60 @@
                     console.log('Service Worker registration failed:', error);
                 });
         }
+
+
+        // Initialize Leaflet Map
+        var map = L.map('map').setView([51.505, -0.09], 13); // Default location: London, UK
+
+        // Add OpenStreetMap tile layer (no API key needed)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Create a marker for the user's position
+        var userMarker = L.marker([51.505, -0.09]).addTo(map);
+
+        // Simulate walk or jump (you can replace this with dynamic data)
+        function moveMarker(latitude, longitude) {
+            // Set the new position of the marker
+            userMarker.setLatLng([latitude, longitude]);
+
+            // Move the map to the new position (optional, smooth zoom in/out)
+            map.setView([latitude, longitude], 13);
+        }
+
+        // Simulate walk data (replace with actual coordinates)
+        var walkPath = [
+            [51.505, -0.09], // Start
+            [51.506, -0.092], // Move 1
+            [51.507, -0.094], // Move 2
+            [51.508, -0.095]  // End
+        ];
+
+        var i = 0;
+
+        // Function to simulate walk by moving the marker along the path
+        function walkSimulation() {
+            if (i < walkPath.length) {
+                var coords = walkPath[i];
+                moveMarker(coords[0], coords[1]);
+                i++;
+                setTimeout(walkSimulation, 1000); // Move every 1 second
+            }
+        }
+
+        // Call the walkSimulation function to start moving the marker
+        walkSimulation();
+
+        // Simulate jump (instant change)
+        function jumpToLocation(latitude, longitude) {
+            moveMarker(latitude, longitude);
+        }
+
+        // Example: Jump to new location
+        setTimeout(() => jumpToLocation(51.509, -0.096), 5000); // After 5 seconds, jump to a new location
+
+
         
     </script>
 </body>
