@@ -247,6 +247,7 @@
         <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
         <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
+        <button onclick="triggerJumpSequence()">Trigger Jump Sequence</button>
      </div>
 
 
@@ -407,7 +408,31 @@
                 .then(() => showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
                 .catch(error => showNotification('❌ Failed to trigger action: ' + error));
         }
-
+        function notify(message) {
+            const notif = document.createElement('p');
+            notif.textContent = message;
+            document.getElementById('notifications').appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+        
+        async function triggerJumpSequence() {
+            try {
+                const response = await fetch('jump.json');
+                const data = await response.json();
+                for (const entry of data) {
+                    const { location, seconds } = entry;
+                    notify(`Jumping to ${location} in ${seconds} seconds...`);
+                    await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+                    const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
+                    await fetch(url);
+                    notify(`Jump triggered for ${location}`);
+                }
+                notify('Jump sequence completed.');
+            } catch (error) {
+                notify('Error fetching jump data.');
+            }
+        }
+        
         function openGoogleMaps() {
             const walkStart = document.getElementById('walkStart').value.trim();
             const walkEnd = document.getElementById('walkEnd').value.trim();
