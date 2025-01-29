@@ -327,11 +327,23 @@
         
         function triggerJumpWithLocation(location) {
             const plusCode = encodeURIComponent(location);  // Ensure the location is in URL format
-            const url = `https://maps.google.com/?q=${plusCode}`;  // Google Maps URL with Plus Code
-            
-            // Redirect to Google Maps with the specific location
-            window.location.href = url;
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${plusCode}`;  // MacroDroid URL with Plus Code
+        
+            // Trigger the jump action by sending the request
+            fetch(url)
+                .then(response => response.json())
+                .then(data => console.log(`Jumped to ${location}`, data))
+                .catch(error => console.error('Error:', error));
         }
+        
+        // Show notification (if you have this function defined in your app)
+        function showNotification(message) {
+            console.log(message);  // You can replace this with actual notification logic in your app
+        }
+        
+        // Call the function to start the process
+        fetchJumpLocations();
+
 
         
         function setFocusedInput(inputId) {
