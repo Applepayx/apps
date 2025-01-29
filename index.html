@@ -311,6 +311,7 @@
         }
         
         async function triggerSequentialJumps(locations) {
+            // Loop over all locations
             for (let i = 0; i < locations.length; i++) {
                 const location = locations[i].location;
                 const seconds = locations[i].seconds;
@@ -318,38 +319,34 @@
                 showNotification(`🚀 Jumping to location: ${location}`);
         
                 // Trigger the jump action for the current location
-                await triggerJumpWithLocation(location);
+                triggerJumpWithLocation(location);
         
-                console.log(`Waiting for ${seconds} seconds before the next jump...`);
-                
                 // Wait for the specified time (in seconds) before jumping to the next location
                 await new Promise(resolve => setTimeout(resolve, seconds * 1000));
-                console.log(`Waited for ${seconds} seconds`);
             }
+        
+            // Once all locations have been processed, show a final notification
+            showNotification("✅ All jumps completed.");
         }
         
-        async function triggerJumpWithLocation(location) {
+        function triggerJumpWithLocation(location) {
             const plusCode = encodeURIComponent(location);  // Ensure the location is in URL format
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${plusCode}`;  // MacroDroid URL with Plus Code
         
-            // Trigger the jump action by sending the request and wait for the response
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                console.log(`Jumped to ${location}`, data);
-            } catch (error) {
-                console.error('Error during jump:', error);
-            }
+            // Trigger the jump action by sending the request
+            fetch(url)
+                .then(response => response.json())
+                .then(data => console.log(`Jumped to ${location}`, data))
+                .catch(error => console.error('Error:', error));
         }
         
-        // Show notification (if you have this function defined in your app)
-        function showNotification(message) {
-            console.log(message);  // You can replace this with actual notification logic in your app
+        // Show notification (replace with your notification logic if needed)
+        function showNotification(message, duration = 4500) {
+            console.log(message);  // Replace with your actual notification code
         }
         
         // Call the function to start the process
         fetchJumpLocations();
-
 
 
         
