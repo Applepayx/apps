@@ -247,8 +247,6 @@
         <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
         <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
-        <button id="fetchLocationsButton">Fetch Locations & Jump</button>
-
      </div>
 
 
@@ -297,53 +295,6 @@
                 }, 500); // Match the transition duration
             }, duration);
         }
-
-
-        async function fetchJumpLocations() {
-            try {
-                const response = await fetch('jump.json');
-                const data = await response.json();
-                triggerSequentialJumps(data.locations);
-            } catch (error) {
-                showNotification('❌ Failed to fetch jump locations.');
-            }
-        }
-        
-        async function triggerSequentialJumps(locations) {
-            // Loop over all locations
-            for (let i = 0; i < locations.length; i++) {
-                const location = locations[i].location;
-                const seconds = locations[i].seconds;
-        
-                showNotification(`🚀 Jumping to location: ${location}`);
-        
-                // Trigger the jump action for the current location
-                triggerJumpWithLocation(location);
-        
-                // Wait for the specified time (in seconds) before jumping to the next location
-                await new Promise(resolve => setTimeout(resolve, seconds * 1000));
-            }
-        
-            // Once all locations have been processed, show a final notification
-            showNotification("✅ All jumps completed.");
-        }
-        
-        function triggerJumpWithLocation(location) {
-            const plusCode = encodeURIComponent(location);  // Ensure the location is in URL format
-            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${plusCode}`;  // MacroDroid URL with Plus Code
-        
-            // Trigger the jump action by sending the request
-            fetch(url)
-                .then(response => response.json())
-                .then(data => console.log(`Jumped to ${location}`, data))
-                .catch(error => console.error('Error:', error));
-        }
-        
-
-        
-        // Call the function to start the process
-        fetchJumpLocations();
-
 
         
         function setFocusedInput(inputId) {
