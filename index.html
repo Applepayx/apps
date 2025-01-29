@@ -318,22 +318,28 @@
                 showNotification(`🚀 Jumping to location: ${location}`);
         
                 // Trigger the jump action for the current location
-                triggerJumpWithLocation(location);
+                await triggerJumpWithLocation(location);
         
+                console.log(`Waiting for ${seconds} seconds before the next jump...`);
+                
                 // Wait for the specified time (in seconds) before jumping to the next location
                 await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+                console.log(`Waited for ${seconds} seconds`);
             }
         }
         
-        function triggerJumpWithLocation(location) {
+        async function triggerJumpWithLocation(location) {
             const plusCode = encodeURIComponent(location);  // Ensure the location is in URL format
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${plusCode}`;  // MacroDroid URL with Plus Code
         
-            // Trigger the jump action by sending the request
-            fetch(url)
-                .then(response => response.json())
-                .then(data => console.log(`Jumped to ${location}`, data))
-                .catch(error => console.error('Error:', error));
+            // Trigger the jump action by sending the request and wait for the response
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(`Jumped to ${location}`, data);
+            } catch (error) {
+                console.error('Error during jump:', error);
+            }
         }
         
         // Show notification (if you have this function defined in your app)
@@ -343,6 +349,7 @@
         
         // Call the function to start the process
         fetchJumpLocations();
+
 
 
         
