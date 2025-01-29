@@ -419,12 +419,14 @@
                 }
         
                 const data = await response.json();
-                if (!Array.isArray(data) || data.length === 0) {
+                const locations = data.locations;  // Correctly access the 'locations' array
+        
+                if (!Array.isArray(locations) || locations.length === 0) {
                     showNotification('⚠️ No jump locations found.');
                     return;
                 }
         
-                for (const [index, entry] of data.entries()) {
+                for (const [index, entry] of locations.entries()) {
                     const { location, seconds } = entry;
         
                     if (!location || !seconds || isNaN(seconds)) {
@@ -449,6 +451,7 @@
                 showNotification('❌ Error fetching jump data.');
             }
         }
+
 
         
         function openGoogleMaps() {
