@@ -16,19 +16,24 @@
     <link rel="preload" href="peakpx.jpg" as="image">
     <title>Apple Pay</title>
     <style>
+        
+        #map {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place the map behind other content */
+        }
         body, html {
             font-family: 'Poppins', Arial, sans-serif;
-            background: url('peakpx.jpg') no-repeat center center fixed; /* Add your image as background */
-            background-color: black; /* Fallback color if the image doesn't load */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent tiling */
-            background-size: auto 100%; /* Stretch the image to fit the screen */
             color: #fff;
             margin: 0;
             text-align: center;
             padding: 10px;
             overflow: hidden; /* Disable scrolling */
             touch-action: none; /* Disable gestures like pinch-to-zoom */
+            position: relative; /* Ensure other elements are positioned above the map */
         }
 
         h1, h3 {
@@ -209,6 +214,7 @@
 <body>
     <div id="lockScreen">
     </div>
+    <div id="map"></div>
     <h1>MacroDroid Trigger</h1>
     
     <!-- Walk Action -->
@@ -249,9 +255,26 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 
     <script>
+
+        // Initialize the Leaflet map
+        const map = L.map('map').setView([51.505, -0.09], 13); // Default to coordinates in London (51.505, -0.09)
+
+        // Add OpenStreetMap tile layer to the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Optional: Add a marker on the map
+        L.marker([51.505, -0.09]).addTo(map)
+            .bindPopup('A marker in London.')
+            .openPopup();
+
+        
         let focusedInput = null;
         let unlockClicks = 0;
        
