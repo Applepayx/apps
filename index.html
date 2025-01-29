@@ -139,6 +139,21 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; /* Smooth transition */
             margin: 5px;
         }
+
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('black.jpg') no-repeat center center fixed;
+            background-size: contain;
+            background-position: center center;
+            z-index: 9999; /* Keep it on top of everything */
+            animation: fadeIn 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
     </style>
 </head>
 <body>
