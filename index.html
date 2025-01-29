@@ -18,315 +18,208 @@
     <style>
         body, html {
             font-family: 'Poppins', Arial, sans-serif;
-            background: url('peakpx.jpg') no-repeat center center fixed; /* Add your image as background */
-            background-color: black; /* Fallback color if the image doesn't load */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent tiling */
-            background-size: auto 100%; /* Stretch the image to fit the screen */
-            color: #fff;
             margin: 0;
             text-align: center;
             padding: 10px;
-            overflow: hidden; /* Disable scrolling */
-            touch-action: none; /* Disable gestures like pinch-to-zoom */
+            overflow: hidden;
+            touch-action: none;
+            position: relative;
         }
 
-        h1, h3 {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
-            font-size: 20px;
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        #sidePanel {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 60px;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        #sidePanel button {
             margin: 10px 0;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px;
         }
 
-        /* Base styling */
+        #sidePanel button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
         .input-group {
-            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             margin: 10px 0;
-            max-width: 100%;
         }
-        
-        /* Transparent input fields */
-        input {
+
+        input, select {
             font-family: 'Poppins', Arial, sans-serif;
-            flex: 1;
-            padding: 8px 15px;
-            font-size: 17px;
+            padding: 10px;
             border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.3); /* Transparent border */
-            background-color: rgba(255, 255, 255, 0.1); /* Transparent background */
-            color: #fff;
-            margin-right: 5px;
-            width: 70%;
-            transition: all 0.3s ease-in-out; /* Smooth transition */
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: #fff;
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        
-        /* Transparent select dropdown */
-        select {
-            font-family: 'Poppins', Arial, sans-serif;
-            width: 100%;
-            padding: 8px 15px;
-            font-size: 18px;
-            border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            margin: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            margin: 10px 0;
-            transition: all 0.3s ease;
+            color: white;
         }
-        
-        select:focus {
-            border-color: #fff;
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        /* Reverted Icon button styling */
-        /* Icon button styling */
-        button.icon {
-            font-family: 'Poppins', Arial, sans-serif;
-            padding: 8px;
+
+        button {
+            padding: 10px;
             font-size: 18px;
+            background-color: rgba(68, 68, 68, 0.3);
+            color: white;
             border: none;
             border-radius: 5px;
-            background-color: rgba(68, 68, 68, 0.3); /* Transparent button */
-            background-size: contain; /* Make sure the image fits inside the button */
-            background-repeat: no-repeat; /* Prevent tiling */
-            background-position: center; /* Center the icon */
-            color: transparent; /* Hide any text (if any) inside the button */
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s ease;
-            margin-left: 5px;
-            width: 40px; /* Set a fixed width for the buttons */
-            height: 40px; /* Set a fixed height for the buttons */
-        }
-        
-        /* Button icon hover and active states */
-        button.icon:hover {
-            background-color: rgba(68, 68, 68, 0.1);
-            transform: scale(1.1);
-        }
-        
-        button.icon:active {
-            background-color: rgba(68, 68, 68, 0.1);
-            transform: scale(1.05);
         }
 
-        
-        /* Action button styling */
-        button.action {
-            width: 50px; /* Fixed width for the buttons */
-            height: 50px; /* Fixed height for the buttons */
-            background-color: transparent; /* Make background transparent */
-            background-size: cover; /* Make sure the image covers the button area */
-            background-position: center; /* Center the image inside the button */
-            background-repeat: no-repeat; /* Prevent image repeating */
-            border: none; /* Remove the border */
-            border-radius: 10px; /* Optional: Rounded corners for the button */
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; /* Smooth transition */
-            margin: 5px;
+        button:hover {
+            background-color: rgba(68, 68, 68, 0.5);
         }
-        
-        /* Hover effect for action buttons */
-        button.action:hover {
-            transform: scale(1.1); /* Button grows on hover */
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* Slight shadow on hover */
-            filter: brightness(1.1); /* Slight brightness increase */
-        }
-        
-        /* Active effect for action buttons */
-        button.action:active {
-            transform: scale(0.95); /* Button shrinks when clicked */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow change */
-            filter: brightness(0.9); /* Slight brightness decrease */
-        }
-        
-        /* Styling to make the action buttons inline */
-        .action-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px; /* Space between buttons */
-            margin-top: 20px;
-        }
-
 
         #notification {
             display: none;
             position: fixed;
-            top: 0; /* Align to the top of the screen */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Adjust for centering */
-            width: 100%; /* Make the notification take full width */
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
+            color: white;
             padding: 15px 20px;
-            border-radius: 0; /* No rounded corners */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             font-family: 'Poppins', Arial, sans-serif;
             z-index: 9999;
             transition: opacity 0.5s ease, transform 0.5s ease;
-            overflow-y: auto; /* Allow vertical scrolling if content exceeds screen height */
-            max-height: 100vh; /* Prevent going off-screen vertically */
         }
 
-
-
-       }
-
-         
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        h1, h3 {
+            font-size: 20px;
+            margin: 10px 0;
         }
-        
-        #lockScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: url('black.jpg') no-repeat center center fixed;
-            background-size: contain;
-            background-position: center center;
-            z-index: 9999; /* Keep it on top of everything */
-            animation: fadeIn 0.3s ease-in-out;
-            transition: opacity 0.3s ease-in-out;
-        }
-
     </style>
 </head>
 <body>
-    <div id="lockScreen">
+    <div id="map"></div>
+    <div id="sidePanel">
+        <button onclick="triggerWalk()">Walk</button>
+        <button onclick="triggerJump()">Jump</button>
+        <button onclick="triggerAction('stop')">Stop</button>
+        <button onclick="triggerAction('check')">Check</button>
     </div>
+    
     <h1>MacroDroid Trigger</h1>
     
-    <!-- Walk Action -->
-    <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
     <div class="input-group">
-        <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
-        <button class="icon" onclick="pasteInput('walkStart')" style="background-image: url('paste-icon.png');"></button>
-        <button class="icon" onclick="clearInput('walkStart')" style="background-image: url('clear-icon.png');"></button>
-        <button class="icon" onclick="switchInputs()" style="background-image: url('switch-icon.png');"></button>
+        <input type="text" id="walkStart" placeholder="Start Location">
+        <input type="text" id="walkEnd" placeholder="End Location">
+        <button onclick="triggerWalk()">Trigger Walk</button>
     </div>
+
     <div class="input-group">
-        <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
-        <button class="icon" onclick="pasteInput('walkEnd')" style="background-image: url('paste-icon.png');"></button>
-        <button class="icon" onclick="clearInput('walkEnd')" style="background-image: url('clear-icon.png');"></button>
-        <button class="icon" onclick="triggerWalk()" style="background-image: url('training.png');"></button>
+        <input type="text" id="jumpLocation" placeholder="Jump Location">
+        <button onclick="triggerJump()">Trigger Jump</button>
     </div>
-    
-    <!-- Jump Action -->
-    <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
-    <div class="input-group">
-        <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
-        <button class="icon" onclick="pasteInput('jumpLocation')" style="background-image: url('paste-icon.png');"></button>
-        <button class="icon" onclick="clearInput('jumpLocation')" style="background-image: url('clear-icon.png');"></button>
-        <button class="icon" onclick="triggerJump()" style="background-image: url('location.png');"></button>
-    </div>
-    <div id="notification"></div>
-    </div>
-    <!-- Saved Locations -->
+
     <select id="savedLocations" onchange="applySavedLocation()">
         <option value="">📍 Saved Locations</option>
     </select>
 
-    <!-- Other Actions -->
-    <h3>⚙️ Other Actions</h3>
-     <div class="action-container">
-        <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
-        <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
-        <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
-        <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
-     </div>
+    <div id="notification"></div>
 
-
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
-       
-   
 
-        // Lock Screen Logic
-        // Lock Screen Logic - Unlock on specific spot
         const lockScreen = document.getElementById('lockScreen');
-        const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 }; // 200x200px area in the center
-        
+        const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 };
+
         lockScreen.addEventListener('click', (event) => {
-            // Check if the click is within the specific spot
             if (
                 event.clientX >= unlockArea.x && event.clientX <= unlockArea.x + unlockArea.width &&
                 event.clientY >= unlockArea.y && event.clientY <= unlockArea.y + unlockArea.height
             ) {
                 unlockClicks++;
                 if (unlockClicks === 3) {
-                    lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks within the area
+                    lockScreen.style.display = 'none';
                 }
             }
         });
 
-
-
-        
         function showNotification(message, duration = 4500) {
             const notification = document.getElementById('notification');
-            
-            // Set the message
             notification.textContent = message;
-            
-            // Show the notification
             notification.style.display = 'block';
             notification.style.opacity = '1';
-        
-            // Hide after the specified duration
             setTimeout(() => {
-                notification.style.opacity = '0'; // Fade out
+                notification.style.opacity = '0';
                 setTimeout(() => {
-                    notification.style.display = 'none'; // Remove from view
-                }, 500); // Match the transition duration
+                    notification.style.display = 'none';
+                }, 500);
             }, duration);
         }
 
-        
-        function setFocusedInput(inputId) {
-            focusedInput = inputId;
-        }
-
-        function clearInput(id) {
-            document.getElementById(id).value = '';
-        }
-
-
-        async function pasteInput(id) {
-            try {
-                const text = await navigator.clipboard.readText();
-                const cleanedText = text.replace(/[()]/g, ''); // Remove parentheses
-                document.getElementById(id).value = cleanedText;
-            } catch (err) {
-                showNotification('❌ Failed to paste from clipboard: ' + err);
+        function triggerWalk() {
+            const start = document.getElementById('walkStart').value.trim();
+            const end = document.getElementById('walkEnd').value.trim();
+    
+            if (!start || !end) {
+                showNotification('⚠️ Please enter both start and end locations.');
+                return;
             }
+
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(() => showNotification('✅ Walk triggered successfully!'))
+                .catch(error => showNotification('❌ Failed to trigger Walk: ' + error));
+        }
+    
+        function triggerJump() {
+            const location = document.getElementById('jumpLocation').value.trim();
+    
+            if (!location) {
+                showNotification('⚠️ Please enter a location for Jump.');
+                return;
+            }
+    
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(() => showNotification('✅ Jump triggered successfully!'))
+                .catch(error => showNotification('❌ Failed to trigger Jump: ' + error));
         }
 
-        function switchInputs() {
-            const startInput = document.getElementById('walkStart');
-            const endInput = document.getElementById('walkEnd');
-
-           // Swap the values of the two inputs
-            const temp = startInput.value;
-            startInput.value = endInput.value;
-            endInput.value = temp;
+        function triggerAction(action) {
+            const url =
+                action === 'check'
+                    ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
+                    : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
+    
+            fetch(url)
+                .then(response => response.text())
+                .then(() => showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .catch(error => showNotification('❌ Failed to trigger action: ' + error));
         }
-        
+
         async function fetchSavedLocations() {
             try {
                 const response = await fetch('locations.json');
@@ -342,153 +235,26 @@
             dropdown.innerHTML = '<option value=""> 📍 Saved Locations </option>';
             for (const [label, location] of Object.entries(locations)) {
                 const option = document.createElement('option');
-                option.value = location;
+                option.value = label;
                 option.textContent = label;
                 dropdown.appendChild(option);
             }
         }
 
         function applySavedLocation() {
-            if (!focusedInput) {
-                showNotification('⚠️ Click on an input field first to select a saved location.');
-                document.getElementById('savedLocations').value = '';
-                return;
-            }
             const dropdown = document.getElementById('savedLocations');
             const selectedLocation = dropdown.value;
-
             if (selectedLocation) {
-                document.getElementById(focusedInput).value = selectedLocation;
-            }
-
-            dropdown.value = '';
-        }
-
-        function triggerWalk() {
-            const start = document.getElementById('walkStart').value.trim();
-            const end = document.getElementById('walkEnd').value.trim();
-    
-            if (!start || !end) {
-                showNotification('⚠️ Please enter both start and end locations.');
-                return;
-            }
-    
-            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
-            fetch(url)
-                .then(response => response.text())
-                .then(() => showNotification('✅ Walk triggered successfully!'))
-                .catch(error => showNotification('❌ Failed to trigger Walk: ' + error));
-        }
-    
-        // Update the triggerJump function
-        function triggerJump() {
-            const location = document.getElementById('jumpLocation').value.trim();
-    
-            if (!location) {
-                showNotification('⚠️ Please enter a location for Jump.');
-                return;
-            }
-    
-            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
-            fetch(url)
-                .then(response => response.text())
-                .then(() => showNotification('✅ Jump triggered successfully!'))
-                .catch(error => showNotification('❌ Failed to trigger Jump: ' + error));
-        }
-    
-        // Update the triggerAction function
-        function triggerAction(action) {
-            const url =
-                action === 'check'
-                    ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
-                    : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
-    
-            fetch(url)
-                .then(response => response.text())
-                .then(() => showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
-                .catch(error => showNotification('❌ Failed to trigger action: ' + error));
-        }
-       
-        
-        async function triggerJumpSequence() {
-            try {
-                const response = await fetch('jump.json');
-                if (!response.ok) {
-                    showNotification('❌ Failed to load jump data.');
-                    return;
+                const location = locations[selectedLocation];
+                if (location) {
+                    document.getElementById('walkStart').value = location.start;
+                    document.getElementById('walkEnd').value = location.end;
+                    showNotification(`✅ Location "${selectedLocation}" applied.`);
                 }
-        
-                const data = await response.json();
-                const locations = data.locations;  // Correctly access the 'locations' array
-        
-                if (!Array.isArray(locations) || locations.length === 0) {
-                    showNotification('⚠️ No jump locations found.');
-                    return;
-                }
-        
-                for (const [index, entry] of locations.entries()) {
-                    const { location, seconds } = entry;
-        
-                    if (!location || !seconds || isNaN(seconds)) {
-                        showNotification(`⚠️ Invalid data at step ${index + 1}. Skipping...`);
-                        continue;
-                    }
-        
-                    showNotification(`⏳ Jumping to ${location} in ${seconds} seconds...`);
-                    await new Promise(resolve => setTimeout(resolve, seconds * 1000));
-        
-                    const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
-                    try {
-                        await fetch(url);
-                        showNotification(`✅ Jump triggered for ${location}`);
-                    } catch {
-                        showNotification(`❌ Failed to trigger jump for ${location}`);
-                    }
-                }
-        
-                showNotification('🏁 Jump sequence completed.');
-            } catch (error) {
-                showNotification('❌ Error fetching jump data.');
             }
         }
-
-
-        
-        function openGoogleMaps() {
-            const walkStart = document.getElementById('walkStart').value.trim();
-            const walkEnd = document.getElementById('walkEnd').value.trim();
-            const jumpLocation = document.getElementById('jumpLocation').value.trim();
-
-            if (walkStart && walkEnd) {
-               // Redirect to a walking route using the Google Maps app
-               const walkUrlScheme = `comgooglemaps://?saddr=${encodeURIComponent(walkStart)}&daddr=${encodeURIComponent(walkEnd)}&directionsmode=walking`;
-               window.location.href = walkUrlScheme;
-            } else if (jumpLocation) {
-            // Redirect to a specific location using the Google Maps app
-                const jumpUrlScheme = `comgooglemaps://?q=${encodeURIComponent(jumpLocation)}`;
-                window.location.href = jumpUrlScheme;
-            } else {
-            // Default to opening the Google Maps app
-                const defaultUrlScheme = 'comgooglemaps://';
-                window.location.href = defaultUrlScheme;
-            }
-
-        }
-
 
         fetchSavedLocations();
-
-        
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                  console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch((error) => {
-                    console.log('Service Worker registration failed:', error);
-                });
-        }
-        
     </script>
 </body>
-</html> 
+</html>
