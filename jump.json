@@ -1,9 +1,9 @@
 {
   "locations": [
     { "location": "2XFX+5WG Rzeszów", "seconds": 1 },
-    { "location": "2XFX+2W7 Rzeszów", "seconds": 15 },
-    { "location": "2XCX+VR9 Rzeszów", "seconds": 15 },
-    { "location": "2XCX+PQM Rzeszów", "seconds": 15}
+    { "location": "2XFX+2W7 Rzeszów", "seconds": 20 },
+    { "location": "2XCX+VR9 Rzeszów", "seconds": 20 },
+    { "location": "2XCX+PQM Rzeszów", "seconds": 20}
     
   ]
 }
