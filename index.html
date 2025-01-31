@@ -285,8 +285,7 @@
 
         // Function to fetch data from Google Sheets CSV
         async function fetchDataFromGoogleSheets() {
-            const randomParam = Math.random().toString(36).substring(7); // Generate a random string
-            const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv&random=${randomParam}`;
+            const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv`;
             
             try {
                 const response = await fetch(googleSheetsUrl);
