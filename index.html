@@ -301,9 +301,10 @@
 
         
         
+
         async function fetchData() {
             try {
-                const response = await fetch('location.json'); // No timestamp now
+                const response = await fetch('location.json'); // Fetch location data from the JSON file
                 if (!response.ok) throw new Error('Failed to fetch data');
         
                 const data = await response.json(); // Parse the JSON data
@@ -312,16 +313,17 @@
                 const battery = data.Battery;
         
                 if (!map) {
-                    map = L.map('map').setView([lat, lng], 17);
+                    map = L.map('map').setView([lat, lng], 17); // Initialize the map if not already done
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     }).addTo(map);
+        
                     marker = L.marker([lat, lng]).addTo(map)
                         .bindPopup('Battery: ' + battery + '%')
                         .openPopup();
                 } else {
-                    marker.setLatLng([lat, lng]);
-                    marker.setPopupContent('Battery: ' + battery + '%');
+                    marker.setLatLng([lat, lng]); // Update marker position
+                    marker.setPopupContent('Battery: ' + battery + '%'); // Update popup content
                     map.flyTo([lat, lng], 17); // Smoothly transition to the new location
                 }
         
@@ -334,11 +336,33 @@
             }
         }
         
+        function updateLocation(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+        
+            // Update marker position based on the click location
+            marker.setLatLng([lat, lng]);
+            marker.setPopupContent(`Battery: ${marker.getPopup().getContent().split(': ')[1]}`);
+        
+            map.flyTo([lat, lng], 17); // Smoothly fly to the new clicked location
+        
+            // Here you would normally make a request to the server to update `location.json`
+            // For now, we'll just log the new location
+            console.log('New Location:', lat, lng);
+            // You can send a POST request to your server to save the updated location
+        }
+        
         // Fetch data on page load
         fetchData();
         
         // Fetch data every 5 seconds (5000 milliseconds)
         setInterval(fetchData, 5000);
+        
+        // Add click event listener to the map to update location on click
+        if (map) {
+            map.on('click', updateLocation);
+        }
+
 
 
         
