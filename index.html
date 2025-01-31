@@ -304,35 +304,43 @@
                 const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv');
                 const data = await response.text();
                 const rows = data.split("\n").slice(1); // Skipping the header row
-
+        
                 // Extract the first row's data (Latitude, Longitude, Battery)
                 const [lat, lng, battery] = rows[0].split(',');
-
-                // Initialize the Leaflet map
-                const map = L.map('map').setView([lat, lng], 17); // Set map center to lat, lng
-
-                // Add OpenStreetMap tile layer
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map);
-
-                // Add a marker at the given coordinates
-                L.marker([lat, lng]).addTo(map)
+        
+                // Check if the map is already initialized
+                if (!window.map) {
+                    // Initialize the Leaflet map if it doesn't exist
+                    window.map = L.map('map').setView([lat, lng], 17); // Set map center to lat, lng
+        
+                    // Add OpenStreetMap tile layer
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(window.map);
+                }
+        
+                // Clear existing markers (if any)
+                if (window.marker) {
+                    window.map.removeLayer(window.marker);
+                }
+        
+                // Add a new marker at the given coordinates
+                window.marker = L.marker([lat, lng]).addTo(window.map)
                     .bindPopup('Battery: ' + battery + '%')
                     .openPopup();
-
-                // Show the battery level below the map
+        
+                // Update the battery level display
                 const batteryLevelDiv = document.getElementById('battery-level');
                 batteryLevelDiv.textContent = `Battery: ${battery}%`;
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
-
+        
         // Fetch data on page load
         fetchData();
         
-        // Fetch data every 5 seconds (5000 milliseconds)
+        // Fetch data every 5 seconds (5000 milliseconds) to refresh the map and battery level
         setInterval(fetchData, 5000);
         
         function showNotification(message, duration = 4500) {
