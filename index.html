@@ -234,27 +234,7 @@
 
     <script>
         let focusedInput = null;
-        let unlockClicks = 0;
-       
-   
 
-        // Lock Screen Logic
-        // Lock Screen Logic - Unlock on specific spot
-        const lockScreen = document.getElementById('lockScreen');
-        const unlockArea = { x: window.innerWidth / 2 - 100, y: window.innerHeight / 2 - 100, width: 100, height: 100 }; // 200x200px area in the center
-        
-        lockScreen.addEventListener('click', (event) => {
-            // Check if the click is within the specific spot
-            if (
-                event.clientX >= unlockArea.x && event.clientX <= unlockArea.x + unlockArea.width &&
-                event.clientY >= unlockArea.y && event.clientY <= unlockArea.y + unlockArea.height
-            ) {
-                unlockClicks++;
-                if (unlockClicks === 3) {
-                    lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks within the area
-                }
-            }
-        });
 
 
         // Function to fetch data from Google Sheets CSV
