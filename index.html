@@ -303,24 +303,28 @@
         
         async function fetchData() {
             try {
-                const timestamp = new Date().getTime(); // Add a timestamp to prevent caching
+                // Add a timestamp to prevent caching
+                const timestamp = new Date().getTime();
                 const response = await fetch(`https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv&t=${timestamp}`);
-                if (!response.ok) throw new Error('Failed to fetch data');
                 
-                const data = await response.text();
-                const rows = data.split("\n").slice(1); // Skipping the header row
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
         
-                // Debugging: Show fetched data in notification
-                showNotification('✅ Fetched data: ' + rows.join(', '));
+                const data = await response.text();
+                const rows = data.split("\n").slice(1); // Skip the header row
         
                 // Validate the data
-                if (rows.length === 0) throw new Error('No data found in Google Sheets');
-                const [lat, lng, battery] = rows[0].split(',');
-                if (!lat || !lng || isNaN(lat) || isNaN(lng)) throw new Error('Invalid latitude or longitude');
-                if (!battery || isNaN(battery)) throw new Error('Invalid battery value');
+                if (rows.length === 0) {
+                    throw new Error('No data found in Google Sheets');
+                }
         
-                // Debugging: Show parsed values in notification
-                showNotification(`📍 Parsed Data - Lat: ${lat}, Lng: ${lng}, Battery: ${battery}%`);
+                const [lat, lng, battery] = rows[0].split(',');
+        
+                // Validate latitude, longitude, and battery
+                if (isNaN(lat) || isNaN(lng) || isNaN(battery)) {
+                    throw new Error('Invalid data format in Google Sheets');
+                }
         
                 // Initialize the map if it doesn't exist
                 if (!map) {
@@ -337,7 +341,7 @@
         
                 // Add the new marker
                 marker = L.marker([lat, lng]).addTo(map)
-                    .bindPopup('Battery: ' + battery + '%')
+                    .bindPopup(`Battery: ${battery}%`)
                     .openPopup();
         
                 // Smoothly transition to the new location
@@ -348,14 +352,16 @@
                 if (batteryLevelDiv) {
                     batteryLevelDiv.textContent = `Battery: ${battery}%`;
                 }
-                
+        
+                // Show a notification to confirm data is up-to-date
+                showNotification(`✅ Data updated: Lat ${lat}, Lng ${lng}, Battery ${battery}%`);
+        
             } catch (error) {
                 console.error('Error fetching data:', error);
                 showNotification('❌ Failed to fetch data. Retrying...');
                 setTimeout(fetchData, 5000); // Retry after 5 seconds
             }
         }
-
 
         // Fetch data on page load
         fetchData();
