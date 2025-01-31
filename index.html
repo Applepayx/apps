@@ -179,13 +179,7 @@
             overflow-y: auto; /* Allow vertical scrolling if content exceeds screen height */
             max-height: 100vh; /* Prevent going off-screen vertically */
         }
-
-
-
-       }
-
-         
-  
+           
         
 
     </style>
@@ -233,8 +227,8 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
-    <div id="mapContainer" style="margin-top: 0; width: 100%; height: 200px; border-radius: 10px; position: relative; overflow: hidden;">
-        <div id="map" style="width: 100%; height: 100%; border-radius: 10px; pointer-events: none;"></div>
+    <div id="mapContainer" style="margin-top: 20px;">
+        <div id="map" style="width: 100%; height: 200px; border-radius: 10px;"></div>
         <p id="batteryLevel" style="font-size: 14px; margin-top: 5px;"></p>
     </div>
 
