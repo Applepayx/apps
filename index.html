@@ -12,12 +12,8 @@
     <link rel="apple-touch-icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="black.jpg" as="image">
     <link rel="preload" href="peakpx.jpg" as="image">
-        <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- Leaflet JavaScript -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <title>Apple Pay</title>
     <style>
         body, html {
@@ -179,12 +175,39 @@
             overflow-y: auto; /* Allow vertical scrolling if content exceeds screen height */
             max-height: 100vh; /* Prevent going off-screen vertically */
         }
-           
+
+
+
+       }
+
+         
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
         
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('black.jpg') no-repeat center center fixed;
+            background-size: contain;
+            background-position: center center;
+            z-index: 9999; /* Keep it on top of everything */
+            animation: fadeIn 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out;
+        }
 
     </style>
 </head>
 <body>
+    <div id="lockScreen">
     </div>
     <h1>MacroDroid Trigger</h1>
     
@@ -226,48 +249,33 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
-    <div id="mapContainer" style="margin-top: 20px;">
-        <div id="map" style="width: 100%; height: 200px; border-radius: 10px;"></div>
-        <p id="batteryLevel" style="font-size: 14px; margin-top: 5px;"></p>
-    </div>
+
 
     <script>
         let focusedInput = null;
+        let unlockClicks = 0;
+       
+   
 
-
-
-        // Function to fetch data from Google Sheets CSV
-        async function fetchDataFromGoogleSheets() {
-            const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv`;
-            
-            try {
-                const response = await fetch(googleSheetsUrl);
-                const csvData = await response.text();
-                const rows = csvData.split('\n').slice(1); // Skip the header row
-                const [latitude, longitude, battery] = rows[0].split(','); // Get the first row's data
+        // Lock Screen Logic
+        // Lock Screen Logic - Unlock on specific spot
+        const lockScreen = document.getElementById('lockScreen');
+        const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 }; // 200x200px area in the center
         
-                // Update the map
-                const map = L.map('map').setView([latitude, longitude], 15); // Set map view to the coordinates
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map);
-        
-                // Add a marker
-                L.marker([latitude, longitude]).addTo(map)
-                    .bindPopup(`Battery: ${battery}%`)
-                    .openPopup();
-        
-                // Update the battery level text
-                const batteryLevel = document.getElementById('batteryLevel');
-                batteryLevel.textContent = `Battery Level: ${battery}%`;
-            } catch (error) {
-                console.error('Failed to fetch data from Google Sheets:', error);
-                showNotification('❌ Failed to load map data.');
+        lockScreen.addEventListener('click', (event) => {
+            // Check if the click is within the specific spot
+            if (
+                event.clientX >= unlockArea.x && event.clientX <= unlockArea.x + unlockArea.width &&
+                event.clientY >= unlockArea.y && event.clientY <= unlockArea.y + unlockArea.height
+            ) {
+                unlockClicks++;
+                if (unlockClicks === 3) {
+                    lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks within the area
+                }
             }
-        }
-        
-        // Call the function to fetch data when the page loads
-        fetchDataFromGoogleSheets();
+        });
+
+
 
         
         function showNotification(message, duration = 4500) {
