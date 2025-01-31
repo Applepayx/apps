@@ -276,6 +276,7 @@
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
+        let map, marker; // Declare variables outside the function to access them globally
        
    
 
@@ -298,46 +299,42 @@
         });
 
 
-        let map, marker; // Declare variables outside the function to access them globally
+        
         
         async function fetchData() {
             try {
-                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv');
+                const timestamp = new Date().getTime(); // Add a timestamp to prevent caching
+                const response = await fetch(`https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv&t=${timestamp}`);
+                if (!response.ok) throw new Error('Failed to fetch data');
+                
                 const data = await response.text();
                 const rows = data.split("\n").slice(1); // Skipping the header row
         
-                // Extract the first row's data (Latitude, Longitude, Battery)
                 const [lat, lng, battery] = rows[0].split(',');
         
                 if (!map) {
-                    // Initialize the Leaflet map only once, on the first fetch
-                    map = L.map('map').setView([lat, lng], 17); // Set map center to lat, lng
-        
-                    // Add OpenStreetMap tile layer
+                    map = L.map('map').setView([lat, lng], 17);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     }).addTo(map);
-        
-                    // Add the marker at the given coordinates
                     marker = L.marker([lat, lng]).addTo(map)
                         .bindPopup('Battery: ' + battery + '%')
                         .openPopup();
                 } else {
-                    // Update the marker position and popup content for subsequent fetches
                     marker.setLatLng([lat, lng]);
                     marker.setPopupContent('Battery: ' + battery + '%');
-                    marker.openPopup();
+                    map.flyTo([lat, lng], 17); // Smoothly transition to the new location
                 }
         
-                // Show the battery level below the map
                 const batteryLevelDiv = document.getElementById('battery-level');
                 batteryLevelDiv.textContent = `Battery: ${battery}%`;
                 
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setTimeout(fetchData, 5000); // Retry after 5 seconds if there's an error
             }
         }
-        
+
         // Fetch data on page load
         fetchData();
         
