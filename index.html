@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preload" href="black.jpg" as="image">
     <link rel="preload" href="peakpx.jpg" as="image">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <title>Apple Pay</title>
     <style>
         body, html {
@@ -251,15 +249,45 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
-    <div id="map" style="height: 300px; width: 100%; margin-top: 20px; border-radius: 10px;"></div>
-
-    <p id="batteryLevel" style="margin-top: 10px; font-size: 16px;"></p>
+    <!-- Location Image Display -->
+    <h3>📍 Location Image</h3>
+    <img id="locationImage" src="" alt="Location Map" style="max-width: 100%; height: auto; margin-top: 10px; display: none;">
 
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
        
-   
+        // Fetch Latitude and Longitude from Google Sheets and Display Map Image
+        async function fetchLocationImage() {
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbzHZ5tBryRvZmFMRw7Oz-EGCpfFLIMGq5A4qSGsJgEnXqhQCsk4VKpNCmvgWdQ-KW9G/exec');
+                const data = await response.json();
+        
+                // Assuming Latitude is in 'A2' and Longitude in 'B2'
+                const latitude = data.Latitude;  // Make sure these field names match your sheet
+                const longitude = data.Longitude;
+        
+                // Check if latitude and longitude are valid
+                if (!latitude || !longitude) {
+                    showNotification('⚠️ Invalid Latitude or Longitude data.');
+                    return;
+                }
+        
+                // Generate the URL for the static map image (Google Static Maps URL)
+                const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x300&markers=color:red%7C${latitude},${longitude}&format=png`;
+        
+                // Set the image source to the generated map URL
+                const locationImage = document.getElementById('locationImage');
+                locationImage.src = mapUrl;
+                locationImage.style.display = 'block'; // Make the image visible
+            } catch (error) {
+                console.error('Error fetching location data:', error);
+                showNotification('❌ Failed to load location image.');
+            }
+        }
+        
+        // Call the function to fetch the location image
+        fetchLocationImage();
 
         // Lock Screen Logic
         // Lock Screen Logic - Unlock on specific spot
@@ -279,58 +307,7 @@
             }
         });
 
-        // Replace with your Google Sheets API URL
-        const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzHZ5tBryRvZmFMRw7Oz-EGCpfFLIMGq5A4qSGsJgEnXqhQCsk4VKpNCmvgWdQ-KW9G/exec';
-    
-        // Function to fetch data from Google Sheets
-        async function fetchData() {
-            try {
-                const response = await fetch(googleSheetsUrl);
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                return null;
-            }
-        }
-    
-        // Function to initialize the map
-        async function initMap() {
-            const data = await fetchData();
-            if (data && data.length > 1) {
-                const latitude = parseFloat(data[1][0]); // A2 (Latitude)
-                const longitude = parseFloat(data[1][1]); // B2 (Longitude)
-                const batteryLevel = data[1][2]; // C2 (Battery)
-        
-                if (!isNaN(latitude) && !isNaN(longitude)) {
-                    // Initialize Leaflet map
-                    const map = L.map('map').setView([latitude, longitude], 15);
-        
-                    // Add OpenStreetMap tiles
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap contributors',
-                    }).addTo(map);
-        
-                    // Add a marker
-                    L.marker([latitude, longitude]).addTo(map)
-                        .bindPopup('Current Location')
-                        .openPopup();
-        
-                    // Display battery level if it's a valid number
-                    if (!isNaN(batteryLevel)) {
-                        document.getElementById('batteryLevel').textContent = `Battery Level: ${batteryLevel}%`;
-                    } else {
-                        document.getElementById('batteryLevel').textContent = '⚠️ Invalid Battery Data';
-                    }
-                } else {
-                    console.error('Invalid latitude or longitude data.');
-                    showNotification('⚠️ Invalid location data received.');
-                }
-            } else {
-                console.error('No data found or invalid data format.');
-                showNotification('⚠️ Unable to fetch map data.');
-            }
-        }
+
 
         
         function showNotification(message, duration = 4500) {
