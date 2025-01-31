@@ -204,24 +204,22 @@
             transition: opacity 0.3s ease-in-out;
         }
 
-        /* New styles for the map and battery display */
+
         #map-container {
-            margin: 20px auto;
-            text-align: center;
+            margin-top: 20px;
         }
 
-        #map-image {
-            width: 200px;
-            height: 150px;
-            border-radius: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+        #map {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0; 
         }
 
         #battery-level {
-            font-size: 16px;
             margin-top: 10px;
-            color: #fff;
+            font-size: 18px;
         }
+
         
     </style>
 </head>
@@ -268,38 +266,14 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
-    <!-- Map and Battery Display -->
+    
+    <!-- Map and Battery -->
     <div id="map-container">
-        <img id="map-image" src="" alt="Map Image">
-        <div id="battery-level">Battery: Loading...</div>
+        <div id="map"></div>
+        <div id="battery-level">Battery Level: <span id="battery">N/A</span></div>
     </div>
-
+    
     <script>
-
-        // Function to fetch and display map and battery level
-        async function fetchMapAndBattery() {
-            const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv';
-            try {
-                const response = await fetch(csvUrl);
-                const csvData = await response.text();
-                const rows = csvData.split('\n');
-                const [latitude, longitude, battery] = rows[1].split(','); // Extract data from the second row (A2, B2, C2)
-
-                // Generate a static map image URL using OpenStreetMap
-                const mapImageUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${latitude},${longitude}&zoom=14&size=200x150&maptype=mapnik`;
-                document.getElementById('map-image').src = mapImageUrl;
-
-                // Display battery level
-                document.getElementById('battery-level').textContent = `Battery: ${battery}%`;
-            } catch (error) {
-                console.error('Failed to fetch or process CSV data:', error);
-                document.getElementById('battery-level').textContent = 'Battery: Error loading data';
-            }
-        }
-
-        // Call the function to load map and battery data
-        fetchMapAndBattery();
-        
         let focusedInput = null;
         let unlockClicks = 0;
        
@@ -324,7 +298,32 @@
         });
 
 
+        // Fetch CSV data from the Google Sheet (publicly available)
+        async function fetchData() {
+            try {
+                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv');
+                const data = await response.text();
+                const rows = data.split("\n").slice(1); // Skipping the header row
 
+                // Extract the first row's data (Latitude, Longitude, Battery)
+                const [lat, lng, battery] = rows[0].split(',');
+
+                // Set the map using OpenStreetMap with the extracted coordinates
+                const mapContainer = document.getElementById('map-container');
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.01},${lat-0.01},${lng+0.01},${lat+0.01}&layer=mapnik&marker=${lat},${lng}`;
+                mapContainer.appendChild(iframe);
+
+                // Show the battery level
+                const batteryLevelDiv = document.getElementById('battery-level');
+                batteryLevelDiv.textContent = `Battery: ${battery}%`;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Fetch data on page load
+        fetchData();
         
         function showNotification(message, duration = 4500) {
             const notification = document.getElementById('notification');
