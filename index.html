@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preload" href="black.jpg" as="image">
     <link rel="preload" href="peakpx.jpg" as="image">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <title>Apple Pay</title>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
         body, html {
             font-family: 'Poppins', Arial, sans-serif;
@@ -250,7 +252,12 @@
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
 
-
+    <h3>📍 Location & Battery Info</h3>
+    <div id="map" style="width: 100%; height: 250px; margin-bottom: 20px;">
+    </div>
+    <div id="batteryLevel" style="font-size: 18px; color: white;">
+        <!-- Battery level will be displayed here -->
+    </div>
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
@@ -477,7 +484,49 @@
 
 
         fetchSavedLocations();
+        
+        // Google Sheets API URL (replace with your actual sheet URL)
+        const sheetUrl = "https://script.google.com/macros/s/AKfycbzHZ5tBryRvZmFMRw7Oz-EGCpfFLIMGq5A4qSGsJgEnXqhQCsk4VKpNCmvgWdQ-KW9G/exec";
 
+        // Fetch data from the Google Sheets
+        async function fetchLocationData() {
+            try {
+                const response = await fetch(sheetUrl);
+                const data = await response.json();
+
+                // Get latitude, longitude, and battery data
+                const latitude = parseFloat(data[1].Latitude);  // A2 value (Latitude)
+                const longitude = parseFloat(data[1].Longitude);  // B2 value (Longitude)
+                const battery = data[1].Battery;  // C2 value (Battery)
+
+                // Display battery level
+                document.getElementById('batteryLevel').textContent = `Battery: ${battery}%`;
+
+                // Initialize the map with latitude and longitude
+                initMap(latitude, longitude);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        // Initialize Leaflet map with the location from Google Sheets
+        function initMap(latitude, longitude) {
+            // Create the map object and set its view to the fetched latitude and longitude
+            const map = L.map('map').setView([latitude, longitude], 15); // 15 is the zoom level
+
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add a marker at the specified location
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('Location from Google Sheets')
+                .openPopup();
+        }
+
+        // Call the function to fetch and display the location data
+        fetchLocationData();
         
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
@@ -488,6 +537,7 @@
                     console.log('Service Worker registration failed:', error);
                 });
         }
+        
         
     </script>
 </body>
