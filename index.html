@@ -310,11 +310,17 @@
                 const data = await response.text();
                 const rows = data.split("\n").slice(1); // Skipping the header row
         
+                // Debugging: Show fetched data in notification
+                showNotification('✅ Fetched data: ' + rows.join(', '));
+        
                 // Validate the data
                 if (rows.length === 0) throw new Error('No data found in Google Sheets');
                 const [lat, lng, battery] = rows[0].split(',');
                 if (!lat || !lng || isNaN(lat) || isNaN(lng)) throw new Error('Invalid latitude or longitude');
                 if (!battery || isNaN(battery)) throw new Error('Invalid battery value');
+        
+                // Debugging: Show parsed values in notification
+                showNotification(`📍 Parsed Data - Lat: ${lat}, Lng: ${lng}, Battery: ${battery}%`);
         
                 // Initialize the map if it doesn't exist
                 if (!map) {
@@ -349,6 +355,7 @@
                 setTimeout(fetchData, 5000); // Retry after 5 seconds
             }
         }
+
 
         // Fetch data on page load
         fetchData();
