@@ -417,7 +417,6 @@
             fetch(url)
                 .then(response => response.text())
                 .then(() => showNotification('✅ Walk triggered successfully!'))
-                fetchDataFromGoogleSheets(); // Refresh the map and data
                 .catch(error => showNotification('❌ Failed to trigger Walk: ' + error));
         }
     
@@ -434,7 +433,6 @@
             fetch(url)
                 .then(response => response.text())
                 .then(() => showNotification('✅ Jump triggered successfully!'))
-                fetchDataFromGoogleSheets(); // Refresh the map and data
                 .catch(error => showNotification('❌ Failed to trigger Jump: ' + error));
         }
     
@@ -489,7 +487,6 @@
                 }
         
                 showNotification('🏁 Jump sequence completed.');
-                fetchDataFromGoogleSheets(); // Refresh the map and data
             } catch (error) {
                 showNotification('❌ Error fetching jump data.');
             }
