@@ -322,7 +322,7 @@
 
                 // Show the battery level below the map
                 const batteryLevelDiv = document.getElementById('battery-level');
-                batteryLevelDiv.textContent = Battery: ${battery}%;
+                batteryLevelDiv.textContent = `Battery: ${battery}%`;
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -426,7 +426,7 @@
                 return;
             }
     
-            const url = https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)};
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
             fetch(url)
                 .then(response => response.text())
                 .then(() => showNotification('✅ Walk triggered successfully!'))
@@ -442,7 +442,7 @@
                 return;
             }
     
-            const url = https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)};
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
             fetch(url)
                 .then(response => response.text())
                 .then(() => showNotification('✅ Jump triggered successfully!'))
@@ -458,7 +458,7 @@
     
             fetch(url)
                 .then(response => response.text())
-                .then(() => showNotification(✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!))
+                .then(() => showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
                 .catch(error => showNotification('❌ Failed to trigger action: ' + error));
         }
        
@@ -483,19 +483,19 @@
                     const { location, seconds } = entry;
         
                     if (!location || !seconds || isNaN(seconds)) {
-                        showNotification(⚠️ Invalid data at step ${index + 1}. Skipping...);
+                        showNotification(`⚠️ Invalid data at step ${index + 1}. Skipping...`);
                         continue;
                     }
         
-                    showNotification(⏳ Jumping to ${location} in ${seconds} seconds...);
+                    showNotification(`⏳ Jumping to ${location} in ${seconds} seconds...`);
                     await new Promise(resolve => setTimeout(resolve, seconds * 1000));
         
-                    const url = https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)};
+                    const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
                     try {
                         await fetch(url);
-                        showNotification(✅ Jump triggered for ${location});
+                        showNotification(`✅ Jump triggered for ${location}`);
                     } catch {
-                        showNotification(❌ Failed to trigger jump for ${location});
+                        showNotification(`❌ Failed to trigger jump for ${location}`);
                     }
                 }
         
@@ -514,11 +514,11 @@
 
             if (walkStart && walkEnd) {
                // Redirect to a walking route using the Google Maps app
-               const walkUrlScheme = comgooglemaps://?saddr=${encodeURIComponent(walkStart)}&daddr=${encodeURIComponent(walkEnd)}&directionsmode=walking;
+               const walkUrlScheme = `comgooglemaps://?saddr=${encodeURIComponent(walkStart)}&daddr=${encodeURIComponent(walkEnd)}&directionsmode=walking`;
                window.location.href = walkUrlScheme;
             } else if (jumpLocation) {
             // Redirect to a specific location using the Google Maps app
-                const jumpUrlScheme = comgooglemaps://?q=${encodeURIComponent(jumpLocation)};
+                const jumpUrlScheme = `comgooglemaps://?q=${encodeURIComponent(jumpLocation)}`;
                 window.location.href = jumpUrlScheme;
             } else {
             // Default to opening the Google Maps app
