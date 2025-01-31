@@ -307,13 +307,20 @@
                 // Extract the first row's data (Latitude, Longitude, Battery)
                 const [lat, lng, battery] = rows[0].split(',');
 
-                // Set the map using OpenStreetMap with the extracted coordinates
-                const mapContainer = document.getElementById('map-container');
-                const iframe = document.createElement('iframe');
-                iframe.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.01},${lat-0.01},${lng+0.01},${lat+0.01}&layer=mapnik&marker=${lat},${lng}`;
-                mapContainer.appendChild(iframe);
+                // Initialize the Leaflet map
+                const map = L.map('map').setView([lat, lng], 13); // Set map center to lat, lng
 
-                // Show the battery level
+                // Add OpenStreetMap tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Add a marker at the given coordinates
+                L.marker([lat, lng]).addTo(map)
+                    .bindPopup('Battery: ' + battery + '%')
+                    .openPopup();
+
+                // Show the battery level below the map
                 const batteryLevelDiv = document.getElementById('battery-level');
                 batteryLevelDiv.textContent = `Battery: ${battery}%`;
             } catch (error) {
