@@ -310,28 +310,43 @@
                 const data = await response.text();
                 const rows = data.split("\n").slice(1); // Skipping the header row
         
+                // Validate the data
+                if (rows.length === 0) throw new Error('No data found in Google Sheets');
                 const [lat, lng, battery] = rows[0].split(',');
+                if (!lat || !lng || isNaN(lat) || isNaN(lng)) throw new Error('Invalid latitude or longitude');
+                if (!battery || isNaN(battery)) throw new Error('Invalid battery value');
         
+                // Initialize the map if it doesn't exist
                 if (!map) {
                     map = L.map('map').setView([lat, lng], 17);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     }).addTo(map);
-                    marker = L.marker([lat, lng]).addTo(map)
-                        .bindPopup('Battery: ' + battery + '%')
-                        .openPopup();
-                } else {
-                    marker.setLatLng([lat, lng]);
-                    marker.setPopupContent('Battery: ' + battery + '%');
-                    map.flyTo([lat, lng], 17); // Smoothly transition to the new location
                 }
         
+                // Remove the old marker if it exists
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+        
+                // Add the new marker
+                marker = L.marker([lat, lng]).addTo(map)
+                    .bindPopup('Battery: ' + battery + '%')
+                    .openPopup();
+        
+                // Smoothly transition to the new location
+                map.flyTo([lat, lng], 17);
+        
+                // Update the battery level display
                 const batteryLevelDiv = document.getElementById('battery-level');
-                batteryLevelDiv.textContent = `Battery: ${battery}%`;
+                if (batteryLevelDiv) {
+                    batteryLevelDiv.textContent = `Battery: ${battery}%`;
+                }
                 
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setTimeout(fetchData, 5000); // Retry after 5 seconds if there's an error
+                showNotification('❌ Failed to fetch data. Retrying...');
+                setTimeout(fetchData, 5000); // Retry after 5 seconds
             }
         }
 
