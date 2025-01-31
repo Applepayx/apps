@@ -300,18 +300,7 @@
 
 
         
-        
-        let fetchInterval = null; // Variable to store the interval ID
-        
-        function startFetching() {
-            // Clear any existing interval
-            if (fetchInterval) {
-                clearInterval(fetchInterval);
-            }
-        
-            // Start a new interval
-            fetchInterval = setInterval(fetchData, 5000); // Fetch data every 5 seconds
-        }
+    
         
         async function fetchData() {
             try {
@@ -377,7 +366,7 @@
         
         // Start fetching data on page load
         fetchData(); // Fetch data immediately
-        startFetching(); // Start the interval
+
 
         
         function showNotification(message, duration = 4500) {
@@ -466,50 +455,80 @@
             dropdown.value = '';
         }
 
+        // Fetch data after a delay (e.g., 40 seconds) when buttons are triggered
         function triggerWalk() {
             const start = document.getElementById('walkStart').value.trim();
             const end = document.getElementById('walkEnd').value.trim();
-    
+        
             if (!start || !end) {
                 showNotification('⚠️ Please enter both start and end locations.');
                 return;
             }
-    
+        
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(() => showNotification('✅ Walk triggered successfully!'))
+                .then(() => {
+                    showNotification('✅ Walk triggered successfully! Fetching updated data in 40 seconds...');
+                    
+                    // Clear any existing timeout
+                    if (fetchTimeout) {
+                        clearTimeout(fetchTimeout);
+                    }
+        
+                    // Fetch data after 40 seconds
+                    fetchTimeout = setTimeout(fetchData, 40000); // 40 seconds delay
+                })
                 .catch(error => showNotification('❌ Failed to trigger Walk: ' + error));
         }
-    
-        // Update the triggerJump function
+        
         function triggerJump() {
             const location = document.getElementById('jumpLocation').value.trim();
-    
+        
             if (!location) {
                 showNotification('⚠️ Please enter a location for Jump.');
                 return;
             }
-    
+        
             const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
             fetch(url)
                 .then(response => response.text())
-                .then(() => showNotification('✅ Jump triggered successfully!'))
+                .then(() => {
+                    showNotification('✅ Jump triggered successfully! Fetching updated data in 40 seconds...');
+                    
+                    // Clear any existing timeout
+                    if (fetchTimeout) {
+                        clearTimeout(fetchTimeout);
+                    }
+        
+                    // Fetch data after 40 seconds
+                    fetchTimeout = setTimeout(fetchData, 40000); // 40 seconds delay
+                })
                 .catch(error => showNotification('❌ Failed to trigger Jump: ' + error));
         }
     
-        // Update the triggerAction function
         function triggerAction(action) {
             const url =
                 action === 'check'
                     ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
                     : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
-    
+        
             fetch(url)
                 .then(response => response.text())
-                .then(() => showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .then(() => {
+                    showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully! Fetching updated data in 40 seconds...`);
+                    
+                    // Clear any existing timeout
+                    if (fetchTimeout) {
+                        clearTimeout(fetchTimeout);
+                    }
+        
+                    // Fetch data after 40 seconds
+                    fetchTimeout = setTimeout(fetchData, 40000); // 40 seconds delay
+                })
                 .catch(error => showNotification('❌ Failed to trigger action: ' + error));
         }
+
        
         
         async function triggerJumpSequence() {
