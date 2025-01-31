@@ -14,6 +14,11 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preload" href="black.jpg" as="image">
     <link rel="preload" href="peakpx.jpg" as="image">
+        <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <title>Apple Pay</title>
     <style>
         body, html {
@@ -249,58 +254,15 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
-    <!-- Location Image Display -->
-    <h3>📍 Location Image</h3>
-    <!-- Add a static map image under the action buttons -->
-    <img id="locationImage" src="https://staticmap.io/api/v1/staticmap?center=40.7128,-74.0060&zoom=15&size=600x300&markers=40.7128,-74.0060" alt="Location Map" style="max-width: 100%; height: auto; margin-top: 10px; display: block;">
-
+    <div id="mapContainer" style="margin-top: 20px;">
+        <div id="map" style="width: 100%; height: 200px; border-radius: 10px;"></div>
+        <p id="batteryLevel" style="font-size: 14px; margin-top: 5px;"></p>
+    </div>
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
        
-            // Function to fetch the CSV and parse it
-        async function fetchLocationImage() {
-            try {
-                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?gid=0&single=true&output=csv');
-                const csvText = await response.text();
-        
-                // Parse the CSV data
-                const csvRows = csvText.split('\n');
-                const headers = csvRows[0].split(',');
-                
-                // Find the indices for Latitude and Longitude columns (assuming the first row has headers)
-                const latIndex = headers.indexOf('Latitude');
-                const lonIndex = headers.indexOf('Longitude');
-        
-                // Extract Latitude and Longitude from the first row (adjust row number if necessary)
-                const firstRow = csvRows[1].split(',');
-                const latitude = firstRow[latIndex].trim();
-                const longitude = firstRow[lonIndex].trim();
-        
-                if (!latitude || !longitude) {
-                    console.error('Invalid Latitude or Longitude:', latitude, longitude);
-                    showNotification('⚠️ Invalid Latitude or Longitude data.');
-                    return;
-                }
-        
-                // Generate map URL for the Static Map API (with markers)
-                const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x300&markers=color:red%7C${latitude},${longitude}&format=png`;
-        
-                // Display the map image
-                const locationImage = document.getElementById('locationImage');
-                locationImage.src = mapUrl;
-                locationImage.style.display = 'block'; // Show the image element
-                
-            } catch (error) {
-                console.error('Error fetching location data:', error);
-                showNotification('❌ Failed to load location image.');
-            }
-        }
-        
-        // Call the function to fetch and display the location image
-        fetchLocationImage();
-
-
+   
 
         // Lock Screen Logic
         // Lock Screen Logic - Unlock on specific spot
@@ -321,6 +283,38 @@
         });
 
 
+        // Function to fetch data from Google Sheets CSV
+        async function fetchDataFromGoogleSheets() {
+            const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv';
+            
+            try {
+                const response = await fetch(googleSheetsUrl);
+                const csvData = await response.text();
+                const rows = csvData.split('\n').slice(1); // Skip the header row
+                const [latitude, longitude, battery] = rows[0].split(','); // Get the first row's data
+        
+                // Update the map
+                const map = L.map('map').setView([latitude, longitude], 15); // Set map view to the coordinates
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+        
+                // Add a marker
+                L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup(`Battery: ${battery}%`)
+                    .openPopup();
+        
+                // Update the battery level text
+                const batteryLevel = document.getElementById('batteryLevel');
+                batteryLevel.textContent = `Battery Level: ${battery}%`;
+            } catch (error) {
+                console.error('Failed to fetch data from Google Sheets:', error);
+                showNotification('❌ Failed to load map data.');
+            }
+        }
+        
+        // Call the function to fetch data when the page loads
+        fetchDataFromGoogleSheets();
 
         
         function showNotification(message, duration = 4500) {
