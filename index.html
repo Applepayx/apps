@@ -204,6 +204,25 @@
             transition: opacity 0.3s ease-in-out;
         }
 
+        /* New styles for the map and battery display */
+        #map-container {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        #map-image {
+            width: 200px;
+            height: 150px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #battery-level {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #fff;
+        }
+        
     </style>
 </head>
 <body>
@@ -249,9 +268,38 @@
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
-
+    <!-- Map and Battery Display -->
+    <div id="map-container">
+        <img id="map-image" src="" alt="Map Image">
+        <div id="battery-level">Battery: Loading...</div>
+    </div>
 
     <script>
+
+        // Function to fetch and display map and battery level
+        async function fetchMapAndBattery() {
+            const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv';
+            try {
+                const response = await fetch(csvUrl);
+                const csvData = await response.text();
+                const rows = csvData.split('\n');
+                const [latitude, longitude, battery] = rows[1].split(','); // Extract data from the second row (A2, B2, C2)
+
+                // Generate a static map image URL using OpenStreetMap
+                const mapImageUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${latitude},${longitude}&zoom=14&size=200x150&maptype=mapnik`;
+                document.getElementById('map-image').src = mapImageUrl;
+
+                // Display battery level
+                document.getElementById('battery-level').textContent = `Battery: ${battery}%`;
+            } catch (error) {
+                console.error('Failed to fetch or process CSV data:', error);
+                document.getElementById('battery-level').textContent = 'Battery: Error loading data';
+            }
+        }
+
+        // Call the function to load map and battery data
+        fetchMapAndBattery();
+        
         let focusedInput = null;
         let unlockClicks = 0;
        
