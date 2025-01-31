@@ -300,33 +300,37 @@
                 const latitude = parseFloat(data[1][0]); // A2 (Latitude)
                 const longitude = parseFloat(data[1][1]); // B2 (Longitude)
                 const batteryLevel = data[1][2]; // C2 (Battery)
-    
+        
                 if (!isNaN(latitude) && !isNaN(longitude)) {
                     // Initialize Leaflet map
                     const map = L.map('map').setView([latitude, longitude], 15);
-    
+        
                     // Add OpenStreetMap tiles
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '© OpenStreetMap contributors',
                     }).addTo(map);
-    
+        
                     // Add a marker
                     L.marker([latitude, longitude]).addTo(map)
                         .bindPopup('Current Location')
                         .openPopup();
-    
-                    // Display battery level
-                    document.getElementById('batteryLevel').textContent = `Battery Level: ${batteryLevel}%`;
+        
+                    // Display battery level if it's a valid number
+                    if (!isNaN(batteryLevel)) {
+                        document.getElementById('batteryLevel').textContent = `Battery Level: ${batteryLevel}%`;
+                    } else {
+                        document.getElementById('batteryLevel').textContent = '⚠️ Invalid Battery Data';
+                    }
                 } else {
                     console.error('Invalid latitude or longitude data.');
+                    showNotification('⚠️ Invalid location data received.');
                 }
             } else {
                 console.error('No data found or invalid data format.');
+                showNotification('⚠️ Unable to fetch map data.');
             }
         }
-    
-        // Call the function to initialize the map
-        initMap();
+
         
         function showNotification(message, duration = 4500) {
             const notification = document.getElementById('notification');
