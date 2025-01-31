@@ -339,7 +339,8 @@
         
                 // Remove the old marker if it exists
                 if (marker) {
-                    map.removeLayer(marker);
+                    map.removeLayer(marker); // Remove the old marker from the map
+                    marker = null; // Clear the marker variable
                 }
         
                 // Add the new marker
