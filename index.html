@@ -206,13 +206,17 @@
             transition: opacity 0.3s ease-in-out;
         }
 
-
         .map-container {
             position: relative;
-            width: 100%;
-            height: 300px; /* Adjusted height */
+            width: 300px; /* Smaller width */
+            height: 300px; /* Smaller height */
             margin-top: 20px;
+            border-radius: 50%; /* Round the corners */
+            overflow: hidden; /* Ensure the map stays inside the rounded container */
+            margin-left: auto; /* Center the map horizontally */
+            margin-right: auto;
         }
+        
         .battery-level {
             margin-top: 10px;
             font-size: 18px;
@@ -263,6 +267,8 @@
         <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
         <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
+        <button onclick="fetchData()">Update Map</button>
+
      </div>
     
     <!-- Map Container -->
@@ -296,7 +302,7 @@
             }
         });
 
-
+        setInterval(fetchData, 10000);
         // Fetch CSV data from the Google Sheet (publicly available)
         async function fetchData() {
             try {
@@ -308,7 +314,7 @@
                 const [lat, lng, battery] = rows[0].split(',');
 
                 // Initialize the Leaflet map
-                const map = L.map('map').setView([lat, lng], 13); // Set map center to lat, lng
+                const map = L.map('map').setView([lat, lng], 18); // Set map center to lat, lng
 
                 // Add OpenStreetMap tile layer
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
