@@ -9,23 +9,6 @@
     <h1>Track My Phone</h1>
     <div id="map" style="width: 600px; height: 400px;"></div>
     <script>
-        // Initialize the map
-        const map = L.map('map').setView([51.505, -0.09], 13); // Default location
-
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Add a marker for the phone's location
-        const marker = L.marker([51.505, -0.09]).addTo(map); // Default marker location
-
-        // Function to update the marker's location
-        function updateLocation(lat, lng) {
-            marker.setLatLng([lat, lng]);
-            map.setView([lat, lng], 13);
-        }
-
         // Function to fetch and parse CSV data
         async function fetchLocationFromCSV() {
             const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv';
@@ -37,15 +20,40 @@
             const latestRow = rows[rows.length - 1]; // Get the latest row
             const [lat, lng] = latestRow.split(','); // Split latitude and longitude
 
-            // Update the marker's location
-            updateLocation(parseFloat(lat), parseFloat(lng));
+            return { lat: parseFloat(lat), lng: parseFloat(lng) };
         }
 
-        // Update location every 5 seconds
-        setInterval(fetchLocationFromCSV, 5000);
+        // Initialize the map with the first location from the CSV
+        async function initializeMap() {
+            // Fetch the initial location
+            const { lat, lng } = await fetchLocationFromCSV();
 
-        // Fetch location immediately on page load
-        fetchLocationFromCSV();
+            // Initialize the map with the fetched location
+            const map = L.map('map').setView([lat, lng], 13);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add a marker for the phone's location
+            const marker = L.marker([lat, lng]).addTo(map);
+
+            // Function to update the marker's location
+            function updateLocation(lat, lng) {
+                marker.setLatLng([lat, lng]);
+                map.setView([lat, lng], 13);
+            }
+
+            // Update location every 5 seconds
+            setInterval(async () => {
+                const { lat, lng } = await fetchLocationFromCSV();
+                updateLocation(lat, lng);
+            }, 5000);
+        }
+
+        // Initialize the map when the page loads
+        initializeMap();
     </script>
 </body>
 </html>
