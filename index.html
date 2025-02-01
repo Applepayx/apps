@@ -9,28 +9,9 @@
 
     <script>
         async function fetchData() {
-            try {
-                const response = await fetch('https://webhook.site/xxxxxx'); // Replace with your Webhook URL
-                const text = await response.text(); // Webhook.site returns raw text, not JSON
-
-                console.log("Raw Response: ", text); // Log the full response to check if it's being fetched correctly
-
-                // Find the latest JSON entry in the raw response
-                const jsonMatch = text.match(/\{.*?\}/gs); // Extract JSON-like content
-
-                if (jsonMatch) {
-                    const latestEntry = JSON.parse(jsonMatch[jsonMatch.length - 1]); // Get the latest entry
-                    console.log("Parsed Entry: ", latestEntry); // Log the parsed JSON object
-                    
-                    document.getElementById('data').textContent = `Location: ${latestEntry.location}\nBattery: ${latestEntry.batteryLevel}%\nTime: ${latestEntry.time}`;
-                } else {
-                    document.getElementById('data').textContent = "No valid JSON data found!";
-                }
-
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                document.getElementById('data').textContent = "Error loading data!";
-            }
+            const response = await fetch('https://webhook.site/xxxxxx'); // Your Webhook URL
+            const text = await response.text();
+            document.getElementById('data').textContent = text;
         }
 
         setInterval(fetchData, 5000); // Refresh every 5 seconds
