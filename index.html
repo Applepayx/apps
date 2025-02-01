@@ -319,7 +319,7 @@
                     const [lat, lng, battery] = rows[0].split(',');
                 
                     // Ensure we only update when there is a meaningful change in data
-                    if (lat && lng && battery) {
+                    if (
                         lat !== previousLat || 
                         lng !== previousLng || 
                         battery !== previousBattery
@@ -357,7 +357,7 @@
                     console.error('Error fetching data:', error);
                     setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
                 }
-            }, 1000); // Increase the debounce delay to 1000ms (1 second)
+            }, 300); // Debounce with a delay of 300ms (adjust as needed)
         }
         
         // Fetch data on page load
