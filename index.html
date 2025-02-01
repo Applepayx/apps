@@ -319,7 +319,7 @@
                     const [lat, lng, battery] = rows[0].split(',');
                 
                     // Ensure we only update when there is a meaningful change in data
-                    if (
+                    if (lat && lng && battery) {
                         lat !== previousLat || 
                         lng !== previousLng || 
                         battery !== previousBattery
