@@ -9,9 +9,23 @@
 
     <script>
         async function fetchData() {
-            const response = await fetch('https://webhook.site/c49e96e0-c833-453f-bfe0-e6c003983a87'); // Your Webhook URL
-            const text = await response.text();
-            document.getElementById('data').textContent = text;
+            try {
+                const response = await fetch('https://webhook.site/xxxxxx'); // Replace with your Webhook.site URL
+                const text = await response.text(); // Webhook.site returns raw text, not JSON
+                
+                // Find the latest JSON entry in the raw response
+                const jsonMatch = text.match(/\{.*?\}/gs); // Extract JSON-like content
+                if (jsonMatch) {
+                    const latestEntry = JSON.parse(jsonMatch[jsonMatch.length - 1]); // Get the latest entry
+                    document.getElementById('data').textContent = `Location: ${latestEntry.location}\nBattery: ${latestEntry.batteryLevel}%\nTime: ${latestEntry.time}`;
+                } else {
+                    document.getElementById('data').textContent = "No valid data found!";
+                }
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById('data').textContent = "Error loading data!";
+            }
         }
 
         setInterval(fetchData, 5000); // Refresh every 5 seconds
