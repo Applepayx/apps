@@ -301,7 +301,7 @@
 
 
         
-        
+
         // Prevent excessive requests and updates by using debounce-like logic
         let fetchTimeout;
         async function fetchData() {
@@ -318,9 +318,13 @@
                 
                     const [lat, lng, battery] = rows[0].split(',');
                 
-                    // Check if the data has genuinely changed
-                    if (lat !== previousLat || lng !== previousLng || battery !== previousBattery) {
-                        // If map hasn't been initialized yet
+                    // Ensure we only update when there is a meaningful change in data
+                    if (
+                        lat !== previousLat || 
+                        lng !== previousLng || 
+                        battery !== previousBattery
+                    ) {
+                        // Only update if there is new data
                         if (!map) {
                             map = L.map('map').setView([lat, lng], 17);
                             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -330,24 +334,27 @@
                                 .bindPopup('Battery: ' + battery + '%')
                                 .openPopup();
                         } else {
-                            // Update the marker with new location and battery level
+                            // Update the marker with new location and battery level only if they have changed
                             marker.setLatLng([lat, lng]);
                             marker.setPopupContent('Battery: ' + battery + '%');
                             map.flyTo([lat, lng], 17); // Smoothly transition to the new location
                         }
         
-                        // Update the previous data
+                        // Update the stored data to prevent flickering
                         previousLat = lat;
                         previousLng = lng;
                         previousBattery = battery;
                     }
                     
+                    // Update the battery display only if the value has changed
                     const batteryLevelDiv = document.getElementById('battery-level');
-                    batteryLevelDiv.textContent = `Battery: ${battery}%`;
-                    
+                    if (batteryLevelDiv.textContent !== `Battery: ${battery}%`) {
+                        batteryLevelDiv.textContent = `Battery: ${battery}%`;
+                    }
+        
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    setTimeout(fetchData, 5000); // Retry after 5 seconds if there's an error
+                    setTimeout(fetchData, 10000); // Retry after 5 seconds if there's an error
                 }
             }, 300); // Debounce with a delay of 300ms (adjust as needed)
         }
