@@ -278,6 +278,7 @@
         let unlockClicks = 0;
         let map, marker; // Declare variables outside the function to access them globally
         let isFetching = false; // Flag to prevent overlapping fetch calls
+        let previousData = { lat: null, lng: null }; // Store the previous data to compare with
 
    
 
@@ -301,6 +302,7 @@
 
 
                 
+        
         async function fetchData() {
             if (isFetching) return; // Prevent overlapping fetch calls
             isFetching = true;
@@ -317,11 +319,20 @@
                 if (rows.length === 0) throw new Error('No data found in the sheet');
         
                 const [lat, lng, battery] = rows[0].split(',');
+                console.log(lat, lng, battery); // Log values to check if they're correct
         
                 // Validate the data
                 if (isNaN(lat) || isNaN(lng) || isNaN(battery)) {
                     throw new Error('Invalid data format in Google Sheets');
                 }
+        
+                // Compare with previous data to check if it's new or old
+                const isNewData = lat !== previousData.lat || lng !== previousData.lng;
+                const notificationMessage = isNewData ? 'New data fetched!' : 'Old data fetched!';
+                showNotification(notificationMessage); // Display notification
+        
+                // Store the new data as the previous data
+                previousData = { lat, lng };
         
                 // Initialize the map if it doesn't exist
                 if (!map) {
@@ -335,7 +346,10 @@
                 } else {
                     // Update the marker and map view only if the data has changed
                     const currentLatLng = marker.getLatLng();
+                    console.log(currentLatLng.lat, currentLatLng.lng); // Log current position
+        
                     if (currentLatLng.lat !== parseFloat(lat) || currentLatLng.lng !== parseFloat(lng)) {
+                        console.log('Updating position');
                         marker.setLatLng([lat, lng]);
                         marker.setPopupContent('Battery: ' + battery + '%');
                         map.flyTo([lat, lng], 17); // Smoothly transition to the new location
