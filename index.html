@@ -277,7 +277,8 @@
         let focusedInput = null;
         let unlockClicks = 0;
         let map, marker; // Declare variables outside the function to access them globally
-       
+        let previousLat = null, previousLng = null; // To store previous coordinates
+
    
 
         // Lock Screen Logic
@@ -309,21 +310,30 @@
                 
                 const data = await response.text();
                 const rows = data.split("\n").slice(1); // Skipping the header row
-        
+            
                 const [lat, lng, battery] = rows[0].split(',');
         
-                if (!map) {
-                    map = L.map('map').setView([lat, lng], 17);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-                    marker = L.marker([lat, lng]).addTo(map)
-                        .bindPopup('Battery: ' + battery + '%')
-                        .openPopup();
-                } else {
-                    marker.setLatLng([lat, lng]);
-                    marker.setPopupContent('Battery: ' + battery + '%');
-                    map.flyTo([lat, lng], 17); // Smoothly transition to the new location
+                // Check if the data has changed before updating
+                if (lat !== previousLat || lng !== previousLng) {
+                    // If map hasn't been initialized yet
+                    if (!map) {
+                        map = L.map('map').setView([lat, lng], 17);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+                        marker = L.marker([lat, lng]).addTo(map)
+                            .bindPopup('Battery: ' + battery + '%')
+                            .openPopup();
+                    } else {
+                        // Update the marker with new location and battery level
+                        marker.setLatLng([lat, lng]);
+                        marker.setPopupContent('Battery: ' + battery + '%');
+                        map.flyTo([lat, lng], 17); // Smoothly transition to the new location
+                    }
+                    
+                    // Update the previous coordinates
+                    previousLat = lat;
+                    previousLng = lng;
                 }
         
                 const batteryLevelDiv = document.getElementById('battery-level');
@@ -334,7 +344,7 @@
                 setTimeout(fetchData, 5000); // Retry after 5 seconds if there's an error
             }
         }
-
+        
         // Fetch data on page load
         fetchData();
         
