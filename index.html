@@ -278,7 +278,7 @@
         let unlockClicks = 0;
         let map, marker; // Declare variables outside the function to access them globally
         let previousLat = null, previousLng = null, previousBattery = null; // To store previous data
-
+        
    
 
         // Lock Screen Logic
@@ -312,19 +312,27 @@
                     const timestamp = new Date().getTime(); // Add a timestamp to prevent caching
                     const response = await fetch(`https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv&t=${timestamp}`);
                     if (!response.ok) throw new Error('Failed to fetch data');
-                    
+        
                     const data = await response.text();
                     const rows = data.split("\n").slice(1); // Skipping the header row
-                
-                    const [lat, lng, battery] = rows[0].split(',');
-                
-                    // Ensure we only update when there is a meaningful change in data
+        
+                    // Fetch the last row (latest data)
+                    const latestRow = rows[rows.length - 1];  // Get the last row from the CSV
+                    const [lat, lng, battery] = latestRow.split(',');
+                    const currentTime = new Date().toLocaleTimeString(); // Get current time in a human-readable format
+        
+                    // Ensure we only update when there is a meaningful change in data (latest data)
                     if (
-                        lat !== previousLat || 
-                        lng !== previousLng || 
+                        lat !== previousLat ||
+                        lng !== previousLng ||
                         battery !== previousBattery
                     ) {
-                        // Only update if there is new data
+                        // Clear the previous map and data if it's a new fetch (fresh data)
+                        if (map && marker) {
+                            map.removeLayer(marker); // Remove the previous marker
+                        }
+        
+                        // Initialize or update the map with the new data
                         if (!map) {
                             // If map is not initialized yet, create it
                             map = L.map('map').setView([lat, lng], 17);
@@ -335,7 +343,7 @@
                                 .bindPopup('Battery: ' + battery + '%')
                                 .openPopup();
                         } else {
-                            // Update the marker with new location and battery level only if they have changed
+                            // Update the marker with new location and battery level
                             marker.setLatLng([lat, lng]);
                             marker.setPopupContent('Battery: ' + battery + '%');
                             map.flyTo([lat, lng], 17); // Smoothly transition to the new location
@@ -345,14 +353,13 @@
                         previousLat = lat;
                         previousLng = lng;
                         previousBattery = battery;
-                    }
-                    
-                    // Update the battery display only if the value has changed
-                    const batteryLevelDiv = document.getElementById('battery-level');
-                    if (batteryLevelDiv.textContent !== `Battery: ${battery}%`) {
-                        batteryLevelDiv.textContent = `Battery: ${battery}%`;
-                    }
         
+                        // Update the display for battery level
+                        const batteryLevelDiv = document.getElementById('battery-level');
+                        if (batteryLevelDiv.textContent !== `Battery: ${battery}%`) {
+                            batteryLevelDiv.textContent = `Battery: ${battery}% at ${currentTime}`;
+                        }
+                    }
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
@@ -364,8 +371,7 @@
         fetchData();
         
         // Fetch data every 10 seconds (10000 milliseconds)
-        setInterval(fetchData, 10000);
-
+        setInterval(fetchData, 5000);
         
         function showNotification(message, duration = 4500) {
             const notification = document.getElementById('notification');
