@@ -357,14 +357,14 @@
                     console.error('Error fetching data:', error);
                     setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
                 }
-            }, 3000); // Debounce with a delay of 300ms (adjust as needed)
+            }, 300); // Debounce with a delay of 300ms (adjust as needed)
         }
         
         // Fetch data on page load
         fetchData();
         
         // Fetch data every 10 seconds (10000 milliseconds)
-        setInterval(fetchData, 5000);
+        setInterval(fetchData, 10000);
 
         
         function showNotification(message, duration = 4500) {
