@@ -277,7 +277,6 @@
         let focusedInput = null;
         let unlockClicks = 0;
         let map, marker; // Declare variables outside the function to access them globally
-        let previousLat = null, previousLng = null, previousBattery = null; // To store previous data
 
    
 
@@ -304,6 +303,8 @@
 
         // Prevent excessive requests and updates by using debounce-like logic
         let fetchTimeout;
+        let previousLat, previousLng, previousBattery;
+        
         async function fetchData() {
             if (fetchTimeout) clearTimeout(fetchTimeout);
         
@@ -314,58 +315,25 @@
                     if (!response.ok) throw new Error('Failed to fetch data');
         
                     const data = await response.text();
-                    const rows = data.split("\n");
+                    const rows = data.split("\n").slice(1);
         
-                    // Check for empty data or ONLY a header row
-                    if (rows.length <= 1 || (rows.length === 2 && rows[0].trim().split(",").length <=1 ) ) { //check if there is any data after headers
-                        console.warn("Empty or invalid CSV data.");
-                        return; // Don't try to process
-                    }
+                    const [lat, lng, battery] = rows[0].split(',');
         
-                    const dataRow = rows[1]; // Get the first *data* row (index 1)
-        
-                    const values = dataRow.split(","); // Split by comma
-        
-                    if (values.length < 3) {
-                        console.error("Not enough values in data row:", dataRow);
-                        return;
-                    }
-        
-                    const latStr = values[0];
-                    const lngStr = values[1];
-                    const batteryStr = values[2];
-        
-                    const lat = parseFloat(latStr.trim());
-                    const lng = parseFloat(lngStr.trim());
-                    const battery = parseInt(batteryStr.trim(), 10);
-        
-                    if (isNaN(lat) || isNaN(lng) || isNaN(battery)) {
-                        console.error("Invalid data format in CSV:", latStr, lngStr, batteryStr);
-                        return;
-                    }
-        
-        
-                    if (lat !== previousLat || lng !== previousLng || battery !== previousBattery) {
-                        if (!map) {
-                            map = L.map('map').setView([lat, lng], 17);
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            }).addTo(map);
-                            marker = L.marker([lat, lng]).addTo(map).bindPopup(`Battery: ${battery}%`).openPopup();
-                        } else {
-                            marker.setLatLng([lat, lng]);
-                            marker.setPopupContent(`Battery: ${battery}%`);
-                            map.flyTo([lat, lng], 17);
-                        }
+                    if (
+                        lat !== previousLat ||
+                        lng !== previousLng ||
+                        battery !== previousBattery
+                    ) {
+                        const message = `Latitude: ${lat}, Longitude: ${lng}, Battery: ${battery}%`;
+                        showNotification(message);  // Use your showNotification function
         
                         previousLat = lat;
                         previousLng = lng;
                         previousBattery = battery;
-                        batteryLevelDiv.textContent = `Battery: ${battery}%`;
                     }
         
                 } catch (error) {
-                    console.error('Error fetching or processing data:', error);
+                    console.error('Error fetching data:', error);
                     setTimeout(fetchData, 10000);
                 }
             }, 300);
@@ -374,7 +342,7 @@
         // Fetch data on page load
         fetchData();
         
-        // Fetch data every 10 seconds (10000 milliseconds)
+        // Fetch data every 10 seconds
         setInterval(fetchData, 10000);
 
         
