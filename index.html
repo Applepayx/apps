@@ -338,7 +338,7 @@
                             // Update the marker with new location and battery level only if they have changed
                             marker.setLatLng([lat, lng]);
                             marker.setPopupContent('Battery: ' + battery + '%');
-                            map.flyTo([lat, lng], 17); // Smoothly transition to the new location
+                            map.flyTo([lat, lng], 16); // Smoothly transition to the new location
                         }
         
                         // Reset previous data after processing new valid data
@@ -355,16 +355,16 @@
         
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
+                    setTimeout(fetchData, 15000); // Retry after 10 seconds if there's an error
                 }
-            }, 3000); // Debounce with a delay of 300ms (adjust as needed)
+            }, 15000); // Debounce with a delay of 300ms (adjust as needed)
         }
         
         // Fetch data on page load
         fetchData();
         
         // Fetch data every 10 seconds (10000 milliseconds)
-        setInterval(fetchData, 10000);
+        setInterval(fetchData, 15000);
 
         
         function showNotification(message, duration = 4500) {
