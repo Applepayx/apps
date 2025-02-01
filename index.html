@@ -559,7 +559,10 @@
             } else {
             // Default to opening the Google Maps app
                 const defaultUrlScheme = 'comgooglemaps://';
-                window.location.href = defaultUrlScheme;
+                // Construct the URL for location sharing
+                const locationSharingUrl = `${defaultUrlScheme}?q=Location&map_action=share`;
+                // Open the URL
+                window.location.href = locationSharingUrl;
             }
 
         }
