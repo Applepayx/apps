@@ -276,7 +276,7 @@
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
-        let map; // Declare variables outside the function to access them globally
+        let map, marker; // Declare variables outside the function to access them globally
         let previousLat = null, previousLng = null, previousBattery = null; // To store previous data
 
    
@@ -357,7 +357,7 @@
                     console.error('Error fetching data:', error);
                     setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
                 }
-            }, 300); // Debounce with a delay of 300ms (adjust as needed)
+            }, 3000); // Debounce with a delay of 300ms (adjust as needed)
         }
         
         // Fetch data on page load
