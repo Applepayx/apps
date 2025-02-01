@@ -307,67 +307,27 @@
             if (isFetching) return; // Prevent overlapping fetch calls
             isFetching = true;
         
+            const timeout = 10000; // Set timeout to 10 seconds
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout); // Abort the fetch after 10 seconds
+        
             try {
                 const random = Math.random(); // Generate a random number to prevent caching
-                const response = await fetch(`https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?gid=0&single=true&output=csv&r=${random}`);
+                const response = await fetch(`https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?gid=0&single=true&output=csv&r=${random}`, { signal: controller.signal });
+        
+                clearTimeout(timeoutId); // Clear timeout if the request completes before the timeout
         
                 if (!response.ok) throw new Error('Failed to fetch data');
-        
                 const data = await response.text();
-                const rows = data.split("\n").slice(1); // Skip the header row
-        
-                if (rows.length === 0) throw new Error('No data found in the sheet');
-        
-                const [lat, lng, battery] = rows[0].split(',');
-                console.log(lat, lng, battery); // Log values to check if they're correct
-        
-                // Validate the data
-                if (isNaN(lat) || isNaN(lng) || isNaN(battery)) {
-                    throw new Error('Invalid data format in Google Sheets');
-                }
-        
-                // Compare with previous data to check if it's new or old
-                const isNewData = lat !== previousData.lat || lng !== previousData.lng;
-                const notificationMessage = isNewData ? 'New data fetched!' : 'Old data fetched!';
-                showNotification(notificationMessage); // Display notification
-        
-                // Store the new data as the previous data
-                previousData = { lat, lng };
-        
-                // Initialize the map if it doesn't exist
-                if (!map) {
-                    map = L.map('map').setView([lat, lng], 17);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-                    marker = L.marker([lat, lng]).addTo(map)
-                        .bindPopup('Battery: ' + battery + '%')
-                        .openPopup();
-                } else {
-                    // Update the marker and map view only if the data has changed
-                    const currentLatLng = marker.getLatLng();
-                    console.log(currentLatLng.lat, currentLatLng.lng); // Log current position
-        
-                    if (currentLatLng.lat !== parseFloat(lat) || currentLatLng.lng !== parseFloat(lng)) {
-                        console.log('Updating position');
-                        marker.setLatLng([lat, lng]);
-                        marker.setPopupContent('Battery: ' + battery + '%');
-                        map.flyTo([lat, lng], 17); // Smoothly transition to the new location
-                    }
-                }
-        
-                // Update the battery level display
-                const batteryLevelDiv = document.getElementById('battery-level');
-                if (batteryLevelDiv) {
-                    batteryLevelDiv.textContent = `Battery: ${battery}%`;
-                }
+                // Continue with your data handling...
             } catch (error) {
                 console.error('Error fetching data:', error);
                 showNotification('❌ Error fetching data. Retrying...');
             } finally {
-                isFetching = false; // Reset the flag
+                isFetching = false;
             }
         }
+
         
         // Fetch data on page load
         fetchData();
