@@ -277,7 +277,8 @@
         let focusedInput = null;
         let unlockClicks = 0;
         let map, marker; // Declare variables outside the function to access them globally
-        let previousLat = null, previousLng = null, previousBattery = null; // To store previous data
+        let previousLat, previousLng, previousBattery;
+
 
    
 
@@ -356,7 +357,7 @@
         
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
+                    setTimeout(fetchData, 5000); // Retry after 10 seconds if there's an error
                 }
             }, 300); // Debounce with a delay of 300ms (adjust as needed)
         }
@@ -365,7 +366,7 @@
         fetchData();
         
         // Fetch data every 10 seconds (10000 milliseconds)
-        setInterval(fetchData, 10000);
+        setInterval(fetchData, 5000);
         
         function showNotification(message, duration = 4500) {
             const notification = document.getElementById('notification');
