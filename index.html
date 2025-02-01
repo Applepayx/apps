@@ -18,7 +18,7 @@
             // Parse CSV data
             const rows = csvText.split('\n'); // Split rows
             const latestRow = rows[rows.length - 1]; // Get the latest row
-            const [lat, lng] = latestRow.split(','); // Split latitude and longitude
+            const [lng, lat] = latestRow.split(','); // Split longitude (A) and latitude (B)
 
             return { lat: parseFloat(lat), lng: parseFloat(lng) };
         }
