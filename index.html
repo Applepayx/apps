@@ -303,7 +303,7 @@
 
         // Prevent excessive requests and updates by using debounce-like logic
         let fetchTimeout;
-        let previousLat = null; // Initialize to null
+        let previousLat = null;
         let previousLng = null;
         let previousBattery = null;
         
@@ -320,16 +320,17 @@
                     const rows = data.split("\n").slice(1);
                     const [lat, lng, battery] = rows[0].split(',');
         
-                    // ***Crucial change: Update AFTER the fetch***
-                    if (lat !== previousLat || lng !== previousLng || battery !== previousBattery) {
-                        const message = `Latitude: ${lat}, Longitude: ${lng}, Battery: ${battery}%`;
-                        showNotification(message);
+                    // ***The FIX: Use a closure***
+                    (function(currentLat, currentLng, currentBattery) { // Immediately Invoked Function Expression (IIFE)
+                        if (currentLat !== previousLat || currentLng !== previousLng || currentBattery !== previousBattery) {
+                            const message = `Latitude: ${currentLat}, Longitude: ${currentLng}, Battery: ${currentBattery}%`;
+                            showNotification(message);
         
-                        previousLat = lat;  // Now update the previous values
-                        previousLng = lng;
-                        previousBattery = battery;
-                    }
-        
+                            previousLat = currentLat;
+                            previousLng = currentLng;
+                            previousBattery = currentBattery;
+                        }
+                    })(lat, lng, battery); // Pass the current values to the IIFE
         
                 } catch (error) {
                     console.error('Error fetching data:', error);
@@ -337,6 +338,7 @@
                 }
             }, 300);
         }
+
         
         // ... (rest of the code, including showNotification)
         
