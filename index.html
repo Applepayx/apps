@@ -277,7 +277,6 @@
         let focusedInput = null;
         let unlockClicks = 0;
         let map, marker; // Declare variables outside the function to access them globally
-        let previousLat = null, previousLng = null, previousBattery = null; // To store previous data
 
    
 
@@ -304,66 +303,52 @@
 
         // Prevent excessive requests and updates by using debounce-like logic
         let fetchTimeout;
+        
         async function fetchData() {
-            if (fetchTimeout) clearTimeout(fetchTimeout); // Clear any existing timeouts to debounce
+            if (fetchTimeout) clearTimeout(fetchTimeout); // Clear existing timeout for debouncing
         
             fetchTimeout = setTimeout(async () => {
                 try {
-                    const timestamp = new Date().getTime(); // Add a timestamp to prevent caching
+                    const timestamp = new Date().getTime(); // Prevent caching
                     const response = await fetch(`https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv&t=${timestamp}`);
                     if (!response.ok) throw new Error('Failed to fetch data');
-                    
-                    const data = await response.text();
-                    const rows = data.split("\n").slice(1); // Skipping the header row
-                
-                    const [lat, lng, battery] = rows[0].split(',');
-                
-                    // Ensure we only update when there is a meaningful change in data
-                    if (
-                        lat !== previousLat || 
-                        lng !== previousLng || 
-                        battery !== previousBattery
-                    ) {
-                        // Only update if there is new data
-                        if (!map) {
-                            // If map is not initialized yet, create it
-                            map = L.map('map').setView([lat, lng], 17);
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            }).addTo(map);
-                            marker = L.marker([lat, lng]).addTo(map)
-                                .bindPopup('Battery: ' + battery + '%')
-                                .openPopup();
-                        } else {
-                            // Update the marker with new location and battery level only if they have changed
-                            marker.setLatLng([lat, lng]);
-                            marker.setPopupContent('Battery: ' + battery + '%');
-                            map.flyTo([lat, lng], 17); // Smoothly transition to the new location
-                        }
         
-                        // Reset previous data after processing new valid data
-                        previousLat = lat;
-                        previousLng = lng;
-                        previousBattery = battery;
+                    const data = await response.text();
+                    const rows = data.split("\n").filter(row => row.trim() !== ""); // Remove empty rows
+                    const lastRow = rows[rows.length - 1].split(','); // Get the last row
+        
+                    const [lat, lng, battery] = lastRow;
+        
+                    // Update map and marker
+                    if (!map) {
+                        // Initialize map if it doesn't exist
+                        map = L.map('map').setView([lat, lng], 17);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+                        marker = L.marker([lat, lng]).addTo(map)
+                            .bindPopup('Battery: ' + battery + '%')
+                            .openPopup();
+                    } else {
+                        // Update marker and map view
+                        marker.setLatLng([lat, lng]);
+                        marker.setPopupContent('Battery: ' + battery + '%');
+                        map.flyTo([lat, lng], 17);
                     }
-                    
-                    // Update the battery display only if the value has changed
+        
+                    // Update battery display
                     const batteryLevelDiv = document.getElementById('battery-level');
-                    if (batteryLevelDiv.textContent !== `Battery: ${battery}%`) {
-                        batteryLevelDiv.textContent = `Battery: ${battery}%`;
-                    }
+                    batteryLevelDiv.textContent = `Battery: ${battery}%`;
         
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
+                    setTimeout(fetchData, 10000); // Retry after 10 seconds on error
                 }
-            }, 300); // Debounce with a delay of 300ms (adjust as needed)
+            }, 300); // Debounce delay
         }
         
-        // Fetch data on page load
+        // Fetch data on page load and every 10 seconds
         fetchData();
-        
-        // Fetch data every 10 seconds (10000 milliseconds)
         setInterval(fetchData, 10000);
 
         
