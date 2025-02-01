@@ -1,21 +1,572 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Live Location & Battery</title>
-</head>
-<body>
-    <h2>Location & Battery Data</h2>
-    <pre id="data">Loading...</pre>
-
-    <script>
-        async function fetchData() {
-            const response = await fetch('https://webhook.site/xxxxxx'); // Your Webhook URL
-            const text = await response.text();
-            document.getElementById('data').textContent = text;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="MacroDroid Trigger">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="black.jpg" as="image">
+    <link rel="preload" href="peakpx.jpg" as="image">
+    <!-- Add Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Apple Pay</title>
+    <style>
+        body, html {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: url('peakpx.jpg') no-repeat center center fixed; /* Add your image as background */
+            background-color: black; /* Fallback color if the image doesn't load */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent tiling */
+            background-size: auto 100%; /* Stretch the image to fit the screen */
+            color: #fff;
+            margin: 0;
+            text-align: center;
+            padding: 10px;
+            overflow: hidden; /* Disable scrolling */
+            touch-action: none; /* Disable gestures like pinch-to-zoom */
         }
 
-        setInterval(fetchData, 5000); // Refresh every 5 seconds
+        h1, h3 {
+            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        /* Base styling */
+        .input-group {
+            font-family: 'Poppins', Arial, sans-serif; /* Apply to headings */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+            max-width: 100%;
+        }
+        
+        /* Transparent input fields */
+        input {
+            font-family: 'Poppins', Arial, sans-serif;
+            flex: 1;
+            padding: 8px 15px;
+            font-size: 17px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Transparent border */
+            background-color: rgba(255, 255, 255, 0.1); /* Transparent background */
+            color: #fff;
+            margin-right: 5px;
+            width: 70%;
+            transition: all 0.3s ease-in-out; /* Smooth transition */
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        
+        /* Transparent select dropdown */
+        select {
+            font-family: 'Poppins', Arial, sans-serif;
+            width: 100%;
+            padding: 8px 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus {
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        /* Reverted Icon button styling */
+        /* Icon button styling */
+        button.icon {
+            font-family: 'Poppins', Arial, sans-serif;
+            padding: 8px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(68, 68, 68, 0.3); /* Transparent button */
+            background-size: contain; /* Make sure the image fits inside the button */
+            background-repeat: no-repeat; /* Prevent tiling */
+            background-position: center; /* Center the icon */
+            color: transparent; /* Hide any text (if any) inside the button */
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s ease;
+            margin-left: 5px;
+            width: 40px; /* Set a fixed width for the buttons */
+            height: 40px; /* Set a fixed height for the buttons */
+        }
+        
+        /* Button icon hover and active states */
+        button.icon:hover {
+            background-color: rgba(68, 68, 68, 0.1);
+            transform: scale(1.1);
+        }
+        
+        button.icon:active {
+            background-color: rgba(68, 68, 68, 0.1);
+            transform: scale(1.05);
+        }
+
+        
+        /* Action button styling */
+        button.action {
+            width: 50px; /* Fixed width for the buttons */
+            height: 50px; /* Fixed height for the buttons */
+            background-color: transparent; /* Make background transparent */
+            background-size: cover; /* Make sure the image covers the button area */
+            background-position: center; /* Center the image inside the button */
+            background-repeat: no-repeat; /* Prevent image repeating */
+            border: none; /* Remove the border */
+            border-radius: 10px; /* Optional: Rounded corners for the button */
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; /* Smooth transition */
+            margin: 5px;
+        }
+        
+        /* Hover effect for action buttons */
+        button.action:hover {
+            transform: scale(1.1); /* Button grows on hover */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* Slight shadow on hover */
+            filter: brightness(1.1); /* Slight brightness increase */
+        }
+        
+        /* Active effect for action buttons */
+        button.action:active {
+            transform: scale(0.95); /* Button shrinks when clicked */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow change */
+            filter: brightness(0.9); /* Slight brightness decrease */
+        }
+        
+        /* Styling to make the action buttons inline */
+        .action-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Space between buttons */
+            margin-top: 20px;
+        }
+
+
+        #notification {
+            display: none;
+            position: fixed;
+            top: 0; /* Align to the top of the screen */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Adjust for centering */
+            width: 100%; /* Make the notification take full width */
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 0; /* No rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-family: 'Poppins', Arial, sans-serif;
+            z-index: 9999;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            overflow-y: auto; /* Allow vertical scrolling if content exceeds screen height */
+            max-height: 100vh; /* Prevent going off-screen vertically */
+        }
+
+
+
+       }
+
+         
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('black.jpg') no-repeat center center fixed;
+            background-size: contain;
+            background-position: center center;
+            z-index: 9999; /* Keep it on top of everything */
+            animation: fadeIn 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+
+        .map-container {
+            position: relative;
+            width: 100%;;
+            height: 200px; /* Adjusted height */
+            margin-top: 20px;
+            border-radius: 5%; /* Round the corners */
+
+        }
+        .battery-level {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #fff;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="lockScreen">
+    </div>
+    <h1>MacroDroid Trigger</h1>
+    
+    <!-- Walk Action -->
+    <h3><img src="walk.png" alt="Walk Icon" style="width: 24px; vertical-align: middle;"> Walk</h3>
+    <div class="input-group">
+        <input type="text" id="walkStart" placeholder="Start Location" onclick="setFocusedInput('walkStart')">
+        <button class="icon" onclick="pasteInput('walkStart')" style="background-image: url('paste-icon.png');"></button>
+        <button class="icon" onclick="clearInput('walkStart')" style="background-image: url('clear-icon.png');"></button>
+        <button class="icon" onclick="switchInputs()" style="background-image: url('switch-icon.png');"></button>
+    </div>
+    <div class="input-group">
+        <input type="text" id="walkEnd" placeholder="End Location" onclick="setFocusedInput('walkEnd')">
+        <button class="icon" onclick="pasteInput('walkEnd')" style="background-image: url('paste-icon.png');"></button>
+        <button class="icon" onclick="clearInput('walkEnd')" style="background-image: url('clear-icon.png');"></button>
+        <button class="icon" onclick="triggerWalk()" style="background-image: url('training.png');"></button>
+    </div>
+    
+    <!-- Jump Action -->
+    <h3><img src="jump.png" alt="Jump Icon" style="width: 24px; vertical-align: middle;"> Jump</h3>
+    <div class="input-group">
+        <input type="text" id="jumpLocation" placeholder="Jump Location" onclick="setFocusedInput('jumpLocation')">
+        <button class="icon" onclick="pasteInput('jumpLocation')" style="background-image: url('paste-icon.png');"></button>
+        <button class="icon" onclick="clearInput('jumpLocation')" style="background-image: url('clear-icon.png');"></button>
+        <button class="icon" onclick="triggerJump()" style="background-image: url('location.png');"></button>
+    </div>
+    <div id="notification"></div>
+    </div>
+    <!-- Saved Locations -->
+    <select id="savedLocations" onchange="applySavedLocation()">
+        <option value="">📍 Saved Locations</option>
+    </select>
+
+    <!-- Other Actions -->
+    <h3>⚙️ Other Actions</h3>
+     <div class="action-container">
+        <button class="action" onclick="openGoogleMaps()" style="background-image: url('google-maps-icon.png');"></button>
+        <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
+        <button class="action" onclick="triggerAction('check')" style="background-image: url('battery-icon.png');"></button>
+        <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
+     </div>
+    
+    <!-- Map Container -->
+    <div id="map" class="map-container"></div>
+
+
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        let focusedInput = null;
+        let unlockClicks = 0;
+        let map, marker; // Declare variables outside the function to access them globally
+        let previousLat = null, previousLng = null, previousBattery = null; // To store previous data
+
+   
+
+        // Lock Screen Logic
+        // Lock Screen Logic - Unlock on specific spot
+        const lockScreen = document.getElementById('lockScreen');
+        const unlockArea = { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 50, width: 100, height: 100 }; // 200x200px area in the center
+        
+        lockScreen.addEventListener('click', (event) => {
+            // Check if the click is within the specific spot
+            if (
+                event.clientX >= unlockArea.x && event.clientX <= unlockArea.x + unlockArea.width &&
+                event.clientY >= unlockArea.y && event.clientY <= unlockArea.y + unlockArea.height
+            ) {
+                unlockClicks++;
+                if (unlockClicks === 3) {
+                    lockScreen.style.display = 'none'; // Hide the lock screen after 3 clicks within the area
+                }
+            }
+        });
+
+
+        
+
+        // Prevent excessive requests and updates by using debounce-like logic
+        let fetchTimeout;
+        async function fetchData() {
+            if (fetchTimeout) clearTimeout(fetchTimeout); // Clear any existing timeouts to debounce
+        
+            fetchTimeout = setTimeout(async () => {
+                try {
+                    const timestamp = new Date().getTime(); // Add a timestamp to prevent caching
+                    const response = await fetch(`https://docs.google.com/spreadsheets/d/e/2PACX-1vQVjL5P7Oefyg5j70VLCiRAdxL7AgD46Aec-Lj2LImOePkIIsqEOeDhEAL944b7b8LduQCktl0bvcWi/pub?output=csv&t=${timestamp}`);
+                    if (!response.ok) throw new Error('Failed to fetch data');
+                    
+                    const data = await response.text();
+                    const rows = data.split("\n").slice(1); // Skipping the header row
+                
+                    const [lat, lng, battery] = rows[0].split(',');
+                
+                    // Ensure we only update when there is a meaningful change in data
+                    if (
+                        lat !== previousLat || 
+                        lng !== previousLng || 
+                        battery !== previousBattery
+                    ) {
+                        // Only update if there is new data
+                        if (!map) {
+                            // If map is not initialized yet, create it
+                            map = L.map('map').setView([lat, lng], 17);
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            }).addTo(map);
+                            marker = L.marker([lat, lng]).addTo(map)
+                                .bindPopup('Battery: ' + battery + '%')
+                                .openPopup();
+                        } else {
+                            // Update the marker with new location and battery level only if they have changed
+                            marker.setLatLng([lat, lng]);
+                            marker.setPopupContent('Battery: ' + battery + '%');
+                            map.flyTo([lat, lng], 17); // Smoothly transition to the new location
+                        }
+        
+                        // Reset previous data after processing new valid data
+                        previousLat = lat;
+                        previousLng = lng;
+                        previousBattery = battery;
+                    }
+                    
+                    // Update the battery display only if the value has changed
+                    const batteryLevelDiv = document.getElementById('battery-level');
+                    if (batteryLevelDiv.textContent !== `Battery: ${battery}%`) {
+                        batteryLevelDiv.textContent = `Battery: ${battery}%`;
+                    }
+        
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    setTimeout(fetchData, 10000); // Retry after 10 seconds if there's an error
+                }
+            }, 300); // Debounce with a delay of 300ms (adjust as needed)
+        }
+        
+        // Fetch data on page load
         fetchData();
+        
+        // Fetch data every 10 seconds (10000 milliseconds)
+        setInterval(fetchData, 10000);
+
+        
+        function showNotification(message, duration = 4500) {
+            const notification = document.getElementById('notification');
+            
+            // Set the message
+            notification.textContent = message;
+            
+            // Show the notification
+            notification.style.display = 'block';
+            notification.style.opacity = '1';
+        
+            // Hide after the specified duration
+            setTimeout(() => {
+                notification.style.opacity = '0'; // Fade out
+                setTimeout(() => {
+                    notification.style.display = 'none'; // Remove from view
+                }, 500); // Match the transition duration
+            }, duration);
+        }
+
+        
+        function setFocusedInput(inputId) {
+            focusedInput = inputId;
+        }
+
+        function clearInput(id) {
+            document.getElementById(id).value = '';
+        }
+
+
+        async function pasteInput(id) {
+            try {
+                const text = await navigator.clipboard.readText();
+                const cleanedText = text.replace(/[()]/g, ''); // Remove parentheses
+                document.getElementById(id).value = cleanedText;
+            } catch (err) {
+                showNotification('❌ Failed to paste from clipboard: ' + err);
+            }
+        }
+
+        function switchInputs() {
+            const startInput = document.getElementById('walkStart');
+            const endInput = document.getElementById('walkEnd');
+
+           // Swap the values of the two inputs
+            const temp = startInput.value;
+            startInput.value = endInput.value;
+            endInput.value = temp;
+        }
+        
+        async function fetchSavedLocations() {
+            try {
+                const response = await fetch('locations.json');
+                const locations = await response.json();
+                populateSavedLocationsDropdown(locations);
+            } catch (error) {
+                console.error('Failed to fetch saved locations:', error);
+            }
+        }
+
+        function populateSavedLocationsDropdown(locations) {
+            const dropdown = document.getElementById('savedLocations');
+            dropdown.innerHTML = '<option value=""> 📍 Saved Locations </option>';
+            for (const [label, location] of Object.entries(locations)) {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = label;
+                dropdown.appendChild(option);
+            }
+        }
+
+        function applySavedLocation() {
+            if (!focusedInput) {
+                showNotification('⚠️ Click on an input field first to select a saved location.');
+                document.getElementById('savedLocations').value = '';
+                return;
+            }
+            const dropdown = document.getElementById('savedLocations');
+            const selectedLocation = dropdown.value;
+
+            if (selectedLocation) {
+                document.getElementById(focusedInput).value = selectedLocation;
+            }
+
+            dropdown.value = '';
+        }
+
+        function triggerWalk() {
+            const start = document.getElementById('walkStart').value.trim();
+            const end = document.getElementById('walkEnd').value.trim();
+    
+            if (!start || !end) {
+                showNotification('⚠️ Please enter both start and end locations.');
+                return;
+            }
+    
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/walk?location1=${encodeURIComponent(start)}&location2=${encodeURIComponent(end)}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(() => showNotification('✅ Walk triggered successfully!'))
+                .catch(error => showNotification('❌ Failed to trigger Walk: ' + error));
+        }
+    
+        // Update the triggerJump function
+        function triggerJump() {
+            const location = document.getElementById('jumpLocation').value.trim();
+    
+            if (!location) {
+                showNotification('⚠️ Please enter a location for Jump.');
+                return;
+            }
+    
+            const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(() => showNotification('✅ Jump triggered successfully!'))
+                .catch(error => showNotification('❌ Failed to trigger Jump: ' + error));
+        }
+    
+        // Update the triggerAction function
+        function triggerAction(action) {
+            const url =
+                action === 'check'
+                    ? 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/check'
+                    : 'https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/reset';
+    
+            fetch(url)
+                .then(response => response.text())
+                .then(() => showNotification(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} triggered successfully!`))
+                .catch(error => showNotification('❌ Failed to trigger action: ' + error));
+        }
+       
+        
+        async function triggerJumpSequence() {
+            try {
+                const response = await fetch('jump.json');
+                if (!response.ok) {
+                    showNotification('❌ Failed to load jump data.');
+                    return;
+                }
+        
+                const data = await response.json();
+                const locations = data.locations;  // Correctly access the 'locations' array
+        
+                if (!Array.isArray(locations) || locations.length === 0) {
+                    showNotification('⚠️ No jump locations found.');
+                    return;
+                }
+        
+                for (const [index, entry] of locations.entries()) {
+                    const { location, seconds } = entry;
+        
+                    if (!location || !seconds || isNaN(seconds)) {
+                        showNotification(`⚠️ Invalid data at step ${index + 1}. Skipping...`);
+                        continue;
+                    }
+        
+                    showNotification(`⏳ Jumping to ${location} in ${seconds} seconds...`);
+                    await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+        
+                    const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(location)}`;
+                    try {
+                        await fetch(url);
+                        showNotification(`✅ Jump triggered for ${location}`);
+                    } catch {
+                        showNotification(`❌ Failed to trigger jump for ${location}`);
+                    }
+                }
+        
+                showNotification('🏁 Jump sequence completed.');
+            } catch (error) {
+                showNotification('❌ Error fetching jump data.');
+            }
+        }
+
+
+        
+        function openGoogleMaps() {
+            const walkStart = document.getElementById('walkStart').value.trim();
+            const walkEnd = document.getElementById('walkEnd').value.trim();
+            const jumpLocation = document.getElementById('jumpLocation').value.trim();
+
+            if (walkStart && walkEnd) {
+               // Redirect to a walking route using the Google Maps app
+               const walkUrlScheme = `comgooglemaps://?saddr=${encodeURIComponent(walkStart)}&daddr=${encodeURIComponent(walkEnd)}&directionsmode=walking`;
+               window.location.href = walkUrlScheme;
+            } else if (jumpLocation) {
+            // Redirect to a specific location using the Google Maps app
+                const jumpUrlScheme = `comgooglemaps://?q=${encodeURIComponent(jumpLocation)}`;
+                window.location.href = jumpUrlScheme;
+            } else {
+            // Default to opening the Google Maps app
+                const defaultUrlScheme = 'comgooglemaps://';
+                window.location.href = defaultUrlScheme;
+            }
+
+        }
+
+
+        fetchSavedLocations();
+        
     </script>
 </body>
-</html>
+</html> 
