@@ -369,7 +369,7 @@
         async function fetchCSVAndUpdateMap() {
             try {
                 // Fetch the CSV data from the Google Sheets URL
-                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vRBwmp5vcD6v8qlf3u40fmFpQ7v6bphbM2jL8WOFwwlaXATWfcqspyy9ZxXhjRuOWwiRsqrd0VYWiH9/pub?gid=0&single=true&output=csv');
+                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vRBwmp5vcD6v8qlf3u40fmFpQ7v6bphbM2jL8WOFwwlaXATWfcqspyy9ZxXhjRuOWwiRsqrd0VYWiH9/pub?gid=0&single=true&output=csv' + `&timestamp=${new Date().getTime()}`);
                 const csvData = await response.text();
         
                 // Parse the CSV data
