@@ -205,16 +205,52 @@
             transition: opacity 0.3s ease-in-out;
         }
 
-        .map-container {
-            flex-grow: 1;
-            overflow: auto;
-        }
         
         iframe {
             width: 100%;
-            height: 500px; /* Adjusted height */
+            height: 200px; /* Adjusted height */
             margin-top: 5px;
             border: none;
+            transition: height 0.3s ease; /* Smooth transition */
+        }
+
+        /* Fullscreen iframe styling */
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+
+        /* Fullscreen overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Exit button for fullscreen */
+        .exit-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .exit-btn:hover {
+            background-color: #cc0000;
         }
         
     </style>
@@ -263,9 +299,7 @@
      </div>
     
     <!-- Map Container -->
-    <div class="map-container">
-        <iframe src="https://glympse.com/BYnL-C9Ot"></iframe>
-    </div>
+    <iframe src="https://glympse.com/BYnL-C9Ot"></iframe>
 
 
     
@@ -295,7 +329,17 @@
 
         
 
+        // Function to toggle between normal and fullscreen view
+        function toggleFullscreen() {
+            const iframe = document.getElementById('mapIframe');
+            const overlay = document.getElementById('overlay');
+            const exitBtn = document.getElementById('exitBtn');
     
+            // Toggle fullscreen class
+            iframe.classList.toggle('fullscreen');
+            overlay.style.display = iframe.classList.contains('fullscreen') ? 'block' : 'none';
+            exitBtn.style.display = iframe.classList.contains('fullscreen') ? 'block' : 'none';
+        }
 
         
         function showNotification(message, duration = 4500) {
