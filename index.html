@@ -206,7 +206,6 @@
         }
 
         
-        /* Default iframe styling */
         iframe {
             width: 100%;
             height: 400px; /* Adjusted height */
@@ -225,6 +224,24 @@
             height: 100vh; /* Full screen height */
             margin: 0;
             z-index: 1000;
+        }
+
+        /* Button to toggle fullscreen mode */
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .fullscreen-btn:hover {
+            background-color: #0056b3;
         }
 
         /* Exit button for fullscreen */
@@ -290,8 +307,11 @@
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
     
-    <!-- The overlay for dark background in fullscreen mode -->
-    <iframe id="mapIframe" src="https://glympse.com/BYnL-C9Ot" onclick="toggleFullscreen()"></iframe>
+    <!-- The fullscreen toggle button -->
+    <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">Go Fullscreen</button>
+    
+    <!-- The iframe map -->
+    <iframe id="mapIframe" src="https://glympse.com/BYnL-C9Ot"></iframe>
     
     <!-- The exit button for fullscreen mode -->
     <button class="exit-btn" id="exitBtn" onclick="toggleFullscreen()" style="display: none;">Exit Fullscreen</button>
@@ -326,16 +346,19 @@
         // Function to toggle between normal and fullscreen view
         function toggleFullscreen() {
             const iframe = document.getElementById('mapIframe');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
             const exitBtn = document.getElementById('exitBtn');
     
-            // Toggle fullscreen class
+            // Toggle fullscreen class on the iframe
             iframe.classList.toggle('fullscreen');
             
-            // Show or hide the exit button based on fullscreen mode
+            // Toggle visibility of fullscreen and exit buttons
             if (iframe.classList.contains('fullscreen')) {
+                fullscreenBtn.style.display = 'none'; // Hide the fullscreen button in fullscreen mode
                 exitBtn.style.display = 'block'; // Show the exit button in fullscreen mode
             } else {
-                exitBtn.style.display = 'none'; // Hide the exit button when not in fullscreen mode
+                fullscreenBtn.style.display = 'block'; // Show the fullscreen button in normal mode
+                exitBtn.style.display = 'none'; // Hide the exit button in normal mode
             }
         }
 
