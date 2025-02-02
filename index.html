@@ -276,7 +276,6 @@
     <script>
         let focusedInput = null;
         let unlockClicks = 0;
-        let map, marker; // Declare variables outside the function to access them globally
 
         
    
@@ -308,37 +307,18 @@
                 const data = await response.text();
                 const rows = data.split("\n").filter(row => row.trim() !== ''); // Filter out empty rows
 
-                // Extract the last row's data (Latitude, Longitude, Battery)
+                // Extract only the first value from column A (latitude, longitude)
                 const lastRow = rows[rows.length - 1];
-                const [latLng, , battery] = lastRow.split(',');
+                const [latLng] = lastRow.split(',');
 
-                // Split the latitude and longitude from the same cell
+                // Split latitude and longitude
                 const [lat, lng] = latLng.split(',').map(coord => parseFloat(coord.trim()));
 
-                if (!map) {
-                    // Initialize the Leaflet map only once, on the first fetch
-                    map = L.map('map').setView([lat, lng], 17); // Set map center to lat, lng
+                console.log(`Latitude: ${lat}, Longitude: ${lng}`);
 
-                    // Add OpenStreetMap tile layer
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
+                // Show the location notification
+                showNotification(`Location: Latitude ${lat}, Longitude ${lng}`);
 
-                    // Add the marker at the given coordinates
-                    marker = L.marker([lat, lng]).addTo(map)
-                        .bindPopup('Battery: ' + battery + '%')
-                        .openPopup();
-                } else {
-                    // Update the marker position and popup content for subsequent fetches
-                    marker.setLatLng([lat, lng]);
-                    marker.setPopupContent('Battery: ' + battery + '%');
-                    marker.openPopup();
-                }
-
-                // Show the battery level below the map
-                const batteryLevelDiv = document.getElementById('battery-level');
-                batteryLevelDiv.textContent = `Battery: ${battery}%`;
-                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
