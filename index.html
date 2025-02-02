@@ -223,25 +223,13 @@
             left: 0;
             width: 100%;
             height: 100vh; /* Full screen height */
-            z-index: 1000;
             margin: 0;
-        }
-
-        /* Fullscreen overlay */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+            z-index: 1000;
         }
 
         /* Exit button for fullscreen */
         .exit-btn {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
             padding: 10px 15px;
@@ -303,9 +291,6 @@
      </div>
     
     <!-- The overlay for dark background in fullscreen mode -->
-    <div class="overlay" id="overlay" onclick="toggleFullscreen()"></div>
-    
-    <!-- The iframe map that will toggle fullscreen -->
     <iframe id="mapIframe" src="https://glympse.com/BYnL-C9Ot" onclick="toggleFullscreen()"></iframe>
     
     <!-- The exit button for fullscreen mode -->
@@ -341,19 +326,16 @@
         // Function to toggle between normal and fullscreen view
         function toggleFullscreen() {
             const iframe = document.getElementById('mapIframe');
-            const overlay = document.getElementById('overlay');
             const exitBtn = document.getElementById('exitBtn');
     
             // Toggle fullscreen class
             iframe.classList.toggle('fullscreen');
             
-            // Show overlay and exit button when in fullscreen mode
+            // Show or hide the exit button based on fullscreen mode
             if (iframe.classList.contains('fullscreen')) {
-                overlay.style.display = 'block';
-                exitBtn.style.display = 'block';
+                exitBtn.style.display = 'block'; // Show the exit button in fullscreen mode
             } else {
-                overlay.style.display = 'none';
-                exitBtn.style.display = 'none';
+                exitBtn.style.display = 'none'; // Hide the exit button when not in fullscreen mode
             }
         }
 
