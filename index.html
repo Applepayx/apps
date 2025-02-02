@@ -382,8 +382,8 @@
                 const mapLink = columns[0].trim(); // A1 cell is expected to contain the map link
         
                 if (mapLink) {
+                    const iframe = document.getElementById('mapIframe');
                     // Update iframe src with the new map link
-                    document.getElementById('mapIframe').src = `https://glympse.com/${mapLink}`;
                     iframe.src = `https://glympse.com/${mapLink}?timestamp=${new Date().getTime()}`;
                     showNotification('✅ Map link updated successfully!');
                 } else {
