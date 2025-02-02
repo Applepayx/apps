@@ -396,7 +396,7 @@
                     const iframe = document.getElementById('mapIframe');
                     // Update iframe src with the new map link
                     iframe.src = `https://glympse.com/${mapLink}?timestamp=${new Date().getTime()}`;
-                    showNotification('✅ Map link updated successfully!');
+                    showNotification(mapLink);
                 } else {
                     console.log('No valid map link found in A1.');
                     showNotification('⚠️ No map link found in A1.');
