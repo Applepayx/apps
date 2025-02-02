@@ -229,10 +229,8 @@
 
         /* Button to toggle fullscreen mode */
         .fullscreen-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 10px 15px;
+
+            padding: 10px;
             background-color: #007bff;
             color: white;
             border: none;
@@ -308,12 +306,12 @@
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
     
-    <!-- The fullscreen toggle button -->
-    <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">Go Fullscreen</button>
+
     
     <!-- The iframe map -->
     <iframe id="mapIframe" src="https://glympse.com/BYnL-C9Ot"></iframe>
-    
+    <!-- The fullscreen toggle button -->
+    <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">Go Fullscreen</button>
     <!-- The exit button for fullscreen mode -->
     <button class="exit-btn" id="exitBtn" onclick="toggleFullscreen()" style="display: none;">Exit Fullscreen</button>
 
