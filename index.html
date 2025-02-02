@@ -298,8 +298,14 @@
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
      </div>
     
-    <!-- Map Container -->
-    <iframe src="https://glympse.com/BYnL-C9Ot"></iframe>
+    <!-- The overlay for dark background in fullscreen mode -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- The iframe map that will toggle fullscreen -->
+    <iframe id="mapIframe" src="https://glympse.com/BYnL-C9Ot" onclick="toggleFullscreen()"></iframe>
+    
+    <!-- The exit button for fullscreen mode -->
+    <button class="exit-btn" id="exitBtn" onclick="toggleFullscreen()" style="display: none;">Exit Fullscreen</button>
 
 
     
