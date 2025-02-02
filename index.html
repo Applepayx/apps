@@ -230,18 +230,15 @@
 
         /* Button to toggle fullscreen mode */
         .fullscreen-btn {
-            position: absolute;
             width: 100%;
             padding: 5px;
-            top: 20px; /* Adjust this value to move the button above the iframe */
-            left: 50%; /* Center horizontally */
             background-color: #007bff;
             font-family: 'Poppins', Arial, sans-serif;
             color: white;
             border: none;
-            font-size: 18px;
+            font-size: 15px;
             cursor: pointer;
-            z-index: 1003;
+            z-index: 1001;
         }
 
         .fullscreen-btn:hover {
@@ -316,9 +313,10 @@
 
     
     <!-- The iframe map -->
+    <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">Go Fullscreen</button>
     <iframe id="mapIframe"></iframe>
     <!-- The fullscreen toggle button -->
-    <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">Go Fullscreen</button>
+    
     
     <!-- The exit button for fullscreen mode -->
     <button class="exit-btn" id="exitBtn" onclick="toggleFullscreen()" style="display: none;">Exit Fullscreen</button>
