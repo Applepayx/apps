@@ -358,7 +358,12 @@
         });
 
 
-        
+        // Add event listeners to all input fields
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('click', function() {
+                this.focus(); // Explicitly focus the input
+            });
+        }); 
 
         // Function to toggle between normal and fullscreen view
         function toggleFullscreen() {
