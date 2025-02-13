@@ -322,6 +322,7 @@
         <button class="action" onclick="triggerAction('stop')" style="background-image: url('stop-icon.png');"></button>
         <button class="action" onclick="triggerAction('check')" style="background-image: url('rotate.png');"></button>
         <button class="action" onclick="triggerJumpSequence()" style="background-image: url('jump-icon.png');"></button>
+         <button class="action" onclick="getCurrentLocation()" style="background-image: url('location-icon.png');"></button>
      </div>
     
 
@@ -419,6 +420,49 @@
         
         // Optionally, you can set an interval to keep checking for updates (every 10 seconds)
 
+        // Function to get the current location and trigger the MacroDroid action
+        function getCurrentLocation() {
+            // Check if geolocation is available in the browser
+            if (navigator.geolocation) {
+                // Request the current position
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Get latitude and longitude
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        
+                        // Prepare the URL for the MacroDroid trigger
+                        const url = `https://trigger.macrodroid.com/5c2aee04-0839-4f5d-b322-ac3fd5e103d0/jump?location1=${encodeURIComponent(latitude + ', ' + longitude)}`;
+                        
+                        // Trigger the MacroDroid action
+                        fetch(url)
+                            .then(response => response.text())
+                            .then(() => showNotification('✅ Location triggered successfully!'))
+                            .catch(error => showNotification('❌ Failed to trigger location: ' + error));
+                    },
+                    (error) => {
+                        // Handle errors (e.g., user denied location access)
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                showNotification('❌ Permission denied to access location.');
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                showNotification('❌ Location information is unavailable.');
+                                break;
+                            case error.TIMEOUT:
+                                showNotification('❌ The request to get user location timed out.');
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                showNotification('❌ An unknown error occurred.');
+                                break;
+                        }
+                    }
+                );
+            } else {
+                // Geolocation is not supported
+                showNotification('❌ Geolocation is not supported by your browser.');
+            }
+        }
 
 
         
